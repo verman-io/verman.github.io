@@ -1,14 +1,14 @@
-verman-tui-www
+verman.github.io
 ==============
 
 [![License](https://img.shields.io/badge/license-Apache--2.0%20OR%20MIT%20OR%20CC0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
-[![GitHub Pages](https://github.com/verman-io/verman-tui-www/actions/workflows/main.yml/badge.svg)](https://github.com/verman-io/verman-tui-www/actions/workflows/main.yml)
+[![GitHub Pages](https://github.com/verman-io/verman.github.io/actions/workflows/main.yml/badge.svg)](https://github.com/verman-io/verman-tui-www/actions/workflows/main.yml)
 
 All frontends in one! - Welcome to [verMan.io](https://verMan.io)
 
 This combines the frontends at:
 
-  - `/` from this repository
+  - `/` from https://github.com/verman-io/verman-tui-www
   - `/docs` from https://github.com/SamuelMarks/libscript (docs for all the `ports' and libscript itself)
   - `/verman` from https://github.com/verman-io/verman-www (the old homepage)
 
