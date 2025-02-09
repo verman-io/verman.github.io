@@ -6,3 +6,26 @@ verman-tui-www
 
 All frontends in one! - Welcome to [verMan.io](https://verMan.io)
 
+This combines the frontends at:
+
+  - `/` from this repository
+  - `/docs` from https://github.com/SamuelMarks/libscript (docs for all the `ports' and libscript itself)
+  - `/verman` from https://github.com/verman-io/verman-www (the old homepage)
+
+<hr/>
+
+## License
+
+https://github.com/vinibiavatti1/TuiCss is MIT licensed and used for the theme.
+
+Everything else is licensed under any of:
+
+- Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or <https://www.apache.org/licenses/LICENSE-2.0>)
+- MIT license ([LICENSE-MIT](LICENSE-MIT) or <https://opensource.org/licenses/MIT>)
+- CC0 license ([LICENSE-CC0](LICENSE-CC0) or <https://creativecommons.org/publicdomain/zero/1.0/legalcode>)
+
+at your option.
+
+### Contribution
+
+Unless you explicitly state otherwise, any contribution intentionally submitted for inclusion in the work by you, as defined in the Apache-2.0 license, shall be licensed as above, without any additional terms or conditions.
