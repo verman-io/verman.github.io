@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>libscript VerMan.io – serve-actix-diesel-auth-scaffold</title>
+    <title>libscript VerMan.io – dockerfiles_ssh</title>
     <script src="/assets/tuicss.min.js" type="application/javascript"></script>
     <script type="application/javascript">
         let firstRun = true;
@@ -114,10 +114,34 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1
-id="appthird_partyserve-actix-diesel-auth-scaffold">app/third_party/serve-actix-diesel-auth-scaffold</h1>
-<p>serve-actix-diesel-auth-scaffold builder/updater and daemon
-installer/updater.</p>
+<h1 id="dockerfiles-for-ssh">dockerfiles for ssh</h1>
+<h2 id="usage">Usage</h2>
+<h3 id="setup-public-and-private-keys-just-for-this">Setup public and
+private keys just for this</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">mkdir</span> <span class="at">--</span> <span class="st">&#39;.ssh&#39;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ssh-keygen</span> <span class="at">-t</span> <span class="st">&#39;rsa&#39;</span> <span class="at">-b</span> <span class="st">&#39;4096&#39;</span> <span class="at">-C</span> <span class="st">&#39;libscript ssh keys&#39;</span> <span class="at">-f</span> <span class="st">&#39;.ssh/id_rsa&#39;</span></span></code></pre></div>
+<p>(this local “.ssh” directory is in both <code>.gitignore</code> and
+<code>.dockerignore</code>)</p>
+<h3 id="build-dockerfiles">Build Dockerfiles</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> build <span class="at">-f</span> <span class="st">&#39;ssh.alpine.Dockerfile&#39;</span> <span class="at">--tag</span> <span class="st">&#39;ssh-alpine&#39;</span>:<span class="st">&#39;latest&#39;</span> <span class="at">--build-arg</span> SSH_PUBKEY=<span class="st">&quot;</span><span class="va">$(</span><span class="fu">cat</span> <span class="at">--</span> .ssh/id_rsa.pub<span class="va">)</span><span class="st">&quot;</span> .</span></code></pre></div>
+<h3 id="run-dockerfiles-and-external-images">Run Dockerfiles and
+external images</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="dt">\</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">--name</span><span class="op">=</span><span class="st">&#39;openssh-server&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="at">--hostname</span><span class="op">=</span><span class="st">&#39;openssh-server&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> PUID=<span class="st">&#39;1000&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> PGID=<span class="st">&#39;1000&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> TZ=<span class="st">&#39;Etc/UTC&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> PUBLIC_KEY=<span class="st">&quot;</span><span class="va">$(</span><span class="fu">cat</span> <span class="at">--</span> .ssh/id_rsa.pub<span class="va">)</span><span class="st">&quot;</span> <span class="dt">\</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> SUDO_ACCESS=1 <span class="dt">\</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="at">-e</span> USER_NAME=<span class="st">&#39;root&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">-p</span> 2222:2223 <span class="dt">\</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">--restart</span> <span class="st">&#39;unless-stopped&#39;</span> <span class="dt">\</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  lscr.io/linuxserver/openssh-server:latest</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> docker run <span class="at">--name</span> ssh-alpine-run <span class="at">-t</span> <span class="at">-d</span> <span class="at">-p</span> 22:222 ssh-alpine</span></code></pre></div>
+<p>Also found this one:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">docker</span> run <span class="at">-d</span> <span class="at">--name</span> debian-openssh-server <span class="at">-p</span> 2222:22 <span class="at">-e</span> USER_PASSWORD=654321 devdotnetorg/openssh-server:debian</span></code></pre></div>
+<p>That you can ssh to with password <code>654321</code></p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">
