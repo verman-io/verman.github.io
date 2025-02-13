@@ -10,7 +10,7 @@
         const nicerName = (s) => {
             const last_slash = s.lastIndexOf("/");
             const base = s.substring(last_slash);
-            return base === "README" ? s.substring(0, last_slash-1) : s;
+            return base === "/README" ? s.substring(0, last_slash-1) : s;
         };
 
         const toggleSidebar = () => {
@@ -122,24 +122,50 @@
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="lib_toolchainrust">_lib/_toolchain/rust</h1>
 <p>Rust installer.</p>
-<p>Usage: node wetzel.js [path-to-json-schema-file] [OPTIONS] -l,
-–headerLevel Top-level header. Default: 1 -c, –checkmark Symbol for
-required properties. Default: ✓ -k, –keyword Use a particular keyword in
-place of “must”, for example “<strong>MUST</strong>”. -p, –schemaPath
-The path string that should be used when generating the schema reference
-paths. -s, –searchPath The path string that should be used when loading
-the schema reference paths. -e, –embedOutput The output path for a
-document that embeds JSON schemas directly (AsciiDoctor only). -m,
-–outputMode The output mode, Markdown (the default) or AsciiDoctor (a).
--n, –noTOC Skip writing the Table of Contents. -a, –autoLink
-Aggressively auto-inter-link types referenced in descriptions. Add =cqo
-to auto-link types that are in code-quotes only. -i An array of schema
-filenames (no paths) that should not get their own table of contents
-entry, nor type listing (they are just used for sharing properties
-across multiple other schemas) -d, –debug Provide a path, and this will
-save out intermediate processing artifacts useful in debugging wetzel.
--w, –suppressWarnings Will not print out WETZEL_WARNING strings
-indicating identified conversion problems. Default: false</p>
+<h2 id="objects">Objects</h2>
+<ul>
+<li><a
+href="#reference-rust-toolchain-vars"><code>rust toolchain vars</code></a>
+(root object)</li>
+</ul>
+<hr />
+<p><a name="reference-rust-toolchain-vars"></a> ### rust toolchain
+vars</p>
+<p>rust toolchain vars that can be set</p>
+<p><strong><code>rust toolchain vars</code> Properties</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>RUST_VERSION</strong></td>
+<td><code>string</code></td>
+<td>Version of Rust demanded. Can be “nightly”</td>
+<td>“beta”</td>
+</tr>
+</tbody>
+</table>
+<p>Additional properties are allowed.</p>
+<h4 id="rust-toolchain-vars.rust_version">rust toolchain
+vars.RUST_VERSION</h4>
+<p>Version of Rust demanded. Can be “nightly”|“beta”|“stable” xor a
+specific version</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

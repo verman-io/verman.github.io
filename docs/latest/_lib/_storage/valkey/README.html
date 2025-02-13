@@ -10,7 +10,7 @@
         const nicerName = (s) => {
             const last_slash = s.lastIndexOf("/");
             const base = s.substring(last_slash);
-            return base === "README" ? s.substring(0, last_slash-1) : s;
+            return base === "/README" ? s.substring(0, last_slash-1) : s;
         };
 
         const toggleSidebar = () => {
@@ -122,24 +122,43 @@
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="lib_storagevalkey">_lib/_storage/valkey</h1>
 <p>Valkey (Redis fork) installer (with daemon).</p>
-<p>Usage: node wetzel.js [path-to-json-schema-file] [OPTIONS] -l,
-–headerLevel Top-level header. Default: 1 -c, –checkmark Symbol for
-required properties. Default: ✓ -k, –keyword Use a particular keyword in
-place of “must”, for example “<strong>MUST</strong>”. -p, –schemaPath
-The path string that should be used when generating the schema reference
-paths. -s, –searchPath The path string that should be used when loading
-the schema reference paths. -e, –embedOutput The output path for a
-document that embeds JSON schemas directly (AsciiDoctor only). -m,
-–outputMode The output mode, Markdown (the default) or AsciiDoctor (a).
--n, –noTOC Skip writing the Table of Contents. -a, –autoLink
-Aggressively auto-inter-link types referenced in descriptions. Add =cqo
-to auto-link types that are in code-quotes only. -i An array of schema
-filenames (no paths) that should not get their own table of contents
-entry, nor type listing (they are just used for sharing properties
-across multiple other schemas) -d, –debug Provide a path, and this will
-save out intermediate processing artifacts useful in debugging wetzel.
--w, –suppressWarnings Will not print out WETZEL_WARNING strings
-indicating identified conversion problems. Default: false</p>
+<h2 id="objects">Objects</h2>
+<ul>
+<li><a
+href="#reference-valkey-server-vars"><code>valkey server vars</code></a>
+(root object)</li>
+</ul>
+<hr />
+<p><a name="reference-valkey-server-vars"></a> ### valkey server
+vars</p>
+<p>valkey vars that can be set</p>
+<p><strong><code>valkey server vars</code> Properties</strong></p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>VALKEY_BUILD_DIR</strong></td>
+<td><code>string</code></td>
+<td>Directory to build valkey from</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Additional properties are allowed.</p>
+<h4 id="valkey-server-vars.valkey_build_dir">valkey server
+vars.VALKEY_BUILD_DIR</h4>
+<p>Directory to build valkey from</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

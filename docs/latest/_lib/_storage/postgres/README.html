@@ -10,7 +10,7 @@
         const nicerName = (s) => {
             const last_slash = s.lastIndexOf("/");
             const base = s.substring(last_slash);
-            return base === "README" ? s.substring(0, last_slash-1) : s;
+            return base === "/README" ? s.substring(0, last_slash-1) : s;
         };
 
         const toggleSidebar = () => {
@@ -122,24 +122,116 @@
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="lib_storagepostgres">_lib/_storage/postgres</h1>
 <p>PostgreSQL installer, user+database init, and tester.</p>
-<p>Usage: node wetzel.js [path-to-json-schema-file] [OPTIONS] -l,
-–headerLevel Top-level header. Default: 1 -c, –checkmark Symbol for
-required properties. Default: ✓ -k, –keyword Use a particular keyword in
-place of “must”, for example “<strong>MUST</strong>”. -p, –schemaPath
-The path string that should be used when generating the schema reference
-paths. -s, –searchPath The path string that should be used when loading
-the schema reference paths. -e, –embedOutput The output path for a
-document that embeds JSON schemas directly (AsciiDoctor only). -m,
-–outputMode The output mode, Markdown (the default) or AsciiDoctor (a).
--n, –noTOC Skip writing the Table of Contents. -a, –autoLink
-Aggressively auto-inter-link types referenced in descriptions. Add =cqo
-to auto-link types that are in code-quotes only. -i An array of schema
-filenames (no paths) that should not get their own table of contents
-entry, nor type listing (they are just used for sharing properties
-across multiple other schemas) -d, –debug Provide a path, and this will
-save out intermediate processing artifacts useful in debugging wetzel.
--w, –suppressWarnings Will not print out WETZEL_WARNING strings
-indicating identified conversion problems. Default: false</p>
+<h2 id="objects">Objects</h2>
+<ul>
+<li><a
+href="#reference-postgres-server-vars"><code>postgres server vars</code></a>
+(root object)</li>
+</ul>
+<hr />
+<p><a name="reference-postgres-server-vars"></a> ### postgres server
+vars</p>
+<p>postgres vars that can be set</p>
+<p><strong><code>postgres server vars</code> Properties</strong></p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>POSTGRESQL_VERSION</strong></td>
+<td><code>string</code></td>
+<td>Version of PostgreSQL demanded</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>POSTGRES_USER</strong></td>
+<td><code>string</code></td>
+<td>Username to create inside postgres</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>POSTGRES_PASSWORD</strong></td>
+<td><code>string</code></td>
+<td>Password for created user inside postgres</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>POSTGRES_PASSWORD_FILE</strong></td>
+<td><code>string</code></td>
+<td>Password file, its contents used as password for created user inside
+postgres</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>POSTGRES_HOST</strong></td>
+<td><code>string</code></td>
+<td>Hostname to serve postgres from</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>POSTGRES_DB</strong></td>
+<td><code>string</code></td>
+<td>Database to create within postgres</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Additional properties are allowed.</p>
+<h4 id="postgres-server-vars.postgresql_version">postgres server
+vars.POSTGRESQL_VERSION</h4>
+<p>Version of PostgreSQL demanded</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h4 id="postgres-server-vars.postgres_user">postgres server
+vars.POSTGRES_USER</h4>
+<p>Username to create inside postgres</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h4 id="postgres-server-vars.postgres_password">postgres server
+vars.POSTGRES_PASSWORD</h4>
+<p>Password for created user inside postgres</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h4 id="postgres-server-vars.postgres_password_file">postgres server
+vars.POSTGRES_PASSWORD_FILE</h4>
+<p>Password file, its contents used as password for created user inside
+postgres</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h4 id="postgres-server-vars.postgres_host">postgres server
+vars.POSTGRES_HOST</h4>
+<p>Hostname to serve postgres from</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h4 id="postgres-server-vars.postgres_db">postgres server
+vars.POSTGRES_DB</h4>
+<p>Database to create within postgres</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">
