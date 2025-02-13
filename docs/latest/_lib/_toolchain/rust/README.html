@@ -7,6 +7,12 @@
     <script type="application/javascript">
         let firstRun = true;
 
+        const nicerName = (s) => {
+            const last_slash = s.lastIndexOf("/");
+            const base = s.substring(last_slash);
+            return base === "README" ? s.substring(0, last_slash-1) : s;
+        };
+
         const toggleSidebar = () => {
             const sideNav = document.querySelector('.tui-sidenav');
 
@@ -23,7 +29,7 @@
                         const ul = sideNav.querySelector('ul');
                         for (const url of urls) {
                             const cls = window.location.pathname === url? ' class="active-navlink"' : '';
-                            ul.innerHTML += '<li'+cls+'><a href="' + url + '">'+(url.length > 25? '…' + url.substring(url.length-29, url.length-5): url)+'</a></li>'
+                            ul.innerHTML += '<li'+cls+'><a href="' + url + '">'+nicerName(url.length > 25? '…' + url.substring(url.length-29, url.length-5): url)+'</a></li>'
                         }
                     }
                 }
@@ -116,6 +122,24 @@
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="lib_toolchainrust">_lib/_toolchain/rust</h1>
 <p>Rust installer.</p>
+<p>Usage: node wetzel.js [path-to-json-schema-file] [OPTIONS] -l,
+–headerLevel Top-level header. Default: 1 -c, –checkmark Symbol for
+required properties. Default: ✓ -k, –keyword Use a particular keyword in
+place of “must”, for example “<strong>MUST</strong>”. -p, –schemaPath
+The path string that should be used when generating the schema reference
+paths. -s, –searchPath The path string that should be used when loading
+the schema reference paths. -e, –embedOutput The output path for a
+document that embeds JSON schemas directly (AsciiDoctor only). -m,
+–outputMode The output mode, Markdown (the default) or AsciiDoctor (a).
+-n, –noTOC Skip writing the Table of Contents. -a, –autoLink
+Aggressively auto-inter-link types referenced in descriptions. Add =cqo
+to auto-link types that are in code-quotes only. -i An array of schema
+filenames (no paths) that should not get their own table of contents
+entry, nor type listing (they are just used for sharing properties
+across multiple other schemas) -d, –debug Provide a path, and this will
+save out intermediate processing artifacts useful in debugging wetzel.
+-w, –suppressWarnings Will not print out WETZEL_WARNING strings
+indicating identified conversion problems. Default: false</p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">
