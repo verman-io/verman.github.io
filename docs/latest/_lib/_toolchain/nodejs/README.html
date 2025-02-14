@@ -9,13 +9,63 @@
         .active-navlink {
             background-color: rgb(255, 255, 0);
         }
+        table {
+            background-color: rgb(0, 0, 168);
+            width: 90%;
+        }
+        html, body {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
     </style>
+    <script type="application/javascript">
+        let firstRun = true;
+
+        let nicerName = (s) => {
+            const last_slash = s.lastIndexOf("/");
+            const base = s.substring(last_slash);
+            const name = base === "/README.html" ? s.substring(0, last_slash) : s.substring(0, s.length - 5);
+            return name.length > 25 ? '…' + name.substring(name.length-29): name;
+        };
+
+        const toggleSidebar = () => {
+            const sideNav = document.querySelector('.tui-sidenav');
+
+            if (sideNav) {
+                const actualBodyStyle = document.getElementById("actual-body").style;
+                if (sideNav.classList.contains('active')) {
+                    //sideNav.classList.remove('active');
+                    actualBodyStyle.marginLeft = '20px';
+                } else {
+                    actualBodyStyle.marginLeft = '390px';
+                    if (firstRun) {
+                        firstRun = false;
+                        sideNav.classList.add('active');
+                        const ul = sideNav.querySelector('ul');
+                        for (const url of urls) {
+                            const listItem = document.createElement("li");
+                            if (window.location.pathname === url)
+                                listItem.className = 'active-navlink';
+                            const anchor = document.createElement("a");
+                            anchor.href = url;
+                            anchor.textContent = nicerName(url);
+                            listItem.appendChild(anchor);
+                            ul.appendChild(listItem);
+                        }
+                        /*document.getElementsByTagName('table').forEach((table) =>
+                            table.classList.add('tui-table')
+                        );*/
+                    }
+                }
+            }
+        }
+        const urls = ["/docs/latest/IDEAS.html","/docs/latest/dockerfiles_ssh/README.html","/docs/latest/app/third_party/firecrawl/README.html","/docs/latest/app/third_party/jupyterhub/README.html","/docs/latest/app/third_party/openvpn/README.html","/docs/latest/app/third_party/serve-actix-diesel-auth-scaffold/README.html","/docs/latest/app/_storage/README.html","/docs/latest/app/README.html","/docs/latest/_lib/_server/nginx/ROADMAP.html","/docs/latest/_lib/_server/nginx/README.html","/docs/latest/_lib/_server/python/README.html","/docs/latest/_lib/_server/rust/README.html","/docs/latest/_lib/_server/README.html","/docs/latest/_lib/_server/nodejs/README.html","/docs/latest/_lib/_toolchain/jq/README.html","/docs/latest/_lib/_toolchain/wait4x/README.html","/docs/latest/_lib/_toolchain/python/README.html","/docs/latest/_lib/_toolchain/rust/README.html","/docs/latest/_lib/_toolchain/cc/README.html","/docs/latest/_lib/_toolchain/README.html","/docs/latest/_lib/_toolchain/nodejs/README.html","/docs/latest/_lib/_common/_noop/README.html","/docs/latest/_lib/_common/README.html","/docs/latest/_lib/_git/README.html","/docs/latest/_lib/_storage/postgres/README.html","/docs/latest/_lib/_storage/valkey/README.html","/docs/latest/_lib/_storage/README.html","/docs/latest/_lib/_daemon/systemd/README.html","/docs/latest/_lib/_daemon/README.html","/docs/latest/_lib/DOCS.html","/docs/latest/_lib/README.html","/docs/latest/WINDOWS.html","/docs/latest/ROADMAP.html","/docs/latest/gen/README.html","/docs/latest/DOCS_ROADMAP.html","/docs/latest/DEPENDENCIES.html","/docs/latest/WHY.html","/docs/latest/README.html"];
+    </script>
 </head>
 <body onload="toggleSidebar()">
 <!-- Sidenav -->
 <nav class="tui-sidenav absolute" style="height: unset !important;">
     <ul>
-        <li></li>
     </ul>
 </nav>
 
@@ -88,18 +138,46 @@
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="lib_toolchainnodejs">_lib/_toolchain/nodejs</h1>
 <p>Node.js installer.</p>
-<h2 id="objects">Objects</h2>
+<!-- Usage -->
+<h3>Usage</h3>
+<div class="tui-tabs">
+    <ul>
+        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
+        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
+    </ul>
+</div>
+<div id="unix-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre>$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
+$ # `export` any variables now (see below for variable docs). Then:
+$ # Set script location:
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_toolchain/nodejs/setup.sh'
+$ . "${SCRIPT_NAME}"</pre>
+    </fieldset>
+</div>
+<div id="windows-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre>> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+> SET "LIBSCRIPT_ROOT_DIR=%cd%"
+> :: `SET` any variables now (see below for variable docs). Then:
+> :: Set script location:
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_toolchain\nodejs\setup.cmd"
+> CALL "%SCRIPT_NAME%"</pre>
+    </fieldset>
+</div>
+<h1 id="objects">Objects</h1>
 <ul>
 <li><a
 href="#reference-nodejs-toolchain-vars"><code>nodejs toolchain vars</code></a>
 (root object)</li>
 </ul>
 <hr />
-<p><a name="reference-nodejs-toolchain-vars"></a> ### nodejs toolchain
+<p><a name="reference-nodejs-toolchain-vars"></a> ## nodejs toolchain
 vars</p>
 <p>nodejs toolchain vars that can be set</p>
 <p><strong><code>nodejs toolchain vars</code> Properties</strong></p>
-<table>
+<table class="tui-table hovered-purple striped-purple">
 <colgroup>
 <col style="width: 25%" />
 <col style="width: 25%" />
@@ -125,8 +203,8 @@ version number</td>
 </tbody>
 </table>
 <p>Additional properties are allowed.</p>
-<h4 id="nodejs-toolchain-vars.nodejs_version">nodejs toolchain
-vars.NODEJS_VERSION</h4>
+<h3 id="nodejs-toolchain-vars.nodejs_version">nodejs toolchain
+vars.NODEJS_VERSION</h3>
 <p>Version of Node.js demanded. Can be “lts” or a specific numeric
 version number</p>
 <ul>
@@ -146,38 +224,4 @@ version number</p>
    alt="Email me"
 >📧</a>
 <script src="/assets/tuicss.min.js" type="application/javascript"></script>
-<script type="application/javascript">
-    let firstRun = true;
-
-    let nicerName = (s) => {
-        const last_slash = s.lastIndexOf("/");
-        const base = s.substring(last_slash);
-        const name = base === "/README.html" ? s.substring(0, last_slash) : s;
-        return name.length > 25 ? '…' + name.substring(name.length-29, name.length-5): name;
-    };
-
-    const toggleSidebar = () => {
-        const sideNav = document.querySelector('.tui-sidenav');
-
-        if (sideNav) {
-            const actualBodyStyle = document.getElementById("actual-body").style
-            if (sideNav.classList.contains('active')) {
-                //sideNav.classList.remove('active');
-                actualBodyStyle.marginLeft = '20px';
-            } else {
-                actualBodyStyle.marginLeft = '350px';
-                if (firstRun) {
-                    firstRun = false;
-                    sideNav.classList.add('active');
-                    const ul = sideNav.querySelector('ul');
-                    for (const url of urls) {
-                        const cls = window.location.pathname === url? ' class="active-navlink"' : '';
-                        ul.innerHTML += '<li' + cls + '><a href="' + url + '">' + nicerName(url) + '</a></li>'
-                    }
-                }
-            }
-        }
-    }
-    const urls = ["/docs/latest/IDEAS.html","/docs/latest/dockerfiles_ssh/README.html","/docs/latest/app/third_party/firecrawl/README.html","/docs/latest/app/third_party/jupyterhub/README.html","/docs/latest/app/third_party/openvpn/README.html","/docs/latest/app/third_party/serve-actix-diesel-auth-scaffold/README.html","/docs/latest/app/_storage/README.html","/docs/latest/app/README.html","/docs/latest/_lib/_server/nginx/ROADMAP.html","/docs/latest/_lib/_server/nginx/README.html","/docs/latest/_lib/_server/python/README.html","/docs/latest/_lib/_server/rust/README.html","/docs/latest/_lib/_server/README.html","/docs/latest/_lib/_server/nodejs/README.html","/docs/latest/_lib/_toolchain/jq/README.html","/docs/latest/_lib/_toolchain/wait4x/README.html","/docs/latest/_lib/_toolchain/python/README.html","/docs/latest/_lib/_toolchain/rust/README.html","/docs/latest/_lib/_toolchain/cc/README.html","/docs/latest/_lib/_toolchain/README.html","/docs/latest/_lib/_toolchain/nodejs/README.html","/docs/latest/_lib/_common/_noop/README.html","/docs/latest/_lib/_common/README.html","/docs/latest/_lib/_git/README.html","/docs/latest/_lib/_storage/postgres/README.html","/docs/latest/_lib/_storage/valkey/README.html","/docs/latest/_lib/_storage/README.html","/docs/latest/_lib/_daemon/systemd/README.html","/docs/latest/_lib/_daemon/README.html","/docs/latest/_lib/DOCS.html","/docs/latest/_lib/README.html","/docs/latest/WINDOWS.html","/docs/latest/ROADMAP.html","/docs/latest/gen/README.html","/docs/latest/DOCS_ROADMAP.html","/docs/latest/DEPENDENCIES.html","/docs/latest/WHY.html","/docs/latest/README.html"];
-</script>
 </body>
