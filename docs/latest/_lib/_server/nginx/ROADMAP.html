@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>libscript VerMan.io – nginx/ROADMAP</title>
+    <meta itemprop="name" content="libscript &ndash; nginx/ROADMAP">
+    <meta name="description" content="Deploy nginx/ROADMAP with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/_lib/_server/nginx/ROADMAP.html" />
+    <title>nginx/ROADMAP from libscript @ VerMan.io</title>
     <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/styles.css" type="text/css">
     <style>
@@ -137,6 +142,7 @@
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="nginx-server-roadmap">nginx server roadmap</h1>
+<a href="https://github.com/SamuelMarks/libscript./blob/master/_lib/_server/nginx/ROADMAP.md" aria-label="Open on GitHub">Open on GitHub</a>
 <ul class="task-list">
 <li><label><input type="checkbox" />simple secure (for template
 interpolation)</label></li>
@@ -170,63 +176,7 @@ type="checkbox" /><code>setup_debian.sh</code></label></li>
 <li><label><input
 type="checkbox" /><code>setup_macOS.sh</code></label></li>
 </ul>
-<!-- Usage -->
-<h3>Usage</h3>
-<div class="tui-tabs">
-    <ul>
-        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
-        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
-    </ul>
-</div>
-<div id="unix-content" class="tui-tab-content tui-window">
-    <fieldset class="tui-fieldset no-legend">
-<pre>$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
-$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
-$ # `export` any variables now (see below for variable docs). Then:
-$ # Set script location:
-$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_server/nginx/setup.sh'
-$ . "${SCRIPT_NAME}"</pre>
-    </fieldset>
-</div>
-<div id="windows-content" class="tui-tab-content tui-window">
-    <fieldset class="tui-fieldset no-legend">
-<pre>> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
-> SET "LIBSCRIPT_ROOT_DIR=%cd%"
-> :: `SET` any variables now (see below for variable docs). Then:
-> :: Set script location:
-> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_server\nginx\setup.cmd"
-> CALL "%SCRIPT_NAME%"</pre>
-    </fieldset>
-</div>
-<!-- Usage -->
-<h3>Usage</h3>
-<div class="tui-tabs">
-    <ul>
-        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
-        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
-    </ul>
-</div>
-<div id="unix-content" class="tui-tab-content tui-window">
-    <fieldset class="tui-fieldset no-legend">
-<pre>$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
-$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
-$ # `export` any variables now (see below for variable docs). Then:
-$ # Set script location:
-$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_server/nginx/setup.sh'
-$ . "${SCRIPT_NAME}"</pre>
-    </fieldset>
-</div>
-<div id="windows-content" class="tui-tab-content tui-window">
-    <fieldset class="tui-fieldset no-legend">
-<pre>> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
-> SET "LIBSCRIPT_ROOT_DIR=%cd%"
-> :: `SET` any variables now (see below for variable docs). Then:
-> :: Set script location:
-> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_server\nginx\setup.cmd"
-> CALL "%SCRIPT_NAME%"</pre>
-    </fieldset>
-</div>
-<h1 id="objects">Objects</h1>
+<!-- Usage --><h1 id="objects">Objects</h1>
 <ul>
 <li><a href="#reference-nginx-vars"><code>nginx vars</code></a> (root
 object)</li>
@@ -299,7 +249,7 @@ object)</li>
 </div>
 
 <a class="tui-button red-168 white-255-text fixed add-btn"
-   href="mailto:samuelmarks@gmail.com"
+   href="mailto:samuel@offscale.io&subject=verman"
    alt="Email me"
 >📧</a>
 <script src="/assets/tuicss.min.js" type="application/javascript"></script>

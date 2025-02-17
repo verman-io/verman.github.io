@@ -2,7 +2,12 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>libscript VerMan.io – README</title>
+    <meta itemprop="name" content="libscript &ndash; latest">
+    <meta name="description" content="Deploy latest with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/README.html" />
+    <title>latest from libscript @ VerMan.io</title>
     <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/styles.css" type="text/css">
     <style>
@@ -137,6 +142,7 @@
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="libscript">libscript</h1>
+<a href="https://github.com/SamuelMarks/libscript./blob/master/README.md" aria-label="Open on GitHub">Open on GitHub</a>
 <p><a
 href="https://en.wikipedia.org/wiki/Cross-platform_software">Cross-platform</a>—<a
 href="https://en.wikipedia.org/wiki/Bourne_shell"><code>/bin/sh</code></a>;
@@ -205,6 +211,12 @@ mechanism.</p>
 <p>Example of generated files are found in the <a
 href="./gen"><code>gen</code></a> directory.</p>
 <h2 id="current-installables">Current ‘installables’</h2>
+<p>Care is taken to use open-source alternatives. For example: <a
+href="https://valkey.io">Valkey</a> [and <a
+href="https://github.com/microsoft/garnet">Garnet</a> for Windows] over
+<a href="https://redis.io">Redis</a>; and <a
+href="https://ferretdb.com">FerretDB</a> over <a
+href="https://mongodb.com">MongoDB</a>.</p>
 <h3 id="toolchains">Toolchains</h3>
 <table>
 <thead>
@@ -389,12 +401,12 @@ and run it anywhere.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> <span class="co"># Replace `$(pwd)` if not in the &#39;libscript&#39; directory.</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export LIBSCRIPT_ROOT_DIR=<span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> <span class="co"># Disable all options (everything set to do-*not*-install)</span></span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> . <span class="st">&quot;</span><span class="va"></span><span class="st">&quot;&#39;/conf-no-all.env.sh&#39;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> . <span class="st">&quot;</span><span class="va">${LIBSCRIPT_ROOT_DIR}</span><span class="st">&quot;&#39;/conf-no-all.env.sh&#39;</span></span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> <span class="co"># Enable installation of *just* Jupyter Hub</span></span>
 <span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export JUPYTERHUB_INSTALL=1</span>
 <span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> <span class="co"># Set script location.</span></span>
-<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export SCRIPT_NAME=<span class="st">&quot;</span><span class="va"></span><span class="st">&quot;&#39;/install.sh&#39;</span></span>
-<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> . <span class="st">&quot;</span><span class="va"></span><span class="st">&quot;</span></span></code></pre></div>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export SCRIPT_NAME=<span class="st">&quot;</span><span class="va">${LIBSCRIPT_ROOT_DIR}</span><span class="st">&quot;&#39;/install.sh&#39;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> . <span class="st">&quot;</span><span class="va">${SCRIPT_NAME}</span><span class="st">&quot;</span></span></code></pre></div>
 <p>See <a href="./gen/env.sh"><code>gen/env.sh</code></a> for options
 that can be overridden by setting environment variables.</p>
 <h2 id="usage-json">Usage (JSON)</h2>
@@ -422,8 +434,8 @@ everything to install.</p>
 <p>The actual installation script. Execute this like so:</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> <span class="co"># Set script location. Change from `pwd` if &#39;install_gen.sh&#39; isn&#39;t in current dir.</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export LIBSCRIPT_ROOT_DIR=<span class="st">&quot;</span><span class="va">$(</span><span class="bu">pwd</span><span class="va">)</span><span class="st">&quot;</span></span>
-<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export SCRIPT_NAME=<span class="st">&quot;</span><span class="va"></span><span class="st">&quot;&#39;/install_gen.sh&#39;</span></span>
-<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> . <span class="st">&quot;</span><span class="va"></span><span class="st">&quot;</span></span></code></pre></div>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> export SCRIPT_NAME=<span class="st">&quot;</span><span class="va">${LIBSCRIPT_ROOT_DIR}</span><span class="st">&quot;&#39;/install_gen.sh&#39;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> . <span class="st">&quot;</span><span class="va">${SCRIPT_NAME}</span><span class="st">&quot;</span></span></code></pre></div>
 <h3
 id="install_parallel_gen.sh"><code>install_parallel_gen.sh</code></h3>
 <p>Parallel version of the above installation script. Execute same
@@ -448,7 +460,7 @@ execution of <code>install_gen.sh</code>.</p>
 <h2 id="docker-usage">Docker usage</h2>
 <p>For debugging, you might want to run something like:</p>
 <div class="sourceCode" id="cb5"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> distro=<span class="st">&#39;debian&#39;</span> <span class="co"># or &#39;alpine&#39;</span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker build <span class="at">--file</span> <span class="st">&quot;</span><span class="va"></span><span class="st">&quot;&#39;.Dockerfile&#39;</span> <span class="at">--progress</span><span class="op">=</span><span class="st">&#39;plain&#39;</span> <span class="at">--no-cache</span> <span class="at">--tag</span> <span class="st">&quot;</span><span class="va">${PWD</span><span class="op">##</span><span class="pp">*</span>/<span class="va">}</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="va"></span><span class="st">&quot;</span> .</span></code></pre></div>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> docker build <span class="at">--file</span> <span class="st">&quot;</span><span class="va">${distro}</span><span class="st">&quot;&#39;.Dockerfile&#39;</span> <span class="at">--progress</span><span class="op">=</span><span class="st">&#39;plain&#39;</span> <span class="at">--no-cache</span> <span class="at">--tag</span> <span class="st">&quot;</span><span class="va">${PWD</span><span class="op">##</span><span class="pp">*</span>/<span class="va">}</span><span class="st">&quot;</span>:<span class="st">&quot;</span><span class="va">${distro}</span><span class="st">&quot;</span> .</span></code></pre></div>
 <h3 id="docker-builder">Docker builder</h3>
 <p>To make things more convenient, use this docker builder; setting
 <code>-i</code> to same as <code>-o</code> of
@@ -456,8 +468,8 @@ execution of <code>install_gen.sh</code>.</p>
 <div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./create_docker_builder.sh <span class="at">-h</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="ex">Create</span> Docker image builder scripts.</span>
 <span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">-p</span> prefix <span class="er">(</span><span class="va"></span><span class="ex">,</span> default: <span class="st">&quot;deploysh&quot;</span><span class="kw">)</span></span>
-<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">-s</span> suffix <span class="er">(</span><span class="va"></span><span class="ex">,</span> default: <span class="st">&quot;-latest&quot;</span><span class="kw">)</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="ex">-p</span> prefix <span class="er">(</span><span class="va">$DOCKER_IMAGE_PREFIX</span><span class="ex">,</span> default: <span class="st">&quot;deploysh&quot;</span><span class="kw">)</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="ex">-s</span> suffix <span class="er">(</span><span class="va">$DOCKER_IMAGE_SUFFIX</span><span class="ex">,</span> default: <span class="st">&quot;-latest&quot;</span><span class="kw">)</span></span>
 <span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="ex">-i</span> input directory <span class="er">(</span><span class="kw">`</span><span class="bu">cd</span><span class="kw">`</span>s if provided, defaults to current working directory<span class="kw">;</span> <span class="ex">adds</span> scripts here also<span class="kw">)</span></span>
 <span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="ex">-v</span> verbosity <span class="er">(</span><span class="ex">can</span> be specified multiple times<span class="kw">)</span></span>
 <span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a><span class="ex">-h</span> show help text</span></code></pre></div>
@@ -495,7 +507,7 @@ conditions.</p>
 </div>
 
 <a class="tui-button red-168 white-255-text fixed add-btn"
-   href="mailto:samuelmarks@gmail.com"
+   href="mailto:samuel@offscale.io&subject=verman"
    alt="Email me"
 >📧</a>
 <script src="/assets/tuicss.min.js" type="application/javascript"></script>
