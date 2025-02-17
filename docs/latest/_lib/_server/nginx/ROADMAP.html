@@ -10,7 +10,11 @@
     <title>nginx/ROADMAP from libscript @ VerMan.io</title>
     <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <style>
+        #actual-body {
+            max-width: 70%;
+        }
         .active-navlink {
             background-color: rgb(255, 255, 0);
         }
@@ -22,6 +26,20 @@
             max-width: 100%;
             overflow-x: hidden;
         }
+        .deploy-img {
+            height: 100%;
+            width: 144px;
+        }
+        .flex {
+            display: flex;
+            justify-content: space-between;
+        }
+        /*.cell {
+            display: flex;
+            text-decoration: none;
+            padding: 120px;
+            margin: 42px;
+        }*/
     </style>
     <script type="application/javascript">
         let firstRun = true;
@@ -41,8 +59,10 @@
                 if (sideNav.classList.contains('active')) {
                     //sideNav.classList.remove('active');
                     actualBodyStyle.marginLeft = '20px';
+                    actualBodyStyle.maxWidth = '100%';
                 } else {
                     actualBodyStyle.marginLeft = '390px';
+                    actualBodyStyle.maxWidth = '70%';
                     if (firstRun) {
                         firstRun = false;
                         sideNav.classList.add('active');
@@ -142,7 +162,7 @@
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="nginx-server-roadmap">nginx server roadmap</h1>
-<a href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/nginx/ROADMAP.md" aria-label="Open on GitHub">Open on GitHub</a>
+<div class="flex"><a class="cell" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/nginx/ROADMAP.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a><a class="cell" onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a><a class="cell" onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a><a class="cell" onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></div>
 <ul class="task-list">
 <li><label><input type="checkbox" />simple secure (for template
 interpolation)</label></li>
@@ -176,7 +196,63 @@ type="checkbox" /><code>setup_debian.sh</code></label></li>
 <li><label><input
 type="checkbox" /><code>setup_macOS.sh</code></label></li>
 </ul>
-<!-- Usage --><h1 id="objects">Objects</h1>
+<!-- Usage -->
+<h3>Usage</h3>
+<div class="tui-tabs">
+    <ul>
+        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
+        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
+    </ul>
+</div>
+<div id="unix-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre>$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
+$ # `export` any variables now (see below for variable docs). Then:
+$ # Set script location:
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_server/nginx/setup.sh'
+$ . "${SCRIPT_NAME}"</pre>
+    </fieldset>
+</div>
+<div id="windows-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre>> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+> SET "LIBSCRIPT_ROOT_DIR=%cd%"
+> :: `SET` any variables now (see below for variable docs). Then:
+> :: Set script location:
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_server\nginx\setup.cmd"
+> CALL "%SCRIPT_NAME%"</pre>
+    </fieldset>
+</div>
+<!-- Usage -->
+<h3>Usage</h3>
+<div class="tui-tabs">
+    <ul>
+        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
+        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
+    </ul>
+</div>
+<div id="unix-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre>$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
+$ # `export` any variables now (see below for variable docs). Then:
+$ # Set script location:
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_server/nginx/setup.sh'
+$ . "${SCRIPT_NAME}"</pre>
+    </fieldset>
+</div>
+<div id="windows-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre>> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+> SET "LIBSCRIPT_ROOT_DIR=%cd%"
+> :: `SET` any variables now (see below for variable docs). Then:
+> :: Set script location:
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_server\nginx\setup.cmd"
+> CALL "%SCRIPT_NAME%"</pre>
+    </fieldset>
+</div>
+<h1 id="objects">Objects</h1>
 <ul>
 <li><a href="#reference-nginx-vars"><code>nginx vars</code></a> (root
 object)</li>
@@ -253,4 +329,36 @@ object)</li>
    alt="Email me"
 >📧</a>
 <script src="/assets/tuicss.min.js" type="application/javascript"></script>
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script>
+    const copyURI = (evt) => {
+        evt.preventDefault();
+        navigator.clipboard.writeText("https://github.com/SamuelMarks/libscript").then(() =>
+                Toastify({
+                    text: "Copied GitHub link to clipboard",
+                    className: "info",
+                    offset: {
+                        y: 12
+                    },
+                    style: {
+                        background: "#0000a8",
+                    }
+                }).showToast(),
+            () => console.error('clipboard write failed')
+        );
+    }
+
+    const TODO = () => {
+        Toastify({
+            text: "TODO",
+            className: "info",
+            offset: {
+                y: 12
+            },
+            style: {
+                background: "#0000a8",
+            }
+        }).showToast()
+    }
+</script>
 </body>

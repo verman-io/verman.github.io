@@ -22,8 +22,7 @@ $ . "${SCRIPT_NAME}"</pre>
 > SET "LIBSCRIPT_ROOT_DIR=%cd%"
 > :: `SET` any variables now (see below for variable docs). Then:
 > :: Set script location:
-> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_toolchain
-odejs\setup.cmd"
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_toolchain\nodejs\setup.cmd"
 > CALL "%SCRIPT_NAME%"</pre>
     </fieldset>
 </div>
