@@ -40,6 +40,27 @@
             padding: 120px;
             margin: 42px;
         }*/
+        .flex-ul-prefer-hor {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            list-style: none;
+            justify-content: space-between;
+        }
+        .right {
+            float: right;
+            width: 50%;
+        }
+        label {
+            width: 50%;
+        }
+        .flex-item {
+            flex-grow: 1;
+            flex-shrink: 1;
+            /*width: calc(100% / 2);*/
+            width: 100%;
+            transition: all 0.4s ease;
+        }
     </style>
     <script type="application/javascript">
         let firstRun = true;
@@ -161,8 +182,7 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="lib_toolchain">_lib/_toolchain</h1>
-<div class="flex"><a class="cell" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_toolchain/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a><a class="cell" onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a><a class="cell" onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a><a class="cell" onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></div>
+<h1 id="lib_toolchain">_lib/_toolchain<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_toolchain/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
 <p>Toolchains. Generally for a specific language like Rust, Python, or
 <code>jq</code>. Sometimes for a specific tool, like <code>wait4x</code>
 to healthcheck deployments.</p>
