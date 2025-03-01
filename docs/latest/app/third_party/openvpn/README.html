@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <meta itemprop="name" content="libscript &ndash; openvpn">
     <meta name="description" content="Deploy openvpn with this cross-platform open-source 1-click installer">
     <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
@@ -10,123 +11,14 @@
     <title>openvpn from libscript @ VerMan.io</title>
     <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <style>
-        #actual-body {
-            max-width: 70%;
-        }
-        .active-navlink {
-            background-color: rgb(255, 255, 0);
-        }
-        table {
-            background-color: rgb(0, 0, 168);
-            width: 90%;
-        }
-        html, body {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-        .deploy-img {
-            height: 100%;
-            width: 144px;
-        }
-        .flex {
-            display: flex;
-            justify-content: space-between;
-        }
-        /*.cell {
-            display: flex;
-            text-decoration: none;
-            padding: 120px;
-            margin: 42px;
-        }*/
-        .flex-ul-prefer-hor {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            list-style: none;
-            justify-content: space-between;
-        }
-        .right {
-            float: right;
-            width: 50%;
-        }
-        label {
-            width: 50%;
-        }
-        .flex-item {
-            flex-grow: 1;
-            flex-shrink: 1;
-            /*width: calc(100% / 2);*/
-            width: 100%;
-            transition: all 0.4s ease;
-        }
-        .line-thru {
-            display: flex;
-            flex-direction: row;
-        }
-        .line-thru:before, .line-thru:after {
-            content: "";
-            flex: 1 1;
-            border-bottom: 1px solid;
-            margin: auto;
-        }
-        .line-thru:before {
-            margin-right: 10px
-        }
-        .line-thru:after {
-            margin-left: 10px
-        }
-    </style>
-    <script type="application/javascript">
-        let firstRun = true;
-
-        let nicerName = (s) => {
-            const last_slash = s.lastIndexOf("/");
-            const base = s.substring(last_slash);
-            const name = base === "/README.html" ? s.substring(0, last_slash) : s.substring(0, s.length - 5);
-            return name.length > 25 ? '…' + name.substring(name.length-29): name;
-        };
-
-        const toggleSidebar = () => {
-            const sideNav = document.querySelector('.tui-sidenav');
-
-            if (sideNav) {
-                const actualBodyStyle = document.getElementById("actual-body").style;
-                if (sideNav.classList.contains('active')) {
-                    //sideNav.classList.remove('active');
-                    actualBodyStyle.marginLeft = '20px';
-                    actualBodyStyle.maxWidth = '100%';
-                } else {
-                    actualBodyStyle.marginLeft = '390px';
-                    actualBodyStyle.maxWidth = '70%';
-                    if (firstRun) {
-                        firstRun = false;
-                        sideNav.classList.add('active');
-                        const ul = sideNav.querySelector('ul');
-                        for (const url of urls) {
-                            const listItem = document.createElement("li");
-                            if (window.location.pathname === url)
-                                listItem.className = 'active-navlink';
-                            const anchor = document.createElement("a");
-                            anchor.href = url;
-                            anchor.textContent = nicerName(url);
-                            listItem.appendChild(anchor);
-                            ul.appendChild(listItem);
-                        }
-                        /*document.getElementsByTagName('table').forEach((table) =>
-                            table.classList.add('tui-table')
-                        );*/
-                    }
-                }
-            }
-        }
-        const urls = ["/docs/latest/IDEAS.html","/docs/latest/dockerfiles_ssh/README.html","/docs/latest/app/third_party/firecrawl/README.html","/docs/latest/app/third_party/jupyterhub/README.html","/docs/latest/app/third_party/openvpn/README.html","/docs/latest/app/third_party/serve-actix-diesel-auth-scaffold/README.html","/docs/latest/app/_storage/README.html","/docs/latest/app/README.html","/docs/latest/_lib/_server/nginx/ROADMAP.html","/docs/latest/_lib/_server/nginx/README.html","/docs/latest/_lib/_server/python/README.html","/docs/latest/_lib/_server/rust/README.html","/docs/latest/_lib/_server/README.html","/docs/latest/_lib/_server/nodejs/README.html","/docs/latest/_lib/_toolchain/jq/README.html","/docs/latest/_lib/_toolchain/wait4x/README.html","/docs/latest/_lib/_toolchain/python/README.html","/docs/latest/_lib/_toolchain/rust/README.html","/docs/latest/_lib/_toolchain/cc/README.html","/docs/latest/_lib/_toolchain/README.html","/docs/latest/_lib/_toolchain/nodejs/README.html","/docs/latest/_lib/_common/_noop/README.html","/docs/latest/_lib/_common/README.html","/docs/latest/_lib/_git/README.html","/docs/latest/_lib/_storage/postgres/README.html","/docs/latest/_lib/_storage/valkey/README.html","/docs/latest/_lib/_storage/README.html","/docs/latest/_lib/_daemon/systemd/README.html","/docs/latest/_lib/_daemon/README.html","/docs/latest/_lib/DOCS.html","/docs/latest/_lib/README.html","/docs/latest/WINDOWS.html","/docs/latest/ROADMAP.html","/docs/latest/gen/README.html","/docs/latest/DOCS_ROADMAP.html","/docs/latest/DEPENDENCIES.html","/docs/latest/WHY.html","/docs/latest/README.html"];
-    </script>
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
 </head>
 <body onload="toggleSidebar()">
 <!-- Sidenav -->
 <nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
     <ul>
     </ul>
 </nav>
@@ -203,46 +95,17 @@
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">
-    <ul>
+    <ul onload="onSidebarLoad()">
         <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
     </ul>
 </div>
 
 <a class="tui-button red-168 white-255-text fixed add-btn"
    href="mailto:samuel@offscale.io&subject=verman"
-   alt="Email me"
+   aria-label="Email me"
 >📧</a>
-<script src="/assets/tuicss.min.js" type="application/javascript"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script>
-    const copyURI = (evt) => {
-        evt.preventDefault();
-        navigator.clipboard.writeText("https://github.com/SamuelMarks/libscript").then(() =>
-                Toastify({
-                    text: "Copied GitHub link to clipboard",
-                    className: "info",
-                    offset: {
-                        y: 12
-                    },
-                    style: {
-                        background: "#0000a8",
-                    }
-                }).showToast(),
-            () => console.error('clipboard write failed')
-        );
-    }
-
-    const TODO = () => {
-        Toastify({
-            text: "TODO",
-            className: "info",
-            offset: {
-                y: 12
-            },
-            style: {
-                background: "#0000a8",
-            }
-        }).showToast()
-    }
-</script>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/tree.min.js"></script>
 </body>

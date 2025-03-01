@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <meta itemprop="name" content="libscript &ndash; jupyterhub">
     <meta name="description" content="Deploy jupyterhub with this cross-platform open-source 1-click installer">
     <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
@@ -10,123 +11,14 @@
     <title>jupyterhub from libscript @ VerMan.io</title>
     <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
-    <style>
-        #actual-body {
-            max-width: 70%;
-        }
-        .active-navlink {
-            background-color: rgb(255, 255, 0);
-        }
-        table {
-            background-color: rgb(0, 0, 168);
-            width: 90%;
-        }
-        html, body {
-            max-width: 100%;
-            overflow-x: hidden;
-        }
-        .deploy-img {
-            height: 100%;
-            width: 144px;
-        }
-        .flex {
-            display: flex;
-            justify-content: space-between;
-        }
-        /*.cell {
-            display: flex;
-            text-decoration: none;
-            padding: 120px;
-            margin: 42px;
-        }*/
-        .flex-ul-prefer-hor {
-            display: flex;
-            flex-direction: row;
-            flex-wrap: wrap;
-            list-style: none;
-            justify-content: space-between;
-        }
-        .right {
-            float: right;
-            width: 50%;
-        }
-        label {
-            width: 50%;
-        }
-        .flex-item {
-            flex-grow: 1;
-            flex-shrink: 1;
-            /*width: calc(100% / 2);*/
-            width: 100%;
-            transition: all 0.4s ease;
-        }
-        .line-thru {
-            display: flex;
-            flex-direction: row;
-        }
-        .line-thru:before, .line-thru:after {
-            content: "";
-            flex: 1 1;
-            border-bottom: 1px solid;
-            margin: auto;
-        }
-        .line-thru:before {
-            margin-right: 10px
-        }
-        .line-thru:after {
-            margin-left: 10px
-        }
-    </style>
-    <script type="application/javascript">
-        let firstRun = true;
-
-        let nicerName = (s) => {
-            const last_slash = s.lastIndexOf("/");
-            const base = s.substring(last_slash);
-            const name = base === "/README.html" ? s.substring(0, last_slash) : s.substring(0, s.length - 5);
-            return name.length > 25 ? '…' + name.substring(name.length-29): name;
-        };
-
-        const toggleSidebar = () => {
-            const sideNav = document.querySelector('.tui-sidenav');
-
-            if (sideNav) {
-                const actualBodyStyle = document.getElementById("actual-body").style;
-                if (sideNav.classList.contains('active')) {
-                    //sideNav.classList.remove('active');
-                    actualBodyStyle.marginLeft = '20px';
-                    actualBodyStyle.maxWidth = '100%';
-                } else {
-                    actualBodyStyle.marginLeft = '390px';
-                    actualBodyStyle.maxWidth = '70%';
-                    if (firstRun) {
-                        firstRun = false;
-                        sideNav.classList.add('active');
-                        const ul = sideNav.querySelector('ul');
-                        for (const url of urls) {
-                            const listItem = document.createElement("li");
-                            if (window.location.pathname === url)
-                                listItem.className = 'active-navlink';
-                            const anchor = document.createElement("a");
-                            anchor.href = url;
-                            anchor.textContent = nicerName(url);
-                            listItem.appendChild(anchor);
-                            ul.appendChild(listItem);
-                        }
-                        /*document.getElementsByTagName('table').forEach((table) =>
-                            table.classList.add('tui-table')
-                        );*/
-                    }
-                }
-            }
-        }
-        const urls = ["/docs/latest/IDEAS.html","/docs/latest/dockerfiles_ssh/README.html","/docs/latest/app/third_party/firecrawl/README.html","/docs/latest/app/third_party/jupyterhub/README.html","/docs/latest/app/third_party/openvpn/README.html","/docs/latest/app/third_party/serve-actix-diesel-auth-scaffold/README.html","/docs/latest/app/_storage/README.html","/docs/latest/app/README.html","/docs/latest/_lib/_server/nginx/ROADMAP.html","/docs/latest/_lib/_server/nginx/README.html","/docs/latest/_lib/_server/python/README.html","/docs/latest/_lib/_server/rust/README.html","/docs/latest/_lib/_server/README.html","/docs/latest/_lib/_server/nodejs/README.html","/docs/latest/_lib/_toolchain/jq/README.html","/docs/latest/_lib/_toolchain/wait4x/README.html","/docs/latest/_lib/_toolchain/python/README.html","/docs/latest/_lib/_toolchain/rust/README.html","/docs/latest/_lib/_toolchain/cc/README.html","/docs/latest/_lib/_toolchain/README.html","/docs/latest/_lib/_toolchain/nodejs/README.html","/docs/latest/_lib/_common/_noop/README.html","/docs/latest/_lib/_common/README.html","/docs/latest/_lib/_git/README.html","/docs/latest/_lib/_storage/postgres/README.html","/docs/latest/_lib/_storage/valkey/README.html","/docs/latest/_lib/_storage/README.html","/docs/latest/_lib/_daemon/systemd/README.html","/docs/latest/_lib/_daemon/README.html","/docs/latest/_lib/DOCS.html","/docs/latest/_lib/README.html","/docs/latest/WINDOWS.html","/docs/latest/ROADMAP.html","/docs/latest/gen/README.html","/docs/latest/DOCS_ROADMAP.html","/docs/latest/DEPENDENCIES.html","/docs/latest/WHY.html","/docs/latest/README.html"];
-    </script>
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
 </head>
 <body onload="toggleSidebar()">
 <!-- Sidenav -->
 <nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
     <ul>
     </ul>
 </nav>
@@ -199,50 +91,161 @@
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="appthird_partyjupyterhub">app/third_party/jupyterhub<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/app/third_party/jupyterhub/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<div class="tui-window" style="width: 100%"><fieldset class="tui-fieldset"><legend class="center">1-click deploy</legend><ul class="flex-ul-prefer-hor"><li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li><li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li><li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li></ul></fieldset></div><h2 class="line-beside">or</h2><div class="tui-window" style="width: 100%"><form id="twoClickForm" action="" method="get"><fieldset class="tui-fieldset"><legend class="center">2-click deploy</legend><div class="flex"><label for="cname" class="flex-item">     CNAME............................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" /><br></div><div class="flex"><label for="log_server" class="flex-item">Metrics/logs (server)............: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/><br></div><div class="flex"><label for="backup_url" class="flex-item">Backup (object storage)..........: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/><br></div><textarea class="tui-input" style="width: 100%" placeholder="Additional vars (JSON format)" name="json" id="json"></textarea></br></fieldset><ul class="flex-ul-prefer-hor"><li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li><li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li><li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li></ul></form></div>
 <p>JupyterHub builder/updater and daemon installer/updater.</p>
+<!-- Local usage -->
+<h3>Local and image-creation usage</h3>
+<div class="tui-tabs">
+    <ul>
+        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
+        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
+    </ul>
+</div>
+<div id="unix-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre>$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
+$ # `export` any variables now (see below for variable docs). Then:
+$ # Set script location:
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/app/third_party/jupyterhub/setup.sh'
+$ . "${SCRIPT_NAME}"</pre>
+    </fieldset>
+</div>
+<div id="windows-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre>> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+> SET "LIBSCRIPT_ROOT_DIR=%cd%"
+> :: `SET` any variables now (see below for variable docs). Then:
+> :: Set script location:
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\app\third_party\jupyterhub\setup.cmd"
+> CALL "%SCRIPT_NAME%"</pre>
+    </fieldset>
+</div>
+<h1 id="objects">Objects</h1>
+<ul>
+<li><a
+href="#reference-jupyterhub-third-party-vars"><code>jupyterhub third-party vars</code></a>
+(root object)</li>
+</ul>
+<hr />
+<p><a name="reference-jupyterhub-third-party-vars"></a> ## jupyterhub
+third-party vars</p>
+<p>jupyterhub third-party vars that can be set</p>
+<p><strong><code>jupyterhub third-party vars</code>
+Properties</strong></p>
+<table class="tui-table hovered-purple striped-purple">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>JUPYTERHUB_SERVICE_USER</strong></td>
+<td><code>string</code></td>
+<td>Username to use for the install + daemon serve (creates user if
+nonexistent)</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>JUPYTERHUB_IP</strong></td>
+<td><code>string</code></td>
+<td>IP address to server from</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>JUPYTERHUB_PORT</strong></td>
+<td><code>string</code></td>
+<td>IP port to server from</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>JUPYTERHUB_NOTEBOOK_DIR</strong></td>
+<td><code>string</code></td>
+<td>Notebook directory (creates if nonexistent)</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>JUPYTERHUB_VENV</strong></td>
+<td><code>string</code></td>
+<td>Python virtualenv to use (creates if nonexistent)</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>JUPYTERHUB_PASSWORD</strong></td>
+<td><code>string</code></td>
+<td>Preferably (hashed+salted argon2) password to use</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Additional properties are allowed.</p>
+<h3 id="jupyterhub-third-party-vars.jupyterhub_service_user">jupyterhub
+third-party vars.JUPYTERHUB_SERVICE_USER</h3>
+<p>Username to use for the install + daemon serve (creates user if
+nonexistent)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="jupyterhub-third-party-vars.jupyterhub_ip">jupyterhub
+third-party vars.JUPYTERHUB_IP</h3>
+<p>IP address to server from</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="jupyterhub-third-party-vars.jupyterhub_port">jupyterhub
+third-party vars.JUPYTERHUB_PORT</h3>
+<p>IP port to server from</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="jupyterhub-third-party-vars.jupyterhub_notebook_dir">jupyterhub
+third-party vars.JUPYTERHUB_NOTEBOOK_DIR</h3>
+<p>Notebook directory (creates if nonexistent)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="jupyterhub-third-party-vars.jupyterhub_venv">jupyterhub
+third-party vars.JUPYTERHUB_VENV</h3>
+<p>Python virtualenv to use (creates if nonexistent)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="jupyterhub-third-party-vars.jupyterhub_password">jupyterhub
+third-party vars.JUPYTERHUB_PASSWORD</h3>
+<p>Preferably (hashed+salted argon2) password to use</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">
-    <ul>
+    <ul onload="onSidebarLoad()">
         <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
     </ul>
 </div>
 
 <a class="tui-button red-168 white-255-text fixed add-btn"
    href="mailto:samuel@offscale.io&subject=verman"
-   alt="Email me"
+   aria-label="Email me"
 >📧</a>
-<script src="/assets/tuicss.min.js" type="application/javascript"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script>
-    const copyURI = (evt) => {
-        evt.preventDefault();
-        navigator.clipboard.writeText("https://github.com/SamuelMarks/libscript").then(() =>
-                Toastify({
-                    text: "Copied GitHub link to clipboard",
-                    className: "info",
-                    offset: {
-                        y: 12
-                    },
-                    style: {
-                        background: "#0000a8",
-                    }
-                }).showToast(),
-            () => console.error('clipboard write failed')
-        );
-    }
-
-    const TODO = () => {
-        Toastify({
-            text: "TODO",
-            className: "info",
-            offset: {
-                y: 12
-            },
-            style: {
-                background: "#0000a8",
-            }
-        }).showToast()
-    }
-</script>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/tree.min.js"></script>
 </body>
