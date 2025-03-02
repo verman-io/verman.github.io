@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; latest/TEST">
+    <meta name="description" content="Deploy latest/TEST with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/TEST.html" />
+    <title>latest/TEST from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+    <ul>
+    </ul>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/packaging-solutions.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="testing-instructions">Testing instructions<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/TEST.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<p>When contributing new `ports’ it’s important to test on different OSs
+and distributions.</p>
+<h2 id="alpine-linux-debian-ubuntu">Alpine Linux, Debian, Ubuntu</h2>
+<p>Convenience Docker Images have been setup here
+https://github.com/SamuelMarks/libscript-docker-images</p>
+<h3 id="usage">Usage</h3>
+<p>(see repo for how to setup ssh keys or alternative password
+solution)</p>
+<p>[optional] Modify your <code>~/.ssh/config</code> with:</p>
+<pre><code>Host alpine321
+    HostName 127.0.0.1
+    Port 2222
+    User root
+    PreferredAuthentications publickey
+    PubkeyAuthentication yes
+    PasswordAuthentication no
+    ServerAliveInterval 10
+    IdentityFile /tmp/.ssh/id_rsa</code></pre>
+<p>Then execute:</p>
+<pre><code>$ docker run --name alpine-server-3-2-1 \
+    -p 2222:22 \
+    -e USER_PASSWORD=&#39;null&#39; \
+    -e USER_PUBKEY=&quot;$(cat -- /tmp.ssh/id_rsa.pub)&quot; \
+    samuelmarks/libscript-docker-images:alpine-3.21
+$ # remove previous ssh host verification with
+$ ssh-keygen -R &#39;[127.0.0.1]:2222&#39;
+$ ssh alpine321 cat /etc/os-release
+NAME=&quot;Alpine Linux&quot;
+ID=alpine
+VERSION_ID=3.21.3
+PRETTY_NAME=&quot;Alpine Linux v3.21&quot;
+HOME_URL=&quot;https://alpinelinux.org/&quot;
+BUG_REPORT_URL=&quot;https://gitlab.alpinelinux.org/alpine/aports/-/issues&quot;</code></pre>
+<p>Now to actually test you can do something like:</p>
+<pre><code>$ export LIBSCRIPT_ROOT_DIR=&#39;/path/to/libscript&#39;
+$ rsync -az &quot;${LIBSCRIPT_ROOT_DIR}&quot; alpine321:/opt/repos/
+$ # implicit test
+$ ssh alpine321 &#39;/opt/repos/libscript/_lib/_toolchain/jq/test.sh&#39;
+$ # explicit handwritten test
+$ ssh alpine321 jq --version</code></pre>
+<h3 id="usage-windows">Usage (Windows)</h3>
+<p>You can essentially follow same steps as above; for
+<code>rsync</code> use the Cygwin version. Alternatively copy files over
+using <code>scp</code> or whatever your preferred approach is.</p>
+<p>PuTTy instructions are also available at
+https://github.com/SamuelMarks/libscript-docker-images</p>
+<h2 id="windows">Windows</h2>
+<p>(guide coming soon)</p>
+<h2
+id="netbsd-freebsd-openbsd-sunos-opensolaris-illumos-hpux-zos">NetBSD;
+FreeBSD; OpenBSD; SunOS / OpenSolaris / illumos; HP/UX; z/OS</h2>
+<p>(guide coming soon; hopefully I find an open-source alternative to
+Vagrant for this!)</p>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul onload="onSidebarLoad()">
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/tree.min.js"></script>
+</body>
