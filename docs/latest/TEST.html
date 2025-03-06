@@ -125,7 +125,7 @@ PRETTY_NAME=&quot;Alpine Linux v3.21&quot;
 HOME_URL=&quot;https://alpinelinux.org/&quot;
 BUG_REPORT_URL=&quot;https://gitlab.alpinelinux.org/alpine/aports/-/issues&quot;</code></pre>
 <p>Now to actually test you can do something like:</p>
-<pre><code>$ export LIBSCRIPT_ROOT_DIR=&#39;/path/to/libscript&#39;
+<pre><code>$ export LIBSCRIPT_ROOT_DIR=&quot;${LIBSCRIPT_ROOT_DIR:-/path/to/libscript}&quot;
 $ rsync -az &quot;${LIBSCRIPT_ROOT_DIR}&quot; alpine321:/opt/repos/
 $ # implicit test
 $ ssh alpine321 &#39;/opt/repos/libscript/_lib/_toolchain/jq/test.sh&#39;
@@ -144,10 +144,33 @@ id="netbsd-freebsd-openbsd-sunos-opensolaris-illumos-hpux-zos">NetBSD;
 FreeBSD; OpenBSD; SunOS / OpenSolaris / illumos; HP/UX; z/OS</h2>
 <p>(guide coming soon; hopefully I find an open-source alternative to
 Vagrant for this!)</p>
+<h2 id="android">Android</h2>
+<p>Install Python on your host machine—e.g., using <a
+href="_lib/_toolchain/python/setup.sh">_lib/_toolchain/python/setup.sh</a>—then
+follow the guide here to setup your Android and SDK
+https://github.com/jb2170/better-adb-sync finishing by running:</p>
+<pre><code>$ python -m pip install BetterADBSync
+$ export LIBSCRIPT_ROOT_DIR=&quot;${LIBSCRIPT_ROOT_DIR:-/path/to/libscript}&quot;
+$ adbsync push --delete &quot;${LIBSCRIPT_ROOT_DIR}&quot; /sdcard/repos/</code></pre>
+<p>Then use <a href="https://termux.dev/en/">termux</a> to access that
+directory and execute commands. <a
+href="https://github.com/Genymobile/scrcpy">scrcpy</a> is popular to
+remotely control the screen+keyboard, and <a
+href="https://github.com/viarotel-org/escrcpy">escrcpy</a> appears to
+allow remote execution of scripts (though remains to be tested &amp;
+checked for security flaws).</p>
+<p>Or alternatively the docs say you can edit your .ssh/config with:</p>
+<pre><code>Host sshelper
+    Port 2222
+    ProxyCommand adb-channel tcp:%p com.arachnoid.sshelper/.SSHelperActivity 1</code></pre>
+<p>(though SSHelper seems to be unmaintained and won’t work on new
+Android’s)</p>
+<h2 id="ios">iOS</h2>
+<p>(guide coming soon)</p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">
-    <ul onload="onSidebarLoad()">
+    <ul>
         <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
     </ul>
 </div>
