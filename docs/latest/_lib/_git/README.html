@@ -14,13 +14,34 @@
     <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+    <script type="importmap">
+        {
+            "imports": {
+                "lit": "https://ga.jspm.io/npm:lit@2.8.0/index.js",
+                "lit/": "https://ga.jspm.io/npm:lit@2.8.0/",
+                "lit-html": "https://ga.jspm.io/npm:lit-html@2.8.0/lit-html.js",
+                "lit-html/": "https://ga.jspm.io/npm:lit-html@2.8.0/",
+                "lit-element/": "https://ga.jspm.io/npm:lit-element@3.3.3/",
+                "@lit/reactive-element": "https://ga.jspm.io/npm:@lit/reactive-element@1.6.3/reactive-element.js",
+                "@lit/reactive-element/": "https://ga.jspm.io/npm:@lit/reactive-element@1.6.1/",
+
+                "@shoelace-style/shoelace/": "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.3.0/",
+
+                "lodash-es/set": "https://unpkg.com/lodash-es@4.17.21/set.js",
+
+                "@jsfe/core": "https://unpkg.com/@jsfe/core@0.0.5/dist/esm-min"
+            }
+        }
+    </script>
+    <link
+            rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/themes/dark.css"
+    />
 </head>
 <body onload="toggleSidebar()">
 <!-- Sidenav -->
 <nav class="tui-sidenav absolute" style="height: unset !important;">
     <div id="tree-container"></div>
-    <ul>
-    </ul>
 </nav>
 
 <!-- Navbar -->
@@ -90,8 +111,54 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="lib_git">_lib/_git<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_git/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<div class="tui-window" style="width: 100%"><fieldset class="tui-fieldset"><legend class="center">1-click deploy</legend><ul class="flex-ul-prefer-hor"><li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li><li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li><li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li></ul></fieldset></div><h2 class="line-beside">or</h2><div class="tui-window" style="width: 100%"><form id="twoClickForm" action="" method="get"><fieldset class="tui-fieldset"><legend class="center">2-click deploy</legend><div class="flex"><label for="cname" class="flex-item">     CNAME............................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" /><br></div><div class="flex"><label for="log_server" class="flex-item">Metrics/logs (server)............: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/><br></div><div class="flex"><label for="backup_url" class="flex-item">Backup (object storage)..........: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/><br></div><textarea class="tui-input" style="width: 100%" placeholder="Additional vars (JSON format)" name="json" id="json"></textarea></br></fieldset><ul class="flex-ul-prefer-hor"><li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li><li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li><li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li></ul></form></div>
+<h1 id="lib_git">_lib/_git<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_git/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<div class="tui-window" style="width: 100%">
+  <fieldset class="tui-fieldset">
+  <legend class="center">1-click deploy</legend>
+  <ul class="flex-ul-prefer-hor">
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li>
+  </ul>
+  </fieldset>
+</div>
+
+<h2 class="line-beside">or</h2>
+
+<div class="tui-window" style="width: 100%">
+  <form id="twoClickForm" action="" method="get">
+    <fieldset class="tui-fieldset">
+      <legend class="center">2-click deploy</legend>
+      <div class="flex">
+        <label for="cname" class="flex-item">     CNAME.........................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" />
+      </div>
+      <div class="flex">
+        <label for="log_server" class="flex-item">Metrics/logs (server).........: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/>
+      </div>
+      <div class="flex">
+        <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
+      </div>
+      <div class="flex">
+        <json-schema-form name="json" id="json" schema='{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"git_get args","description":"git_get function arguments","type":"object","properties":{"1":{"description":"repository","type":"string"},"2":{"description":"target directory","type":"string"},"3":{"description":"branch","type":"string"}},"required":["1","2"]}
+'></json-schema-form>
+      </div>
+      <div class="flex">
+        <json-schema-form
+      			id="myForm"
+      			schema='{"title": "CDN demo","description": "Pretty neat, huh?","properties": {            "foo": {             "type": "string"            },            "bar": {             "type": "boolean"            }           }          }'
+      			data='{"foo": "Hello"}'
+      			ui-schema='{"bar": { "ui:widget": "switch" }}'>
+      	</json-schema-form>
+      </div>
+
+      <ul class="flex-ul-prefer-hor">
+        <li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li>
+        <li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li>
+        <li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li>
+      </ul>
+    </fieldset>
+  </form>
+</div>
 <p><code>git</code> helpers</p>
 <!-- Local usage -->
 <h3>Local and image-creation usage</h3>
@@ -121,7 +188,54 @@ $ . "${SCRIPT_NAME}"</pre>
 > CALL "%SCRIPT_NAME%"</pre>
     </fieldset>
 </div>
-<h1 id="objects">Objects</h1>
+<h1 id="objects">Objects<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_git/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<div class="tui-window" style="width: 100%">
+  <fieldset class="tui-fieldset">
+  <legend class="center">1-click deploy</legend>
+  <ul class="flex-ul-prefer-hor">
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li>
+  </ul>
+  </fieldset>
+</div>
+
+<h2 class="line-beside">or</h2>
+
+<div class="tui-window" style="width: 100%">
+  <form id="twoClickForm" action="" method="get">
+    <fieldset class="tui-fieldset">
+      <legend class="center">2-click deploy</legend>
+      <div class="flex">
+        <label for="cname" class="flex-item">     CNAME.........................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" />
+      </div>
+      <div class="flex">
+        <label for="log_server" class="flex-item">Metrics/logs (server).........: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/>
+      </div>
+      <div class="flex">
+        <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
+      </div>
+      <div class="flex">
+        <json-schema-form name="json" id="json" schema='{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"git_get args","description":"git_get function arguments","type":"object","properties":{"1":{"description":"repository","type":"string"},"2":{"description":"target directory","type":"string"},"3":{"description":"branch","type":"string"}},"required":["1","2"]}
+'></json-schema-form>
+      </div>
+      <div class="flex">
+        <json-schema-form
+      			id="myForm"
+      			schema='{"title": "CDN demo","description": "Pretty neat, huh?","properties": {            "foo": {             "type": "string"            },            "bar": {             "type": "boolean"            }           }          }'
+      			data='{"foo": "Hello"}'
+      			ui-schema='{"bar": { "ui:widget": "switch" }}'>
+      	</json-schema-form>
+      </div>
+
+      <ul class="flex-ul-prefer-hor">
+        <li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li>
+        <li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li>
+        <li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li>
+      </ul>
+    </fieldset>
+  </form>
+</div>
 <ul>
 <li><a href="#reference-git_get-args"><code>git_get args</code></a>
 (root object)</li>
@@ -194,5 +308,4 @@ $ . "${SCRIPT_NAME}"</pre>
 <script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
 <script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
-<script type="application/javascript" charset="utf-8" src="/assets/tree.min.js"></script>
 </body>
