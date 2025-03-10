@@ -14,29 +14,7 @@
     <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
-    <script type="importmap">
-        {
-            "imports": {
-                "lit": "https://ga.jspm.io/npm:lit@2.8.0/index.js",
-                "lit/": "https://ga.jspm.io/npm:lit@2.8.0/",
-                "lit-html": "https://ga.jspm.io/npm:lit-html@2.8.0/lit-html.js",
-                "lit-html/": "https://ga.jspm.io/npm:lit-html@2.8.0/",
-                "lit-element/": "https://ga.jspm.io/npm:lit-element@3.3.3/",
-                "@lit/reactive-element": "https://ga.jspm.io/npm:@lit/reactive-element@1.6.3/reactive-element.js",
-                "@lit/reactive-element/": "https://ga.jspm.io/npm:@lit/reactive-element@1.6.1/",
-
-                "@shoelace-style/shoelace/": "https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.3.0/",
-
-                "lodash-es/set": "https://unpkg.com/lodash-es@4.17.21/set.js",
-
-                "@jsfe/core": "https://unpkg.com/@jsfe/core@0.0.5/dist/esm-min"
-            }
-        }
-    </script>
-    <link
-            rel="stylesheet"
-            href="https://cdn.jsdelivr.net/npm/@shoelace-style/shoelace@2.9.0/cdn/themes/dark.css"
-    />
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
 </head>
 <body onload="toggleSidebar()">
 <!-- Sidenav -->
@@ -138,17 +116,13 @@
       <div class="flex">
         <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
       </div>
+
       <div class="flex">
-        <json-schema-form name="json" id="json" schema='{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/postgres/vars.schema.json","title":"postgres server vars","description":"postgres vars that can be set","type":"object","properties":{"POSTGRESQL_VERSION":{"description":"Version of PostgreSQL demanded","type":"string"},"POSTGRES_USER":{"description":"Username to create inside postgres","type":"string"},"POSTGRES_PASSWORD":{"description":"Password for created user inside postgres","type":"string"},"POSTGRES_PASSWORD_FILE":{"description":"Password file, its contents used as password for created user inside postgres","type":"string"},"POSTGRES_HOST":{"description":"Hostname to serve postgres from","type":"string"},"POSTGRES_DB":{"description":"Database to create within postgres","type":"string"}}}
-'></json-schema-form>
+        <div id="editor_holder"></div>
       </div>
+
       <div class="flex">
-        <json-schema-form
-      			id="myForm"
-      			schema='{"title": "CDN demo","description": "Pretty neat, huh?","properties": {            "foo": {             "type": "string"            },            "bar": {             "type": "boolean"            }           }          }'
-      			data='{"foo": "Hello"}'
-      			ui-schema='{"bar": { "ui:widget": "switch" }}'>
-      	</json-schema-form>
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Deploy</button>
       </div>
 
       <ul class="flex-ul-prefer-hor">
@@ -215,17 +189,13 @@ $ . "${SCRIPT_NAME}"</pre>
       <div class="flex">
         <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
       </div>
+
       <div class="flex">
-        <json-schema-form name="json" id="json" schema='{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/postgres/vars.schema.json","title":"postgres server vars","description":"postgres vars that can be set","type":"object","properties":{"POSTGRESQL_VERSION":{"description":"Version of PostgreSQL demanded","type":"string"},"POSTGRES_USER":{"description":"Username to create inside postgres","type":"string"},"POSTGRES_PASSWORD":{"description":"Password for created user inside postgres","type":"string"},"POSTGRES_PASSWORD_FILE":{"description":"Password file, its contents used as password for created user inside postgres","type":"string"},"POSTGRES_HOST":{"description":"Hostname to serve postgres from","type":"string"},"POSTGRES_DB":{"description":"Database to create within postgres","type":"string"}}}
-'></json-schema-form>
+        <div id="editor_holder"></div>
       </div>
+
       <div class="flex">
-        <json-schema-form
-      			id="myForm"
-      			schema='{"title": "CDN demo","description": "Pretty neat, huh?","properties": {            "foo": {             "type": "string"            },            "bar": {             "type": "boolean"            }           }          }'
-      			data='{"foo": "Hello"}'
-      			ui-schema='{"bar": { "ui:widget": "switch" }}'>
-      	</json-schema-form>
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Deploy</button>
       </div>
 
       <ul class="flex-ul-prefer-hor">
@@ -360,4 +330,73 @@ vars.POSTGRES_DB</h3>
 <script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
 <script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
 <script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+<script>
+const editor = new JSONEditor(document.getElementById("editor_holder"),
+  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/postgres/vars.schema.json","title":"postgres server vars","description":"postgres vars that can be set","type":"object","properties":{"POSTGRESQL_VERSION":{"description":"Version of PostgreSQL demanded","type":"string"},"POSTGRES_USER":{"description":"Username to create inside postgres","type":"string"},"POSTGRES_PASSWORD":{"description":"Password for created user inside postgres","type":"string"},"POSTGRES_PASSWORD_FILE":{"description":"Password file, its contents used as password for created user inside postgres","type":"string"},"POSTGRES_HOST":{"description":"Hostname to serve postgres from","type":"string"},"POSTGRES_DB":{"description":"Database to create within postgres","type":"string"}}}
+});
+editor.on("ready", () => {
+  const editor_holder = document.getElementById("editor_holder");
+  let longest = 0;
+  let STYLES = "";
+  for (const formControl of editor_holder.getElementsByClassName("form-control")) {
+      let input = null;
+      formControl.classList.add("flex");
+      for (const child of formControl.children) {
+          switch (child.tagName.toLowerCase()) {
+              case "input":
+                  input = child;
+                  child.classList.add("flex-item");
+                  break;
+
+              case "label":
+                  child.classList.add("flex-item");
+                  // .replace("]", "").replace("[", "")
+                  child.id = `label-${child.htmlFor}`;
+                  const n = child.textContent.length;
+                  if (n > longest) longest = n;
+                  break;
+
+              case "p":
+                  if (child.id.endsWith("-description")) {
+                      input.placeholder = child.textContent;
+                      formControl.removeChild(child);
+                  }
+                  break;
+
+              default:
+                  break;
+          }
+      }
+
+      for (const child of formControl.children) {
+          if (child.tagName.toLowerCase() === "input") {
+              let l = 20 + (longest - child.textContent.length);
+              let dots = "";
+              for (let i=0; i<l; i++) {
+                  dots += ".";
+              }
+              dots += ": ";
+              STYLES += `#label-${child.id}:after { content: "${dots}"; }\n`;
+          }
+      }
+  }
+  console.info("STYLES:", STYLES, ";");
+  const style = document.createElement("style");
+  style.type = "text/css";
+  if (style.styleSheet) style.styleSheet.cssText = STYLES;
+  else style.appendChild(document.createTextNode(STYLES));
+  document.getElementsByTagName("head")[0].appendChild(style);
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync(STYLES)
+  document.adoptedStyleSheets = [sheet]
+});
+const submitButton = document.getElementById("submit");
+submitButton.onsubmit = "return false;";
+const submitButtonFunc = (e) => {
+  e.preventDefault();
+  console.log(editor.getValue());
+  return false;
+};
+submitButton.addEventListener("click", submitButtonFunc);
+</script>
 </body>
