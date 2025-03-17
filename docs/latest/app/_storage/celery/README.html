@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <meta itemprop="name" content="libscript &ndash; rust">
-    <meta name="description" content="Deploy rust with this cross-platform open-source 1-click installer">
+    <meta itemprop="name" content="libscript &ndash; celery">
+    <meta name="description" content="Deploy celery with this cross-platform open-source 1-click installer">
     <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
     <link rel="author" href="https://github.com/SamuelMarks" />
-    <link rel="canonical" href="https://verMan.io./docs/latest/_lib/_server/rust/README.html" />
-    <title>rust from libscript @ VerMan.io</title>
+    <link rel="canonical" href="https://verMan.io./docs/latest/app/_storage/celery/README.html" />
+    <title>celery from libscript @ VerMan.io</title>
     <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/styles.css" type="text/css">
     <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
@@ -89,7 +89,7 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="lib_serverrust">_lib/_server/rust<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/rust/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<h1 id="app_storagecelery">app/_storage/celery<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/app/_storage/celery/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
 <div class="tui-window" style="width: 100%">
   <fieldset class="tui-fieldset">
   <legend class="center">1-click deploy</legend>
@@ -133,9 +133,8 @@
     </fieldset>
   </form>
 </div>
-<p><a
-href="https://en.wikipedia.org/wiki/Rust_(programming_language)">Rust</a>
-server builder/updater and daemon installer/updater.</p>
+<p><a href="https://en.wikipedia.org/wiki/Celery_(software)">Celery
+(queue)</a> builder/updater and daemon installer/updater.</p>
 <!-- Local usage -->
 <h3>Local and image-creation usage</h3>
 <div class="tui-tabs">
@@ -150,7 +149,7 @@ server builder/updater and daemon installer/updater.</p>
 $ export LIBSCRIPT_ROOT_DIR="$(pwd)"
 $ # `export` any variables now (see below for variable docs). Then:
 $ # Set script location:
-$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_server/rust/setup.sh'
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/app/_storage/celery/setup.sh'
 $ . "${SCRIPT_NAME}"</pre>
     </fieldset>
 </div>
@@ -160,11 +159,11 @@ $ . "${SCRIPT_NAME}"</pre>
 > SET "LIBSCRIPT_ROOT_DIR=%cd%"
 > :: `SET` any variables now (see below for variable docs). Then:
 > :: Set script location:
-> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_server\rust\setup.cmd"
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\app\_storage\celery\setup.cmd"
 > CALL "%SCRIPT_NAME%"</pre>
     </fieldset>
 </div>
-<h1 id="objects">Objects<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/rust/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<h1 id="objects">Objects<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/app/_storage/celery/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
 <div class="tui-window" style="width: 100%">
   <fieldset class="tui-fieldset">
   <legend class="center">1-click deploy</legend>
@@ -210,14 +209,21 @@ $ . "${SCRIPT_NAME}"</pre>
 </div>
 <ul>
 <li><a
-href="#reference-rust-server-vars"><code>rust server vars</code></a>
+href="#reference-celery-storage-vars"><code>celery storage vars</code></a>
 (root object)</li>
 </ul>
 <hr />
-<p><a name="reference-rust-server-vars"></a> ## rust server vars</p>
-<p>rust server vars that can be set</p>
-<p><strong><code>rust server vars</code> Properties</strong></p>
+<p><a name="reference-celery-storage-vars"></a> ## celery storage
+vars</p>
+<p>celery storage vars that can be set</p>
+<p><strong><code>celery storage vars</code> Properties</strong></p>
 <table class="tui-table hovered-purple striped-purple">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th></th>
@@ -228,28 +234,32 @@ href="#reference-rust-server-vars"><code>rust server vars</code></a>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>DEST</strong></td>
+<td><strong>JUPYTERHUB_SERVICE_USER</strong></td>
 <td><code>string</code></td>
-<td>Destination (working directory)</td>
+<td>User (try-create); use for the daemon</td>
 <td>No</td>
 </tr>
 <tr class="even">
-<td><strong>VARS</strong></td>
+<td><strong>PYTHON_VENV</strong></td>
 <td><code>string</code></td>
-<td>Key/value in JSON format (as an escaped string)</td>
+<td>Python virtualenv to install &amp; then start the celery daemon
+from</td>
 <td>No</td>
 </tr>
 </tbody>
 </table>
 <p>Additional properties are allowed.</p>
-<h3 id="rust-server-vars.dest">rust server vars.DEST</h3>
-<p>Destination (working directory)</p>
+<h3 id="celery-storage-vars.jupyterhub_service_user">celery storage
+vars.JUPYTERHUB_SERVICE_USER</h3>
+<p>User (try-create); use for the daemon</p>
 <ul>
 <li><strong>Type</strong>: <code>string</code></li>
 <li><strong>Required</strong>: No</li>
 </ul>
-<h3 id="rust-server-vars.vars">rust server vars.VARS</h3>
-<p>Key/value in JSON format (as an escaped string)</p>
+<h3 id="celery-storage-vars.python_venv">celery storage
+vars.PYTHON_VENV</h3>
+<p>Python virtualenv to install &amp; then start the celery daemon
+from</p>
 <ul>
 <li><strong>Type</strong>: <code>string</code></li>
 <li><strong>Required</strong>: No</li>
@@ -271,7 +281,7 @@ href="#reference-rust-server-vars"><code>rust server vars</code></a>
 <script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
 <script>
 const editor = new JSONEditor(document.getElementById("editor_holder"),
-  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/rust/vars.schema.json","title":"rust server vars","description":"rust server vars that can be set","type":"object","properties":{"DEST":{"description":"Destination (working directory)","type":"string"},"VARS":{"description":"Key/value in JSON format (as an escaped string)","type":"string"}}}
+  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/app/_storage/vars.schema.json","title":"celery storage vars","description":"celery storage vars that can be set","type":"object","properties":{"JUPYTERHUB_SERVICE_USER":{"description":"User (try-create); use for the daemon","type":"string"},"PYTHON_VENV":{"description":"Python virtualenv to install & then start the celery daemon from","type":"string"}}}
 });
 editor.on("ready", () => {
   const editor_holder = document.getElementById("editor_holder");

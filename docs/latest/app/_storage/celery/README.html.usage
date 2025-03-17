@@ -8,21 +8,21 @@
 </div>
 <div id="unix-content" class="tui-tab-content tui-window">
     <fieldset class="tui-fieldset no-legend">
-<pre>$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+<pre id="usage-unix">$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
 $ export LIBSCRIPT_ROOT_DIR="$(pwd)"
 $ # `export` any variables now (see below for variable docs). Then:
 $ # Set script location:
-$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/app/_storage/setup.sh'
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/app/_storage/celery/setup.sh'
 $ . "${SCRIPT_NAME}"</pre>
     </fieldset>
 </div>
 <div id="windows-content" class="tui-tab-content tui-window">
     <fieldset class="tui-fieldset no-legend">
-<pre>> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+<pre id="usage-win">> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
 > SET "LIBSCRIPT_ROOT_DIR=%cd%"
 > :: `SET` any variables now (see below for variable docs). Then:
 > :: Set script location:
-> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\app\_storage\setup.cmd"
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\app\_storage\celery\setup.cmd"
 > CALL "%SCRIPT_NAME%"</pre>
     </fieldset>
 </div>

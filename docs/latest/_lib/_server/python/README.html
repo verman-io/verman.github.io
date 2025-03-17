@@ -122,7 +122,7 @@
       </div>
 
       <div class="flex">
-        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Deploy</button>
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Set vars</button>
       </div>
 
       <ul class="flex-ul-prefer-hor">
@@ -133,8 +133,9 @@
     </fieldset>
   </form>
 </div>
-<p>Python server virtualenv builder/updater and daemon
-installer/updater.</p>
+<p><a
+href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a>
+server virtualenv builder/updater and daemon installer/updater.</p>
 <!-- Local usage -->
 <h3>Local and image-creation usage</h3>
 <div class="tui-tabs">
@@ -145,7 +146,7 @@ installer/updater.</p>
 </div>
 <div id="unix-content" class="tui-tab-content tui-window">
     <fieldset class="tui-fieldset no-legend">
-<pre>$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+<pre id="usage-unix">$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
 $ export LIBSCRIPT_ROOT_DIR="$(pwd)"
 $ # `export` any variables now (see below for variable docs). Then:
 $ # Set script location:
@@ -155,7 +156,7 @@ $ . "${SCRIPT_NAME}"</pre>
 </div>
 <div id="windows-content" class="tui-tab-content tui-window">
     <fieldset class="tui-fieldset no-legend">
-<pre>> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+<pre id="usage-win">> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
 > SET "LIBSCRIPT_ROOT_DIR=%cd%"
 > :: `SET` any variables now (see below for variable docs). Then:
 > :: Set script location:
@@ -196,7 +197,7 @@ $ . "${SCRIPT_NAME}"</pre>
       </div>
 
       <div class="flex">
-        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Deploy</button>
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Set vars</button>
       </div>
 
       <ul class="flex-ul-prefer-hor">
@@ -289,26 +290,31 @@ editor.on("ready", () => {
   let longest = 0;
   let STYLES = "";
   for (const formControl of editor_holder.getElementsByClassName("form-control")) {
-      let input = null;
+      let inputElement = undefined;
+      let label = undefined;
       formControl.classList.add("flex");
       for (const child of formControl.children) {
           switch (child.tagName.toLowerCase()) {
               case "input":
-                  input = child;
-                  child.classList.add("flex-item");
+                  inputElement = child;
+                  inputElement.classList.add("flex-item");
+                  inputElement.classList.add("tui-input");
+                  if (inputElement.name != null && (inputElement.name.indexOf("SECRET") > -1 || inputElement.name.indexOf("PASSWORD") > -1))
+                      inputElement.type = "password";
                   break;
 
               case "label":
-                  child.classList.add("flex-item");
+                  label = child;
+                  label.classList.add("flex-item");
                   // .replace("]", "").replace("[", "")
-                  child.id = `label-${child.htmlFor}`;
-                  const n = child.textContent.length;
+                  label.id = `label-${label.htmlFor}`;
+                  const n = label.textContent.length;
                   if (n > longest) longest = n;
                   break;
 
               case "p":
                   if (child.id.endsWith("-description")) {
-                      input.placeholder = child.textContent;
+                      inputElement.placeholder = child.textContent;
                       formControl.removeChild(child);
                   }
                   break;
@@ -322,15 +328,12 @@ editor.on("ready", () => {
           if (child.tagName.toLowerCase() === "input") {
               let l = 20 + (longest - child.textContent.length);
               let dots = "";
-              for (let i=0; i<l; i++) {
-                  dots += ".";
-              }
+              for (let i=0; i<l; i++) dots += ".";
               dots += ": ";
               STYLES += `#label-${child.id}:after { content: "${dots}"; }\n`;
           }
       }
   }
-  console.info("STYLES:", STYLES, ";");
   const style = document.createElement("style");
   style.type = "text/css";
   if (style.styleSheet) style.styleSheet.cssText = STYLES;

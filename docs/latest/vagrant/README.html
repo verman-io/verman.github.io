@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <meta itemprop="name" content="libscript &ndash; _toolchain">
-    <meta name="description" content="Deploy _toolchain with this cross-platform open-source 1-click installer">
+    <meta itemprop="name" content="libscript &ndash; vagrant">
+    <meta name="description" content="Deploy vagrant with this cross-platform open-source 1-click installer">
     <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
     <link rel="author" href="https://github.com/SamuelMarks" />
-    <link rel="canonical" href="https://verMan.io./docs/latest/_lib/_toolchain/README.html" />
-    <title>_toolchain from libscript @ VerMan.io</title>
+    <link rel="canonical" href="https://verMan.io./docs/latest/vagrant/README.html" />
+    <title>vagrant from libscript @ VerMan.io</title>
     <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
     <link rel="stylesheet" href="/assets/styles.css" type="text/css">
     <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
@@ -88,20 +88,36 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="lib_toolchain">_lib/_toolchain<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_toolchain/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<p><a href="https://en.wikipedia.org/wiki/Toolchain">Toolchains</a>.
-Generally for a specific <a
-href="https://en.wikipedia.org/wiki/Programming_language">language</a>
-like <a
-href="https://en.wikipedia.org/wiki/Rust_(programming_language)">Rust</a>,
-<a
-href="https://en.wikipedia.org/wiki/Python_(programming_language)">Python</a>,
-or <a
-href="https://en.wikipedia.org/wiki/Jq_(programming_language)"><code>jq</code></a>.
-Sometimes for a specific tool, like <a
-href="https://github.com/atkrad/wait4x"><code>wait4x</code></a> to
-healthcheck <a
-href="https://en.wikipedia.org/wiki/System_deployment">deployments</a>.</p>
+<h1 id="vagrant">vagrant<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/vagrant/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<p><code>Vagrantfile</code>s primarily used for testing whether
+libscript works on specific OS+distribution+version+arch.</p>
+<p>Each has the same instructions, namely:</p>
+<h2 id="usage">Usage</h2>
+<pre><code>vagrant up</code></pre>
+<h2 id="libscript-usage">Libscript usage</h2>
+<p>Then you can use it like any other ssh host, e.g., to install
+PostgreSQL:</p>
+<pre><code>vagrant ssh -c &#39;&quot;${LIBSCRIPT_ROOT_DIR}&quot;/_lib/_storage/postgres/setup.sh&#39;</code></pre>
+<h3 id="test">Test</h3>
+<p>…and to test PostgreSQL:</p>
+<pre><code>vagrant ssh -c &#39;. &quot;${LIBSCRIPT_ROOT_DIR}&quot;/env.sh &amp;&amp; &quot;${LIBSCRIPT_ROOT_DIR}&quot;/_lib/_storage/postgres/test.sh&#39;</code></pre>
+<hr />
+<p>So you can run it in a loop, like:</p>
+<pre><code>previous_wd=&quot;$(pwd)&quot;
+for dir in *; do
+    if [ -f &quot;${dir}&quot;&#39;/Vagrantfile&#39; ]; then
+        cd -- &quot;${dir}&quot;
+
+        # then aforementioned vagrant ssh commands
+        vagrant up
+        vagrant ssh -c &#39;&quot;${LIBSCRIPT_ROOT_DIR}&quot;/_lib/_storage/postgres/setup.sh&#39;
+        vagrant ssh -c &#39;. &quot;${LIBSCRIPT_ROOT_DIR}&quot;/env.sh &amp;&amp; &quot;${LIBSCRIPT_ROOT_DIR}&quot;/_lib/_storage/postgres/test.sh&#39;
+
+        cd -- &quot;${previous_wd}&quot;
+    fi
+done</code></pre>
+<p>(wrap in a subshell with a <code>&amp;</code> at the end to run in
+parallel)</p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">
