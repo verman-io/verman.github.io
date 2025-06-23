@@ -1,3 +1,5 @@
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe_exec.sh"
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe.sh"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -119,10 +121,10 @@ href="https://en.wikipedia.org/wiki/Alpine_Linux">Alpine</a>,
 &amp;etc.); inside/outside of <a
 href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a></li>
 <li><a href="https://en.wikipedia.org/wiki/MacOS">macOS</a></li>
+<li><a href="https://en.wikipedia.org/wiki/FreeBSD">FreeBSD</a></li>
 <li>[coming soon!] <a
 href="https://en.wikipedia.org/wiki/Comparison_of_BSD_operating_systems">*BSDs</a>
 [<a href="https://en.wikipedia.org/wiki/NetBSD">NetBSD</a>, <a
-href="https://en.wikipedia.org/wiki/FreeBSD">FreeBSD</a>, <a
 href="https://en.wikipedia.org/wiki/OpenBSD">OpenBSD</a>]</li>
 <li>[coming soon!] <a
 href="https://en.wikipedia.org/wiki/SunOS">SunOS</a> and derivatives |
@@ -206,12 +208,16 @@ href="https://mongodb.com">MongoDB</a>.</p>
 </thead>
 <tbody>
 <tr class="odd">
+<td><a href="https://etcd.io">etcd</a></td>
+<td><code>ETCD_VERSION</code>†</td>
+</tr>
+<tr class="even">
 <td><a href="https://postgresql.org">PostgreSQL</a></td>
 <td><code>POSTGRESQL_VERSION</code>†; <code>POSTGRES_USER</code>†;
 <code>POSTGRES_PASSWORD</code>‡; <code>POSTGRES_PASSWORD_FILE</code>‡;
 <code>POSTGRES_HOST</code>; <code>POSTGRES_DB</code>†</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td><a href="https://valkey.io">Valkey</a> [Redis fork]</td>
 <td></td>
 </tr>
@@ -223,6 +229,10 @@ href="https://mongodb.com">MongoDB</a>.</p>
 </ul>
 <h3 id="servers">Servers</h3>
 <table>
+<colgroup>
+<col style="width: 87%" />
+<col style="width: 12%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th>Name</th>
@@ -233,6 +243,16 @@ href="https://mongodb.com">MongoDB</a>.</p>
 <tr class="odd">
 <td><a href="https://nginx.org">nginx</a></td>
 <td><code>VARS</code>‡</td>
+</tr>
+<tr class="even">
+<td><a href="https://kubernetes.io">kubernetes</a> (<a
+href="https://joostvdg.github.io/kubernetes/khw-gce">thw</a>)</td>
+<td><code>VARS</code></td>
+</tr>
+<tr class="odd">
+<td><a href="https://kubernetes.io">kubernetes</a> (<a
+href="https://k0sproject.io">k0</a>)</td>
+<td><code>VARS</code></td>
 </tr>
 </tbody>
 </table>
@@ -426,6 +446,21 @@ execution of <code>install_gen.sh</code>.</p>
 <div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> ./build_docker_images.sh <span class="at">-o</span> ./tmp</span>
 <span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd ./tmp <span class="kw">&amp;&amp;</span> <span class="fu">sh</span> ./docker_builder.sh</span>
 <span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co"># or docker_builder_parallel.sh ^</span></span></code></pre></div>
+<h2 id="vagrant-usage">Vagrant usage</h2>
+<p>First install <a href="https://vagrantup.com">Vagrant</a>. Then, for
+example, deploy the debian Vagrant box with:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="bu">cd</span> libscript/vagrant/debian12</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="ex">vagrant</span> up</span></code></pre></div>
+<h3 id="example-postgresql">Example (PostgreSQL)</h3>
+<p>Deploy PostgreSQL:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vagrant</span> ssh <span class="at">-c</span> <span class="st">&#39;. ${LIBSCRIPT_ROOT_DIR}/env.sh &amp;&amp; ${LIBSCRIPT_ROOT_DIR}/_lib/_storage/postgres/setup.sh&#39;</span></span></code></pre></div>
+<p>Test whether the deployment succeeded:</p>
+<div class="sourceCode" id="cb10"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vagrant</span> ssh <span class="at">-c</span> <span class="st">&#39;. ${LIBSCRIPT_ROOT_DIR}/env.sh &amp;&amp; ${LIBSCRIPT_ROOT_DIR}/_lib/_storage/postgres/test.sh&#39;</span></span></code></pre></div>
+<p>Run the official REPL, connected to this newly deployed
+PostgreSQL:</p>
+<div class="sourceCode" id="cb11"><pre
+class="sourceCode sh"><code class="sourceCode bash"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vagrant</span> ssh <span class="at">-c</span> <span class="st">&#39;psql &quot;postgres://rest_user:rest_pass@localhost/rest_db&quot;&#39;</span></span></code></pre></div>
 <hr/>
 <h2 id="license">License</h2>
 <p>Licensed under any of:</p>

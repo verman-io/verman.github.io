@@ -1,3 +1,5 @@
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe_exec.sh"
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe.sh"
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -112,7 +114,7 @@ directories over.</p>
 and <code>create_installer_from_json.sh</code> will do the copying for
 you.</p>
 <p>For example, I usually run:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rm <span class="at">-rf</span> gen/<span class="dt">{</span><span class="pp">*</span><span class="dt">.sh</span><span class="op">,</span><span class="pp">*</span><span class="dt">.cmd</span><span class="op">,</span><span class="dt">_lib</span><span class="op">,</span><span class="dt">app</span><span class="op">,</span><span class="dt">dockerfiles}</span> <span class="kw">;</span> <span class="fu">sh</span> ./create_installer_from_json.sh <span class="at">-f</span> ./install.json <span class="at">-o</span> gen</span>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> rm <span class="at">-rf</span> gen/<span class="dt">{</span><span class="pp">*</span><span class="dt">.csh</span><span class="op">,</span><span class="pp">*</span><span class="dt">.sh</span><span class="op">,</span><span class="pp">*</span><span class="dt">.cmd</span><span class="op">,</span><span class="dt">_lib</span><span class="op">,</span><span class="dt">app</span><span class="op">,</span><span class="dt">dockerfiles}</span> <span class="kw">;</span> <span class="fu">sh</span> ./create_installer_from_json.sh <span class="at">-f</span> ./install.json <span class="at">-o</span> gen</span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> sh ./create_docker_builder.sh <span class="at">-i</span> gen <span class="at">-vvv</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd gen <span class="kw">&amp;&amp;</span> <span class="fu">sh</span> ./docker_builder.sh</span>
 <span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># or docker_builder_parallel.sh ^</span></span></code></pre></div>

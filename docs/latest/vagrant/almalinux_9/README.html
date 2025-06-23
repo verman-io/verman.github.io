@@ -1,0 +1,119 @@
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe_exec.sh"
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe.sh"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; almalinux_9">
+    <meta name="description" content="Deploy almalinux_9 with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/vagrant/almalinux_9/README.html" />
+    <title>almalinux_9 from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="almalinux-os-rhel-compatible">AlmaLinux OS (RHEL
+compatible)<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/vagrant/almalinux_9/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="usage">Usage</h2>
+<pre><code>vagrant up</code></pre>
+<h2 id="libscript-usage">Libscript usage</h2>
+<p>Then you can use it like any other ssh host, e.g., to install
+PostgreSQL:</p>
+<pre><code>vagrant ssh -c &#39;&quot;${LIBSCRIPT_ROOT_DIR}&quot;/_lib/_storage/postgres/setup.sh&#39;</code></pre>
+<h3 id="test">Test</h3>
+<p>…and to test PostgreSQL:</p>
+<pre><code>vagrant ssh -c &#39;. &quot;${LIBSCRIPT_ROOT_DIR}&quot;/env.sh &amp;&amp; &quot;${LIBSCRIPT_ROOT_DIR}&quot;/_lib/_storage/postgres/test.sh&#39;</code></pre>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+</body>

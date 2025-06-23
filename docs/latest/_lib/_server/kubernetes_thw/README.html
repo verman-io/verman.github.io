@@ -1,0 +1,358 @@
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe_exec.sh"
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe.sh"
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; kubernetes_thw">
+    <meta name="description" content="Deploy kubernetes_thw with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/_lib/_server/kubernetes_thw/README.html" />
+    <title>kubernetes_thw from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="lib_serverkubernetes_thw">_lib/_server/kubernetes_thw<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/kubernetes_thw/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<div class="tui-window" style="width: 100%">
+  <fieldset class="tui-fieldset">
+  <legend class="center">1-click deploy</legend>
+  <ul class="flex-ul-prefer-hor">
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li>
+  </ul>
+  </fieldset>
+</div>
+
+<h2 class="line-beside">or</h2>
+
+<div class="tui-window" style="width: 100%">
+  <form id="twoClickForm" action="" method="get">
+    <fieldset class="tui-fieldset">
+      <legend class="center">2-click deploy</legend>
+      <div class="flex">
+        <label for="cname" class="flex-item">     CNAME.........................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" />
+      </div>
+      <div class="flex">
+        <label for="log_server" class="flex-item">Metrics/logs (server).........: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/>
+      </div>
+      <div class="flex">
+        <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
+      </div>
+
+      <div class="flex">
+        <div id="editor_holder"></div>
+      </div>
+
+      <div class="flex">
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Set vars</button>
+      </div>
+
+      <ul class="flex-ul-prefer-hor">
+        <li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li>
+        <li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li>
+        <li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li>
+      </ul>
+    </fieldset>
+  </form>
+</div>
+<p>Kuberenetes deployment following this guide: -
+https://github.com/kelseyhightower/kubernetes-the-hard-way</p>
+<p>To start, create 4 nodes that can talk to each other on the same
+network.</p>
+<p>For a locally runnable Vagrant example, see <a
+href="https://github.com/SamuelMarks/libscript/tree/master/vagrant/debian12_multi">vagrant/debian12_multi</a></p>
+<p>NOTE: Working from <a
+href="https://github.com/kelseyhightower/kubernetes-the-hard-way/tree/52eb26dad1a3e9e8083a89"><code>52eb26d</code></a>.</p>
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe_exec.sh"
+[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe.sh"
+<!-- Local usage -->
+<h3>Local and image-creation usage</h3>
+<div class="tui-tabs">
+    <ul>
+        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
+        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
+    </ul>
+</div>
+<div id="unix-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre id="usage-unix">$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
+$ # `export` any variables now (see below for variable docs). Then:
+$ # Set script location:
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_server/kubernetes_thw/setup.sh'
+$ . "${SCRIPT_NAME}"</pre>
+    </fieldset>
+</div>
+<div id="windows-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre id="usage-win">> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+> SET "LIBSCRIPT_ROOT_DIR=%cd%"
+> :: `SET` any variables now (see below for variable docs). Then:
+> :: Set script location:
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_server\kubernetes_thw\setup.cmd"
+> CALL "%SCRIPT_NAME%"</pre>
+    </fieldset>
+</div>
+<h1 id="objects">Objects<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/kubernetes_thw/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<div class="tui-window" style="width: 100%">
+  <fieldset class="tui-fieldset">
+  <legend class="center">1-click deploy</legend>
+  <ul class="flex-ul-prefer-hor">
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li>
+  </ul>
+  </fieldset>
+</div>
+
+<h2 class="line-beside">or</h2>
+
+<div class="tui-window" style="width: 100%">
+  <form id="twoClickForm" action="" method="get">
+    <fieldset class="tui-fieldset">
+      <legend class="center">2-click deploy</legend>
+      <div class="flex">
+        <label for="cname" class="flex-item">     CNAME.........................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" />
+      </div>
+      <div class="flex">
+        <label for="log_server" class="flex-item">Metrics/logs (server).........: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/>
+      </div>
+      <div class="flex">
+        <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
+      </div>
+
+      <div class="flex">
+        <div id="editor_holder"></div>
+      </div>
+
+      <div class="flex">
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Set vars</button>
+      </div>
+
+      <ul class="flex-ul-prefer-hor">
+        <li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li>
+        <li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li>
+        <li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li>
+      </ul>
+    </fieldset>
+  </form>
+</div>
+<ul>
+<li><a
+href="#reference-kubernetes_thw-(kubernetes---the-hard-way)-server-vars"><code>kubernetes_thw (Kubernetes - The Hard Way) server vars</code></a>
+(root object)</li>
+</ul>
+<hr />
+<p><a name="reference-kubernetes_thw-(kubernetes---the-hard-way)-server-vars"></a>
+## kubernetes_thw (Kubernetes - The Hard Way) server vars</p>
+<p>kubernetes_thw vars that can be set</p>
+<p><strong><code>kubernetes_thw (Kubernetes - The Hard Way) server vars</code>
+Properties</strong></p>
+<table class="tui-table hovered-purple striped-purple">
+<thead>
+<tr class="header">
+<th></th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>DEST</strong></td>
+<td><code>string</code></td>
+<td>Destination (working directory)</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>VARS</strong></td>
+<td><code>string</code></td>
+<td>Key/value in JSON format (as an escaped string)</td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>Additional properties are allowed.</p>
+<h3
+id="kubernetes_thw-kubernetes---the-hard-way-server-vars.dest">kubernetes_thw
+(Kubernetes - The Hard Way) server vars.DEST</h3>
+<p>Destination (working directory)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3
+id="kubernetes_thw-kubernetes---the-hard-way-server-vars.vars">kubernetes_thw
+(Kubernetes - The Hard Way) server vars.VARS</h3>
+<p>Key/value in JSON format (as an escaped string)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+<script>
+const editor = new JSONEditor(document.getElementById("editor_holder"),
+  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/kubernetes_thw/vars.schema.json","title":"kubernetes_thw (Kubernetes - The Hard Way) server vars","description":"kubernetes_thw vars that can be set","type":"object","properties":{"DEST":{"description":"Destination (working directory)","type":"string"},"VARS":{"description":"Key/value in JSON format (as an escaped string)","type":"string"}}}
+});
+editor.on("ready", () => {
+  const editor_holder = document.getElementById("editor_holder");
+  let longest = 0;
+  let STYLES = "";
+  for (const formControl of editor_holder.getElementsByClassName("form-control")) {
+      let inputElement = undefined;
+      let label = undefined;
+      formControl.classList.add("flex");
+      for (const child of formControl.children) {
+          switch (child.tagName.toLowerCase()) {
+              case "input":
+                  inputElement = child;
+                  inputElement.classList.add("flex-item");
+                  inputElement.classList.add("tui-input");
+                  if (inputElement.name != null && (inputElement.name.indexOf("SECRET") > -1 || inputElement.name.indexOf("PASSWORD") > -1))
+                      inputElement.type = "password";
+                  break;
+
+              case "label":
+                  label = child;
+                  label.classList.add("flex-item");
+                  // .replace("]", "").replace("[", "")
+                  label.id = `label-${label.htmlFor}`;
+                  const n = label.textContent.length;
+                  if (n > longest) longest = n;
+                  break;
+
+              case "p":
+                  if (child.id.endsWith("-description")) {
+                      inputElement.placeholder = child.textContent;
+                      formControl.removeChild(child);
+                  }
+                  break;
+
+              default:
+                  break;
+          }
+      }
+
+      for (const child of formControl.children) {
+          if (child.tagName.toLowerCase() === "input") {
+              let l = 20 + (longest - child.textContent.length);
+              let dots = "";
+              for (let i=0; i<l; i++) dots += ".";
+              dots += ": ";
+              STYLES += `#label-${child.id}:after { content: "${dots}"; }\n`;
+          }
+      }
+  }
+  const style = document.createElement("style");
+  style.type = "text/css";
+  if (style.styleSheet) style.styleSheet.cssText = STYLES;
+  else style.appendChild(document.createTextNode(STYLES));
+  document.getElementsByTagName("head")[0].appendChild(style);
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync(STYLES)
+  document.adoptedStyleSheets = [sheet]
+});
+const submitButton = document.getElementById("submit");
+submitButton.onsubmit = "return false;";
+const submitButtonFunc = (e) => {
+  e.preventDefault();
+  console.log(editor.getValue());
+  return false;
+};
+submitButton.addEventListener("click", submitButtonFunc);
+</script>
+</body>
