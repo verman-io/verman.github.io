@@ -1,5 +1,3 @@
-[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe_exec.sh"
-[CONTINUE] processing "/home/runner/work/verman-tui-www/verman-tui-www/libscript/_lib/_common/envsubst_safe.sh"
 let firstRun = true;
 
 let nicerName = (s) => {
