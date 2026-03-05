@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; fluentbit">
+    <meta name="description" content="Deploy fluentbit with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/_lib/_server/fluentbit/README.html" />
+    <title>fluentbit from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="fluent-bit">Fluent Bit<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/fluentbit/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<div class="tui-window" style="width: 100%">
+  <fieldset class="tui-fieldset">
+  <legend class="center">1-click deploy</legend>
+  <ul class="flex-ul-prefer-hor">
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li>
+  </ul>
+  </fieldset>
+</div>
+
+<h2 class="line-beside">or</h2>
+
+<div class="tui-window" style="width: 100%">
+  <form id="twoClickForm" action="" method="get">
+    <fieldset class="tui-fieldset">
+      <legend class="center">2-click deploy</legend>
+      <div class="flex">
+        <label for="cname" class="flex-item">     CNAME.........................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" />
+      </div>
+      <div class="flex">
+        <label for="log_server" class="flex-item">Metrics/logs (server).........: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/>
+      </div>
+      <div class="flex">
+        <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
+      </div>
+
+      <div class="flex">
+        <div id="editor_holder"></div>
+      </div>
+
+      <div class="flex">
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Set vars</button>
+      </div>
+
+      <ul class="flex-ul-prefer-hor">
+        <li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li>
+        <li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li>
+        <li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li>
+      </ul>
+    </fieldset>
+  </form>
+</div>
+<p><strong>Fluent Bit</strong> is a super fast, lightweight, and highly
+scalable logging and metrics processor and forwarder. It allows you to
+collect data/logs from different sources, unify and send them to
+multiple destinations.</p>
+<p>It’s fully compatible with Docker and Kubernetes environments.</p>
+<h2 id="integration-in-libscript">Integration in
+<code>libscript</code></h2>
+<p>This module provides basic setup, test, and uninstall capabilities
+for <code>fluent-bit</code>.</p>
+<h3 id="windows-details">Windows Details</h3>
+<p>On Windows, it installs via Chocolatey or falls back to natively
+downloading and extracting the official <code>.zip</code> archive from
+<code>packages.fluentbit.io</code>.</p>
+<h3 id="posix-details">POSIX Details</h3>
+<p>On Linux and macOS, it delegates to the system package manager (e.g.,
+<code>apt-get</code>, <code>brew</code>, <code>apk</code>) to install
+<code>fluent-bit</code>.</p>
+<h2 id="variables">Variables</h2>
+<p>For full configuration variables, please refer to the
+<code>vars.schema.json</code>.</p>
+<!-- Local usage -->
+<h3>Local and image-creation usage</h3>
+<div class="tui-tabs">
+    <ul>
+        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
+        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
+    </ul>
+</div>
+<div id="unix-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre id="usage-unix">$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
+$ # `export` any variables now (see below for variable docs). Then:
+$ # Set script location:
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_server/fluentbit/setup.sh'
+$ . "${SCRIPT_NAME}"</pre>
+    </fieldset>
+</div>
+<div id="windows-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre id="usage-win">> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+> SET "LIBSCRIPT_ROOT_DIR=%cd%"
+> :: `SET` any variables now (see below for variable docs). Then:
+> :: Set script location:
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_server\fluentbit\setup.cmd"
+> CALL "%SCRIPT_NAME%"</pre>
+    </fieldset>
+</div>
+<h1 id="objects">Objects<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/fluentbit/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<div class="tui-window" style="width: 100%">
+  <fieldset class="tui-fieldset">
+  <legend class="center">1-click deploy</legend>
+  <ul class="flex-ul-prefer-hor">
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li>
+  </ul>
+  </fieldset>
+</div>
+
+<h2 class="line-beside">or</h2>
+
+<div class="tui-window" style="width: 100%">
+  <form id="twoClickForm" action="" method="get">
+    <fieldset class="tui-fieldset">
+      <legend class="center">2-click deploy</legend>
+      <div class="flex">
+        <label for="cname" class="flex-item">     CNAME.........................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" />
+      </div>
+      <div class="flex">
+        <label for="log_server" class="flex-item">Metrics/logs (server).........: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/>
+      </div>
+      <div class="flex">
+        <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
+      </div>
+
+      <div class="flex">
+        <div id="editor_holder"></div>
+      </div>
+
+      <div class="flex">
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Set vars</button>
+      </div>
+
+      <ul class="flex-ul-prefer-hor">
+        <li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li>
+        <li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li>
+        <li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li>
+      </ul>
+    </fieldset>
+  </form>
+</div>
+<ul>
+<li><a
+href="#reference-fluent-bit-configuration"><code>Fluent Bit Configuration</code></a>
+(root object)</li>
+</ul>
+<hr />
+<p><a name="reference-fluent-bit-configuration"></a> ## Fluent Bit
+Configuration</p>
+<p>Configuration variables for deploying and configuring Fluent Bit, a
+super fast, lightweight, and highly scalable logging and metrics
+processor and forwarder.</p>
+<p><strong><code>Fluent Bit Configuration</code> Properties</strong></p>
+<table class="tui-table hovered-purple striped-purple">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>FLUENTBIT_VERSION</strong></td>
+<td><code>string</code></td>
+<td>Specific version of Fluent Bit to install. Can be a numeric version
+(e.g. ‘3.0.0’) or an alias like ‘latest’.</td>
+<td>No, default: <code>"latest"</code></td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_GLOBAL_INSTALL_METHOD</strong></td>
+<td><code>string</code></td>
+<td>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded binaries).</td>
+<td>No, default: <code>"system"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_WINDOWS_PKG_MGR</strong></td>
+<td><code>string</code></td>
+<td>Global package manager override for Windows targets (e.g. winget,
+choco).</td>
+<td>No, default: <code>"winget"</code></td>
+</tr>
+<tr class="even">
+<td><strong>FLUENTBIT_INSTALL_METHOD</strong></td>
+<td><code>string</code></td>
+<td>How to install Fluent Bit. ‘system’ uses the native OS package
+manager, ‘source’ downloads the official binaries.</td>
+<td>No, default: <code>"system"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>FLUENTBIT_CONFIG_FILE</strong></td>
+<td><code>string</code></td>
+<td>Absolute path to a pre-existing custom fluent-bit.conf file to use
+instead of the default configuration.</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>FLUENTBIT_LOG_LEVEL</strong></td>
+<td><code>string</code></td>
+<td>The logging verbosity level for the Fluent Bit daemon itself
+(e.g. info, debug, error).</td>
+<td>No, default: <code>"info"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>FLUENTBIT_HTTP_SERVER</strong></td>
+<td><code>string</code></td>
+<td>Enable the built-in HTTP server for metrics and health checks.
+Highly recommended for monitoring.</td>
+<td>No, default: <code>"On"</code></td>
+</tr>
+<tr class="even">
+<td><strong>FLUENTBIT_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Port for the Fluent Bit HTTP metrics interface to listen on.</td>
+<td>No, default: <code>2020</code></td>
+</tr>
+<tr class="odd">
+<td><strong>FLUENTBIT_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Address for the Fluent Bit HTTP metrics interface to bind to.</td>
+<td>No, default: <code>"0.0.0.0"</code></td>
+</tr>
+<tr class="even">
+<td><strong>FLUENTBIT_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Optional: Unix socket for the Fluent Bit metrics interface to listen
+on (Linux/macOS only).</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>FLUENTBIT_DEFAULT_INPUT</strong></td>
+<td><code>string</code></td>
+<td>Default input plugin to configure for collecting data (e.g. ‘tail’,
+‘forward’, ‘cpu’, ‘dummy’).</td>
+<td>No, default: <code>"dummy"</code></td>
+</tr>
+<tr class="even">
+<td><strong>FLUENTBIT_DEFAULT_OUTPUT</strong></td>
+<td><code>string</code></td>
+<td>Default output plugin to configure for routing data (e.g. ‘stdout’,
+‘es’, ‘loki’, ‘http’).</td>
+<td>No, default: <code>"stdout"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>FLUENTBIT_SERVICE_RUN_AS_USER</strong></td>
+<td><code>string</code></td>
+<td>Windows local user account to run the service under (leave empty to
+use Network Service / Local System).</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>FLUENTBIT_SERVICE_RUN_AS_PASSWORD</strong></td>
+<td><code>string</code></td>
+<td>Password for the Windows local user account (if applicable).</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>FLUENTBIT_SERVICE_NAME</strong></td>
+<td><code>string</code></td>
+<td>Custom name for the Fluent Bit background service (allows
+side-by-side installations).</td>
+<td>No, default: <code>"libscript_fluentbit"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Additional properties are allowed.</p>
+<h3 id="fluent-bit-configuration.fluentbit_version">Fluent Bit
+Configuration.FLUENTBIT_VERSION</h3>
+<p>Specific version of Fluent Bit to install. Can be a numeric version
+(e.g. ‘3.0.0’) or an alias like ‘latest’.</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"latest"</code></li>
+</ul>
+<h3 id="fluent-bit-configuration.libscript_global_install_method">Fluent
+Bit Configuration.LIBSCRIPT_GLOBAL_INSTALL_METHOD</h3>
+<p>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded binaries).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"system"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"system"</code></li>
+<li><code>"source"</code></li>
+</ul></li>
+</ul>
+<h3 id="fluent-bit-configuration.libscript_windows_pkg_mgr">Fluent Bit
+Configuration.LIBSCRIPT_WINDOWS_PKG_MGR</h3>
+<p>Global package manager override for Windows targets (e.g. winget,
+choco).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"winget"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"winget"</code></li>
+<li><code>"choco"</code></li>
+</ul></li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_install_method">Fluent Bit
+Configuration.FLUENTBIT_INSTALL_METHOD</h3>
+<p>How to install Fluent Bit. ‘system’ uses the native OS package
+manager, ‘source’ downloads the official binaries.</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"system"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"system"</code></li>
+<li><code>"source"</code></li>
+</ul></li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_config_file">Fluent Bit
+Configuration.FLUENTBIT_CONFIG_FILE</h3>
+<p>Absolute path to a pre-existing custom fluent-bit.conf file to use
+instead of the default configuration.</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_log_level">Fluent Bit
+Configuration.FLUENTBIT_LOG_LEVEL</h3>
+<p>The logging verbosity level for the Fluent Bit daemon itself
+(e.g. info, debug, error).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"info"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"error"</code></li>
+<li><code>"warning"</code></li>
+<li><code>"info"</code></li>
+<li><code>"debug"</code></li>
+<li><code>"trace"</code></li>
+</ul></li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_http_server">Fluent Bit
+Configuration.FLUENTBIT_HTTP_SERVER</h3>
+<p>Enable the built-in HTTP server for metrics and health checks. Highly
+recommended for monitoring.</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"On"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"On"</code></li>
+<li><code>"Off"</code></li>
+</ul></li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_listen_port">Fluent Bit
+Configuration.FLUENTBIT_LISTEN_PORT</h3>
+<p>Port for the Fluent Bit HTTP metrics interface to listen on.</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No, default: <code>2020</code></li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_listen_address">Fluent Bit
+Configuration.FLUENTBIT_LISTEN_ADDRESS</h3>
+<p>Address for the Fluent Bit HTTP metrics interface to bind to.</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"0.0.0.0"</code></li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_listen_socket">Fluent Bit
+Configuration.FLUENTBIT_LISTEN_SOCKET</h3>
+<p>Optional: Unix socket for the Fluent Bit metrics interface to listen
+on (Linux/macOS only).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_default_input">Fluent Bit
+Configuration.FLUENTBIT_DEFAULT_INPUT</h3>
+<p>Default input plugin to configure for collecting data (e.g. ‘tail’,
+‘forward’, ‘cpu’, ‘dummy’).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"dummy"</code></li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_default_output">Fluent Bit
+Configuration.FLUENTBIT_DEFAULT_OUTPUT</h3>
+<p>Default output plugin to configure for routing data (e.g. ‘stdout’,
+‘es’, ‘loki’, ‘http’).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"stdout"</code></li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_service_run_as_user">Fluent
+Bit Configuration.FLUENTBIT_SERVICE_RUN_AS_USER</h3>
+<p>Windows local user account to run the service under (leave empty to
+use Network Service / Local System).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3
+id="fluent-bit-configuration.fluentbit_service_run_as_password">Fluent
+Bit Configuration.FLUENTBIT_SERVICE_RUN_AS_PASSWORD</h3>
+<p>Password for the Windows local user account (if applicable).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="fluent-bit-configuration.fluentbit_service_name">Fluent Bit
+Configuration.FLUENTBIT_SERVICE_NAME</h3>
+<p>Custom name for the Fluent Bit background service (allows
+side-by-side installations).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default:
+<code>"libscript_fluentbit"</code></li>
+</ul>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+        <li style="float: right"><a href="https://rewriteInC.io">&num;rewriteInC.io</a></li>
+        <li style="float: right"><a href="https://offscale.io">offscale.io</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+<script>
+const editor = new JSONEditor(document.getElementById("editor_holder"),
+  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/fluentbit/vars.schema.json","title":"Fluent Bit Configuration","description":"Configuration variables for deploying and configuring Fluent Bit, a super fast, lightweight, and highly scalable logging and metrics processor and forwarder.","type":"object","properties":{"FLUENTBIT_VERSION":{"description":"Specific version of Fluent Bit to install. Can be a numeric version (e.g. '3.0.0') or an alias like 'latest'.","type":"string","default":"latest","versionAliases":["latest","stable"]},"LIBSCRIPT_GLOBAL_INSTALL_METHOD":{"description":"Global override for how software should be installed across all systems (e.g. system package manager vs downloaded binaries).","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_WINDOWS_PKG_MGR":{"description":"Global package manager override for Windows targets (e.g. winget, choco).","type":"string","enum":["winget","choco"],"default":"winget"},"FLUENTBIT_INSTALL_METHOD":{"description":"How to install Fluent Bit. 'system' uses the native OS package manager, 'source' downloads the official binaries.","type":"string","enum":["system","source"],"default":"system"},"FLUENTBIT_CONFIG_FILE":{"description":"Absolute path to a pre-existing custom fluent-bit.conf file to use instead of the default configuration.","type":"string"},"FLUENTBIT_LOG_LEVEL":{"description":"The logging verbosity level for the Fluent Bit daemon itself (e.g. info, debug, error).","type":"string","enum":["error","warning","info","debug","trace"],"default":"info"},"FLUENTBIT_HTTP_SERVER":{"description":"Enable the built-in HTTP server for metrics and health checks. Highly recommended for monitoring.","type":"string","enum":["On","Off"],"default":"On"},"FLUENTBIT_LISTEN_PORT":{"description":"Port for the Fluent Bit HTTP metrics interface to listen on.","type":["string","integer"],"default":2020},"FLUENTBIT_LISTEN_ADDRESS":{"description":"Address for the Fluent Bit HTTP metrics interface to bind to.","type":"string","default":"0.0.0.0"},"FLUENTBIT_LISTEN_SOCKET":{"description":"Optional: Unix socket for the Fluent Bit metrics interface to listen on (Linux/macOS only).","type":"string"},"FLUENTBIT_DEFAULT_INPUT":{"description":"Default input plugin to configure for collecting data (e.g. 'tail', 'forward', 'cpu', 'dummy').","type":"string","default":"dummy"},"FLUENTBIT_DEFAULT_OUTPUT":{"description":"Default output plugin to configure for routing data (e.g. 'stdout', 'es', 'loki', 'http').","type":"string","default":"stdout"},"FLUENTBIT_SERVICE_RUN_AS_USER":{"description":"Windows local user account to run the service under (leave empty to use Network Service / Local System).","type":"string"},"FLUENTBIT_SERVICE_RUN_AS_PASSWORD":{"description":"Password for the Windows local user account (if applicable).","type":"string"},"FLUENTBIT_SERVICE_NAME":{"description":"Custom name for the Fluent Bit background service (allows side-by-side installations).","type":"string","default":"libscript_fluentbit"}}}
+});
+editor.on("ready", () => {
+  const editor_holder = document.getElementById("editor_holder");
+  let longest = 0;
+  let STYLES = "";
+  for (const formControl of editor_holder.getElementsByClassName("form-control")) {
+      let inputElement = undefined;
+      let label = undefined;
+      formControl.classList.add("flex");
+      for (const child of formControl.children) {
+          switch (child.tagName.toLowerCase()) {
+              case "input":
+                  inputElement = child;
+                  inputElement.classList.add("flex-item");
+                  inputElement.classList.add("tui-input");
+                  if (inputElement.name != null && (inputElement.name.indexOf("SECRET") > -1 || inputElement.name.indexOf("PASSWORD") > -1))
+                      inputElement.type = "password";
+                  break;
+
+              case "label":
+                  label = child;
+                  label.classList.add("flex-item");
+                  // .replace("]", "").replace("[", "")
+                  label.id = `label-${label.htmlFor}`;
+                  const n = label.textContent.length;
+                  if (n > longest) longest = n;
+                  break;
+
+              case "p":
+                  if (child.id.endsWith("-description")) {
+                      inputElement.placeholder = child.textContent;
+                      formControl.removeChild(child);
+                  }
+                  break;
+
+              default:
+                  break;
+          }
+      }
+
+      for (const child of formControl.children) {
+          if (child.tagName.toLowerCase() === "input") {
+              let l = 20 + (longest - child.textContent.length);
+              let dots = "";
+              for (let i=0; i<l; i++) dots += ".";
+              dots += ": ";
+              STYLES += `#label-${child.id}:after { content: "${dots}"; }\n`;
+          }
+      }
+  }
+  const style = document.createElement("style");
+  style.type = "text/css";
+  if (style.styleSheet) style.styleSheet.cssText = STYLES;
+  else style.appendChild(document.createTextNode(STYLES));
+  document.getElementsByTagName("head")[0].appendChild(style);
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync(STYLES)
+  document.adoptedStyleSheets = [sheet]
+});
+const submitButton = document.getElementById("submit");
+submitButton.onsubmit = "return false;";
+const submitButtonFunc = (e) => {
+  e.preventDefault();
+  console.log(editor.getValue());
+  return false;
+};
+submitButton.addEventListener("click", submitButtonFunc);
+</script>
+</body>

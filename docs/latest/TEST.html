@@ -88,83 +88,39 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="testing-instructions">Testing instructions<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/TEST.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<p>When contributing new `ports’ it’s important to test on different OSs
-and distributions.</p>
-<h2 id="alpine-linux-debian-ubuntu">Alpine Linux, Debian, Ubuntu</h2>
-<p>Convenience Docker Images have been setup here
-https://github.com/SamuelMarks/libscript-docker-images</p>
-<h3 id="usage">Usage</h3>
-<p>(see repo for how to setup ssh keys or alternative password
-solution)</p>
-<p>[optional] Modify your <code>~/.ssh/config</code> with:</p>
-<pre><code>Host alpine321
-    HostName 127.0.0.1
-    Port 2222
-    User root
-    PreferredAuthentications publickey
-    PubkeyAuthentication yes
-    PasswordAuthentication no
-    ServerAliveInterval 10
-    IdentityFile /tmp/.ssh/id_rsa</code></pre>
-<p>Then execute:</p>
-<pre><code>$ docker run --name alpine-server-3-2-1 \
-    -p 2222:22 \
-    -e USER_PASSWORD=&#39;null&#39; \
-    -e USER_PUBKEY=&quot;$(cat -- /tmp.ssh/id_rsa.pub)&quot; \
-    samuelmarks/libscript-docker-images:alpine-3.21
-$ # remove previous ssh host verification with
-$ ssh-keygen -R &#39;[127.0.0.1]:2222&#39;
-$ ssh alpine321 cat /etc/os-release
-NAME=&quot;Alpine Linux&quot;
-ID=alpine
-VERSION_ID=3.21.3
-PRETTY_NAME=&quot;Alpine Linux v3.21&quot;
-HOME_URL=&quot;https://alpinelinux.org/&quot;
-BUG_REPORT_URL=&quot;https://gitlab.alpinelinux.org/alpine/aports/-/issues&quot;</code></pre>
-<p>Now to actually test you can do something like:</p>
-<pre><code>$ export LIBSCRIPT_ROOT_DIR=&quot;${LIBSCRIPT_ROOT_DIR:-/path/to/libscript}&quot;
-$ rsync -az &quot;${LIBSCRIPT_ROOT_DIR}&quot; alpine321:/opt/repos/
-$ # implicit test
-$ ssh alpine321 &#39;/opt/repos/libscript/_lib/_toolchain/jq/test.sh&#39;
-$ # explicit handwritten test
-$ ssh alpine321 jq --version</code></pre>
-<h3 id="usage-windows">Usage (Windows)</h3>
-<p>You can essentially follow same steps as above; for
-<code>rsync</code> use the Cygwin version. Alternatively copy files over
-using <code>scp</code> or whatever your preferred approach is.</p>
-<p>PuTTy instructions are also available at
-https://github.com/SamuelMarks/libscript-docker-images</p>
-<h2 id="windows">Windows</h2>
-<p>(guide coming soon)</p>
-<h2
-id="netbsd-freebsd-openbsd-sunos-opensolaris-illumos-hpux-zos">NetBSD;
-FreeBSD; OpenBSD; SunOS / OpenSolaris / illumos; HP/UX; z/OS</h2>
-<p>(guide coming soon; hopefully I find an open-source alternative to
-Vagrant for this!)</p>
-<h2 id="android">Android</h2>
-<p>Install Python on your host machine—e.g., using <a
-href="_lib/_toolchain/python/setup.sh">_lib/_toolchain/python/setup.sh</a>—then
-follow the guide here to setup your Android and SDK
-https://github.com/jb2170/better-adb-sync finishing by running:</p>
-<pre><code>$ python -m pip install BetterADBSync
-$ export LIBSCRIPT_ROOT_DIR=&quot;${LIBSCRIPT_ROOT_DIR:-/path/to/libscript}&quot;
-$ adbsync push --delete &quot;${LIBSCRIPT_ROOT_DIR}&quot; /sdcard/repos/</code></pre>
-<p>Then use <a href="https://termux.dev/en/">termux</a> to access that
-directory and execute commands. <a
-href="https://github.com/Genymobile/scrcpy">scrcpy</a> is popular to
-remotely control the screen+keyboard, and <a
-href="https://github.com/viarotel-org/escrcpy">escrcpy</a> appears to
-allow remote execution of scripts (though remains to be tested &amp;
-checked for security flaws).</p>
-<p>Or alternatively the docs say you can edit your .ssh/config with:</p>
-<pre><code>Host sshelper
-    Port 2222
-    ProxyCommand adb-channel tcp:%p com.arachnoid.sshelper/.SSHelperActivity 1</code></pre>
-<p>(though SSHelper seems to be unmaintained and won’t work on new
-Android’s)</p>
-<h2 id="ios">iOS</h2>
-<p>(guide coming soon)</p>
+<h1 id="testing-strategy">Testing Strategy<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/TEST.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>Details how LibScript ensures idempotent, error-free execution across
+a massively fragmented landscape of operating systems, architectures,
+and shells.</p>
+<h2 id="what-makes-the-testing-strategy-interesting">What Makes The
+Testing Strategy Interesting?</h2>
+<p>Because LibScript modifies the host OS natively, testing isn’t just
+unit-testing code; it’s testing state mutations on actual machines. We
+employ a multi-layered approach involving localized shell scripts,
+comprehensive CI matrices, and Vagrant VM orchestration.</p>
+<h2 id="component-verification-test.sh-test.cmd">Component Verification
+(<code>test.sh</code> / <code>test.cmd</code>)</h2>
+<p>Every component ships with an active verification script. -
+<strong>Toolchains</strong>: Compiles a real program (e.g., C++ compiles
+a binary, Node.js runs an eval). - <strong>Servers</strong>: Runs
+configuration syntax checks (<code>nginx -t</code>) or hits health
+endpoints. - <strong>Databases</strong>: Executes native client commands
+(e.g., <code>psql -c "SELECT 1;"</code>) to ensure the daemon is
+actively accepting connections.</p>
+<h2 id="continuous-integration-github-actions">Continuous Integration
+(GitHub Actions)</h2>
+<p>Our <code>ci.yml</code> matrix is exhaustive. It automatically
+provisions pristine environments across: - <code>ubuntu-latest</code> -
+<code>macos-latest</code> - <code>windows-latest</code> It installs each
+component, executes its tests, and asserts success, guaranteeing
+cross-platform parity.</p>
+<h2 id="deep-vagrant-validation">Deep Vagrant Validation</h2>
+<p>For edge-case distributions (Alpine, FreeBSD, AlmaLinux), the
+<code>vagrant/</code> directory provides configurations to spin up
+ephemeral local VMs. This allows developers to mount the repository, run
+tests locally in a pristine shell, and destroy the environment in
+seconds.</p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

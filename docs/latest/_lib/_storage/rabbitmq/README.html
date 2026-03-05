@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; rabbitmq">
+    <meta name="description" content="Deploy rabbitmq with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/_lib/_storage/rabbitmq/README.html" />
+    <title>rabbitmq from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="rabbitmq-storagedatabase">Rabbitmq (Storage/Database)<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_storage/rabbitmq/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose-current-state">Purpose &amp; Current State</h2>
+<p><strong>Purpose</strong>: This document provides context and
+technical details for the <code>rabbitmq</code> component (part of
+<code>_storage</code>) within the LibScript ecosystem. LibScript is a
+modular, zero-dependency shell-script framework designed for
+cross-platform software provisioning across Linux, macOS, DOS, and
+Windows.</p>
+<p><strong>Current State</strong>: LibScript functions as a
+comprehensive global and per-component package manager, featuring a
+robust core CLI (<code>libscript.sh</code>, <code>libscript.cmd</code>,
+<code>libscript.bat</code>). It includes multi-platform toolchain
+support (Rust, Python, Node, Go, Java, C/C++), servers (Postgres 18,
+Nginx, Valkey), and advanced environment querying (<code>env</code>
+subcommand). It natively supports generating deployment configurations
+(<code>package_as docker</code>, <code>package_as docker_compose</code>,
+<code>package_as msi</code>, <code>package_as innosetup</code>,
+<code>package_as nsis</code>, <code>package_as TUI</code>) with deep
+installer customization, automated parallel dependency downloading and
+resolution via <code>libscript.json</code>, and robust uninstall
+lifecycle hooks (<code>uninstall.sh</code>/<code>uninstall.cmd</code>)
+for cleanly removing binaries, configs, and services. It natively
+handles deep semantic versioning, global <code>--secrets</code>
+extraction, caching, OpenBao/Vault generation, local caching via SQLite
+(<code>db-search</code>, <code>update-db</code>), explicit error
+handling for unsupported actions, and background process serving. Recent
+advancements have stabilized major Windows installer generation (MSI,
+InnoSetup, NSIS) and expanded macOS native service provisioning.</p>
+<h2 id="overview">Overview</h2>
+<p>This directory contains the installation and configuration scripts
+for <code>rabbitmq</code>. It is designed to be executed via the global
+<code>libscript.sh</code> router or directly via
+<code>cli.sh</code>.</p>
+<h3 id="installation">Installation</h3>
+<p><strong>Unix (Linux/macOS):</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./cli.sh</span> <span class="op">&lt;</span>COMMAND<span class="op">&gt;</span> <span class="op">&lt;</span>PACKAGE_NAME<span class="op">&gt;</span> <span class="pp">[</span><span class="ss">VERSION</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">OPTIONS</span><span class="pp">]</span></span></code></pre></div>
+<p><strong>Windows:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cmd"><code class="sourceCode dosbat"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cli.cmd <span class="kw">&lt;</span>COMMAND<span class="kw">&gt;</span> <span class="kw">&lt;</span>PACKAGE_NAME<span class="kw">&gt;</span> [VERSION] [OPTIONS]</span></code></pre></div>
+<h2 id="architecture">Architecture</h2>
+<ul>
+<li><code>setup.sh</code>: The main entrypoint that resolves the OS and
+invokes the correct script.</li>
+<li><code>setup_generic.sh</code>: Fallback installation logic using the
+package manager mapper.</li>
+<li><code>test.sh</code> / <code>test.cmd</code>: Verification scripts
+to ensure the component is installed and functioning correctly.</li>
+<li><code>vars.schema.json</code>: The schema definition for the CLI
+arguments.</li>
+</ul>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+        <li style="float: right"><a href="https://rewriteInC.io">&num;rewriteInC.io</a></li>
+        <li style="float: right"><a href="https://offscale.io">offscale.io</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+</body>

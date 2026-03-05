@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; latest/DEVELOPING">
+    <meta name="description" content="Deploy latest/DEVELOPING with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/DEVELOPING.html" />
+    <title>latest/DEVELOPING from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="developing-libscript">Developing LibScript<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/DEVELOPING.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>A contributor’s guide to scaffolding, implementing, and verifying new
+cross-platform components within the LibScript ecosystem.</p>
+<h2 id="what-makes-developing-for-libscript-interesting">What Makes
+Developing for LibScript Interesting?</h2>
+<p>You don’t need to learn a complex DSL or a new programming language.
+If you can write a basic shell script, you can write a LibScript
+component. The framework abstracts away argument parsing, OS detection,
+help-text generation, and testing harnesses, letting you focus entirely
+on the core installation logic.</p>
+<h2 id="developing-a-component">Developing a Component</h2>
+<ol type="1">
+<li><strong>Scaffold</strong>: Create your directory
+(<code>_lib/_toolchain/my_tool</code>).</li>
+<li><strong>Symlink Core Routers</strong>: Link <code>cli.sh</code> and
+<code>cli.cmd</code> from the <code>_common</code> directory to
+automatically gain CLI routing and JSON schema parsing.</li>
+<li><strong>Define Schema</strong>: Create
+<code>vars.schema.json</code>. Define your variables, defaults, and
+descriptions. The framework will automatically generate
+<code>--help</code> documentation and wire these up as environment
+variables.
+<ul>
+<li><em>Component Dependencies</em>: To make your app depend on another
+LibScript tool (e.g., <code>nodejs</code> or <code>postgres</code>), add
+<code>"is_libscript_dependency": true</code> to the variable property.
+<code>cli.sh</code> and <code>cli.cmd</code> will automatically invoke
+the installation of the specified component, honoring the generated
+<code>_STRATEGY</code> properties, before <code>setup.sh</code>
+begins.</li>
+</ul></li>
+<li><strong>Write <code>setup.sh</code></strong>:
+<ul>
+<li>Source OS info:
+<code>. "$SCRIPT_DIR/../../_common/os_info.sh"</code></li>
+<li>Install OS packages: <code>depends curl unzip</code></li>
+<li>Download, extract, and configure your tool.</li>
+</ul></li>
+<li><strong>Write Windows Support</strong>: Create
+<code>setup_win.ps1</code> for PowerShell logic.</li>
+<li><strong>Write Tests</strong>: Create <code>test.sh</code> to compile
+a Hello World or ping a service.</li>
+</ol>
+<h2 id="core-best-practices">Core Best Practices</h2>
+<ul>
+<li><strong>Idempotency</strong>: Your <code>setup.sh</code> must be
+safe to run multiple times. Always check if a config line exists before
+appending it.</li>
+<li><strong>Environment Scoping</strong>: Respect the
+<code>$PREFIX</code> variable. Components should be capable of
+installing globally (e.g., <code>/usr/local</code>) or locally (e.g.,
+<code>./my_env</code>).</li>
+<li><strong>Headless Execution</strong>: Never prompt the user for input
+during <code>setup.sh</code>. All inputs must be passed via CLI
+arguments defined in <code>vars.schema.json</code>.</li>
+</ul>
+<h2 id="features-available-to-developers">Features Available to
+Developers</h2>
+<ul>
+<li><code>pkg_mgr.sh</code> for universal dependency installation.</li>
+<li>Built-in daemon registration functions for Systemd, OpenRC, and
+Windows Services.</li>
+<li>Caching abstraction (downloads automatically hit
+<code>LIBSCRIPT_CACHE_DIR</code>).</li>
+</ul>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+        <li style="float: right"><a href="https://rewriteInC.io">&num;rewriteInC.io</a></li>
+        <li style="float: right"><a href="https://offscale.io">offscale.io</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+</body>

@@ -1,0 +1,662 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; mariadb">
+    <meta name="description" content="Deploy mariadb with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/_lib/_storage/mariadb/README.html" />
+    <title>mariadb from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@json-editor/json-editor@latest/dist/jsoneditor.min.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="mariadb-storage">MariaDB (Storage)<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_storage/mariadb/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<div class="tui-window" style="width: 100%">
+  <fieldset class="tui-fieldset">
+  <legend class="center">1-click deploy</legend>
+  <ul class="flex-ul-prefer-hor">
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li>
+  </ul>
+  </fieldset>
+</div>
+
+<h2 class="line-beside">or</h2>
+
+<div class="tui-window" style="width: 100%">
+  <form id="twoClickForm" action="" method="get">
+    <fieldset class="tui-fieldset">
+      <legend class="center">2-click deploy</legend>
+      <div class="flex">
+        <label for="cname" class="flex-item">     CNAME.........................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" />
+      </div>
+      <div class="flex">
+        <label for="log_server" class="flex-item">Metrics/logs (server).........: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/>
+      </div>
+      <div class="flex">
+        <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
+      </div>
+
+      <div class="flex">
+        <div id="editor_holder"></div>
+      </div>
+
+      <div class="flex">
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Set vars</button>
+      </div>
+
+      <ul class="flex-ul-prefer-hor">
+        <li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li>
+        <li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li>
+        <li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li>
+      </ul>
+    </fieldset>
+  </form>
+</div>
+<h2 id="purpose-current-state">Purpose &amp; Current State</h2>
+<p><strong>Purpose</strong>: This document provides context and
+technical details for the <code>mariadb</code> component (part of
+<code>_storage</code>) within the LibScript ecosystem. LibScript is a
+modular, zero-dependency shell-script framework designed for
+cross-platform software provisioning across Linux, macOS, DOS, and
+Windows.</p>
+<p><strong>Current State</strong>: LibScript functions as a
+comprehensive global and per-component package manager, featuring a
+robust core CLI (<code>libscript.sh</code>, <code>libscript.cmd</code>,
+<code>libscript.bat</code>). It includes multi-platform toolchain
+support (Rust, Python, Node, Go, Java, C/C++), servers (Postgres 18,
+Nginx, Valkey), and advanced environment querying (<code>env</code>
+subcommand). It natively supports generating deployment configurations
+(<code>package_as docker</code>, <code>package_as docker_compose</code>,
+<code>package_as msi</code>, <code>package_as innosetup</code>,
+<code>package_as nsis</code>, <code>package_as TUI</code>) with deep
+installer customization, automated parallel dependency downloading and
+resolution via <code>libscript.json</code>, and robust uninstall
+lifecycle hooks (<code>uninstall.sh</code>/<code>uninstall.cmd</code>)
+for cleanly removing binaries, configs, and services. It natively
+handles deep semantic versioning, global <code>--secrets</code>
+extraction, caching, OpenBao/Vault generation, local caching via SQLite
+(<code>db-search</code>, <code>update-db</code>), explicit error
+handling for unsupported actions, and background process serving. Recent
+advancements have stabilized major Windows installer generation (MSI,
+InnoSetup, NSIS) and expanded macOS native service provisioning.</p>
+<h2 id="overview">Overview</h2>
+<p>This directory contains the installation and configuration scripts
+for <code>mariadb</code>. It is designed to be executed via the global
+<code>libscript.sh</code> router or directly via
+<code>cli.sh</code>.</p>
+<h3 id="installation">Installation</h3>
+<p><strong>Unix (Linux/macOS):</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./cli.sh</span> <span class="op">&lt;</span>COMMAND<span class="op">&gt;</span> <span class="op">&lt;</span>PACKAGE_NAME<span class="op">&gt;</span> <span class="pp">[</span><span class="ss">VERSION</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">OPTIONS</span><span class="pp">]</span></span></code></pre></div>
+<p><strong>Windows:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cmd"><code class="sourceCode dosbat"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cli.cmd <span class="kw">&lt;</span>COMMAND<span class="kw">&gt;</span> <span class="kw">&lt;</span>PACKAGE_NAME<span class="kw">&gt;</span> [VERSION] [OPTIONS]</span></code></pre></div>
+<h2 id="configuration-options">Configuration Options</h2>
+<p>The following environment variables can be passed to the CLI
+(<code>--KEY=VALUE</code>) or exported before running the setup
+script.</p>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 31%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+<th>Default</th>
+<th>Aliases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>MARIADB_VERSION</code></td>
+<td>Specific version of mariadb to install. Can be a numeric version or
+an alias.</td>
+<td><code>latest</code></td>
+<td><code>latest, stable</code></td>
+</tr>
+<tr class="even">
+<td><code>LIBSCRIPT_GLOBAL_INSTALL_METHOD</code></td>
+<td>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</td>
+<td><code>system</code></td>
+<td><code>| | `LIBSCRIPT_WINDOWS_PKG_MGR` | Global package manager override for Windows targets (e.g. winget, choco). | `winget` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>MARIADB_INSTALL_METHOD</code></td>
+<td>How to install MARIADB. ‘system’ uses the native OS package manager,
+‘source’ compiles/downloads binaries.</td>
+<td><code>system</code></td>
+<td><code>| | `LIBSCRIPT_LISTEN_PORT` | Global port to listen on | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>LIBSCRIPT_LISTEN_ADDRESS</code></td>
+<td>Global address to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `LIBSCRIPT_LISTEN_SOCKET` | Global unix socket to listen on | `none` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>MARIADB_LISTEN_PORT</code></td>
+<td>Port for MARIADB to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `MARIADB_LISTEN_ADDRESS` | Address for MARIADB to listen on | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>MARIADB_LISTEN_SOCKET</code></td>
+<td>Unix socket for MARIADB to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `MARIADB_DATA_DIR` | Directory for MariaDB data | `none` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>MARIADB_SERVICE_RUN_AS_USER</code></td>
+<td>Windows local user account to run the service (leave empty for
+Network Service)</td>
+<td><code>none</code></td>
+<td><code>| | `MARIADB_SERVICE_RUN_AS_PASSWORD` | Password for the local user account (if applicable) | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>MARIADB_SERVICE_NAME</code></td>
+<td>Custom name for the Windows Service (allows side-by-side
+installations)</td>
+<td><code>libscript_mariadb</code></td>
+<td>``</td>
+</tr>
+</tbody>
+</table>
+<h2 id="architecture">Architecture</h2>
+<ul>
+<li><code>setup.sh</code>: The main entrypoint that resolves the OS and
+invokes the correct script.</li>
+<li><code>setup_generic.sh</code>: Fallback installation logic using the
+package manager mapper.</li>
+<li><code>test.sh</code> / <code>test.cmd</code>: Verification scripts
+to ensure the component is installed and functioning correctly.</li>
+<li><code>vars.schema.json</code>: The schema definition for the CLI
+arguments.</li>
+</ul>
+<!-- Local usage -->
+<h3>Local and image-creation usage</h3>
+<div class="tui-tabs">
+    <ul>
+        <li><a class="tui-tab active" data-tab-content="unix-content">UNIX</a></li>
+        <li><a class="tui-tab" data-tab-content="windows-content">Windows</a></li>
+    </ul>
+</div>
+<div id="unix-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre id="usage-unix">$ # Replace `$(pwd)` if not in the 'libscript' directory or a generated one.
+$ export LIBSCRIPT_ROOT_DIR="$(pwd)"
+$ # `export` any variables now (see below for variable docs). Then:
+$ # Set script location:
+$ export SCRIPT_NAME="${LIBSCRIPT_ROOT_DIR}"'/_lib/_storage/mariadb/setup.sh'
+$ . "${SCRIPT_NAME}"</pre>
+    </fieldset>
+</div>
+<div id="windows-content" class="tui-tab-content tui-window">
+    <fieldset class="tui-fieldset no-legend">
+<pre id="usage-win">> :: Replace `%cd%` if not in the 'libscript' directory or a generated one.
+> SET "LIBSCRIPT_ROOT_DIR=%cd%"
+> :: `SET` any variables now (see below for variable docs). Then:
+> :: Set script location:
+> SET SCRIPT_NAME="%LIBSCRIPT_ROOT_DIR%\_lib\_storage\mariadb\setup.cmd"
+> CALL "%SCRIPT_NAME%"</pre>
+    </fieldset>
+</div>
+<h1 id="objects">Objects<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_storage/mariadb/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<div class="tui-window" style="width: 100%">
+  <fieldset class="tui-fieldset">
+  <legend class="center">1-click deploy</legend>
+  <ul class="flex-ul-prefer-hor">
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></a></li>
+    <li><a onclick="TODO()"><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></a></li>
+  </ul>
+  </fieldset>
+</div>
+
+<h2 class="line-beside">or</h2>
+
+<div class="tui-window" style="width: 100%">
+  <form id="twoClickForm" action="" method="get">
+    <fieldset class="tui-fieldset">
+      <legend class="center">2-click deploy</legend>
+      <div class="flex">
+        <label for="cname" class="flex-item">     CNAME.........................: </label><input class="tui-input flex-item" name="cname" id="cname" placeholder="Domain name" />
+      </div>
+      <div class="flex">
+        <label for="log_server" class="flex-item">Metrics/logs (server).........: </label><input class="tui-input flex-item" name="log_server" id="log_server" placeholder="If == ↑domain then deploy"/>
+      </div>
+      <div class="flex">
+        <label for="backup_url" class="flex-item">Backup (object storage).......: </label><input class="tui-input flex-item" name="backup_url" id="backup_url" placeholder="Object storage—e.g., s3—URL"/>
+      </div>
+
+      <div class="flex">
+        <div id="editor_holder"></div>
+      </div>
+
+      <div class="flex">
+        <button class="tui-button" id="submit" type="submit" onclick="submitButtonFunc($event)" onsubmit="return false;">Set vars</button>
+      </div>
+
+      <ul class="flex-ul-prefer-hor">
+        <li><button type="submit" id="azure_button" formaction="https://azure/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://aka.ms/deploytoazurebutton" alt="Deploy to Azure"/></button></li>
+        <li><button type="submit" id="digitalocean_button" formaction="https://digitalocean/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://www.deploytodo.com/do-btn-blue.svg" alt="Deploy to Digital Ocean"/></button></li>
+        <li><button type="submit" id="aws_button" formaction="https://amazonaws/" formenctype="text/plain" onclick=twoClickDeploy(this)><img class="deploy-img" src="https://s3.amazonaws.com/cloudformation-examples/cloudformation-launch-stack.png" alt="Deploy to AWS"></button></li>
+      </ul>
+    </fieldset>
+  </form>
+</div>
+<ul>
+<li><a
+href="#reference-mariadb-storage-vars"><code>mariadb storage vars</code></a>
+(root object)</li>
+</ul>
+<hr />
+<p><a name="reference-mariadb-storage-vars"></a> ## mariadb storage
+vars</p>
+<p>mariadb storage vars that can be set</p>
+<p><strong><code>mariadb storage vars</code> Properties</strong></p>
+<table class="tui-table hovered-purple striped-purple">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th></th>
+<th>Type</th>
+<th>Description</th>
+<th>Required</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>MARIADB_VERSION</strong></td>
+<td><code>string</code></td>
+<td>Specific version of mariadb to install. Can be a numeric version or
+an alias.</td>
+<td>No, default: <code>"latest"</code></td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_GLOBAL_INSTALL_METHOD</strong></td>
+<td><code>string</code></td>
+<td>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</td>
+<td>No, default: <code>"system"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_WINDOWS_PKG_MGR</strong></td>
+<td><code>string</code></td>
+<td>Global package manager override for Windows targets (e.g. winget,
+choco).</td>
+<td>No, default: <code>"winget"</code></td>
+</tr>
+<tr class="even">
+<td><strong>MARIADB_INSTALL_METHOD</strong></td>
+<td><code>string</code></td>
+<td>How to install MARIADB. ‘system’ uses the native OS package manager,
+‘source’ compiles/downloads binaries.</td>
+<td>No, default: <code>"system"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Global port to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Global address to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Global unix socket to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>MARIADB_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Port for MARIADB to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>MARIADB_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Address for MARIADB to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>MARIADB_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Unix socket for MARIADB to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>MARIADB_DATA_DIR</strong></td>
+<td><code>string</code></td>
+<td>Directory for MariaDB data</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>MARIADB_SERVICE_RUN_AS_USER</strong></td>
+<td><code>string</code></td>
+<td>Windows local user account to run the service (leave empty for
+Network Service)</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>MARIADB_SERVICE_RUN_AS_PASSWORD</strong></td>
+<td><code>string</code></td>
+<td>Password for the local user account (if applicable)</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>MARIADB_SERVICE_NAME</strong></td>
+<td><code>string</code></td>
+<td>Custom name for the Windows Service (allows side-by-side
+installations)</td>
+<td>No, default: <code>"libscript_mariadb"</code></td>
+</tr>
+</tbody>
+</table>
+<p>Additional properties are allowed.</p>
+<h3 id="mariadb-storage-vars.mariadb_version">mariadb storage
+vars.MARIADB_VERSION</h3>
+<p>Specific version of mariadb to install. Can be a numeric version or
+an alias.</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"latest"</code></li>
+</ul>
+<h3 id="mariadb-storage-vars.libscript_global_install_method">mariadb
+storage vars.LIBSCRIPT_GLOBAL_INSTALL_METHOD</h3>
+<p>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"system"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"system"</code></li>
+<li><code>"source"</code></li>
+</ul></li>
+</ul>
+<h3 id="mariadb-storage-vars.libscript_windows_pkg_mgr">mariadb storage
+vars.LIBSCRIPT_WINDOWS_PKG_MGR</h3>
+<p>Global package manager override for Windows targets (e.g. winget,
+choco).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"winget"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"winget"</code></li>
+<li><code>"choco"</code></li>
+</ul></li>
+</ul>
+<h3 id="mariadb-storage-vars.mariadb_install_method">mariadb storage
+vars.MARIADB_INSTALL_METHOD</h3>
+<p>How to install MARIADB. ‘system’ uses the native OS package manager,
+‘source’ compiles/downloads binaries.</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"system"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"system"</code></li>
+<li><code>"source"</code></li>
+</ul></li>
+</ul>
+<h3 id="mariadb-storage-vars.libscript_listen_port">mariadb storage
+vars.LIBSCRIPT_LISTEN_PORT</h3>
+<p>Global port to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.libscript_listen_address">mariadb storage
+vars.LIBSCRIPT_LISTEN_ADDRESS</h3>
+<p>Global address to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.libscript_listen_socket">mariadb storage
+vars.LIBSCRIPT_LISTEN_SOCKET</h3>
+<p>Global unix socket to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.mariadb_listen_port">mariadb storage
+vars.MARIADB_LISTEN_PORT</h3>
+<p>Port for MARIADB to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.mariadb_listen_address">mariadb storage
+vars.MARIADB_LISTEN_ADDRESS</h3>
+<p>Address for MARIADB to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.mariadb_listen_socket">mariadb storage
+vars.MARIADB_LISTEN_SOCKET</h3>
+<p>Unix socket for MARIADB to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.mariadb_data_dir">mariadb storage
+vars.MARIADB_DATA_DIR</h3>
+<p>Directory for MariaDB data</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.mariadb_service_run_as_user">mariadb
+storage vars.MARIADB_SERVICE_RUN_AS_USER</h3>
+<p>Windows local user account to run the service (leave empty for
+Network Service)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.mariadb_service_run_as_password">mariadb
+storage vars.MARIADB_SERVICE_RUN_AS_PASSWORD</h3>
+<p>Password for the local user account (if applicable)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="mariadb-storage-vars.mariadb_service_name">mariadb storage
+vars.MARIADB_SERVICE_NAME</h3>
+<p>Custom name for the Windows Service (allows side-by-side
+installations)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default:
+<code>"libscript_mariadb"</code></li>
+</ul>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+        <li style="float: right"><a href="https://rewriteInC.io">&num;rewriteInC.io</a></li>
+        <li style="float: right"><a href="https://offscale.io">offscale.io</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+<script>
+const editor = new JSONEditor(document.getElementById("editor_holder"),
+  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_storage/mariadb/vars.schema.json","title":"mariadb storage vars","description":"mariadb storage vars that can be set","type":"object","properties":{"MARIADB_VERSION":{"description":"Specific version of mariadb to install. Can be a numeric version or an alias.","type":"string","default":"latest","versionAliases":["latest","stable"]},"LIBSCRIPT_GLOBAL_INSTALL_METHOD":{"description":"Global override for how software should be installed across all systems (e.g. system package manager vs downloaded binaries/from-source).","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_WINDOWS_PKG_MGR":{"description":"Global package manager override for Windows targets (e.g. winget, choco).","type":"string","enum":["winget","choco"],"default":"winget"},"MARIADB_INSTALL_METHOD":{"description":"How to install MARIADB. 'system' uses the native OS package manager, 'source' compiles/downloads binaries.","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_LISTEN_PORT":{"type":["string","integer"],"description":"Global port to listen on"},"LIBSCRIPT_LISTEN_ADDRESS":{"type":"string","description":"Global address to listen on"},"LIBSCRIPT_LISTEN_SOCKET":{"type":"string","description":"Global unix socket to listen on"},"MARIADB_LISTEN_PORT":{"type":["string","integer"],"description":"Port for MARIADB to listen on"},"MARIADB_LISTEN_ADDRESS":{"type":"string","description":"Address for MARIADB to listen on"},"MARIADB_LISTEN_SOCKET":{"type":"string","description":"Unix socket for MARIADB to listen on"},"MARIADB_DATA_DIR":{"description":"Directory for MariaDB data","type":"string"},"MARIADB_SERVICE_RUN_AS_USER":{"description":"Windows local user account to run the service (leave empty for Network Service)","type":"string"},"MARIADB_SERVICE_RUN_AS_PASSWORD":{"description":"Password for the local user account (if applicable)","type":"string"},"MARIADB_SERVICE_NAME":{"description":"Custom name for the Windows Service (allows side-by-side installations)","type":"string","default":"libscript_mariadb"}}}
+});
+editor.on("ready", () => {
+  const editor_holder = document.getElementById("editor_holder");
+  let longest = 0;
+  let STYLES = "";
+  for (const formControl of editor_holder.getElementsByClassName("form-control")) {
+      let inputElement = undefined;
+      let label = undefined;
+      formControl.classList.add("flex");
+      for (const child of formControl.children) {
+          switch (child.tagName.toLowerCase()) {
+              case "input":
+                  inputElement = child;
+                  inputElement.classList.add("flex-item");
+                  inputElement.classList.add("tui-input");
+                  if (inputElement.name != null && (inputElement.name.indexOf("SECRET") > -1 || inputElement.name.indexOf("PASSWORD") > -1))
+                      inputElement.type = "password";
+                  break;
+
+              case "label":
+                  label = child;
+                  label.classList.add("flex-item");
+                  // .replace("]", "").replace("[", "")
+                  label.id = `label-${label.htmlFor}`;
+                  const n = label.textContent.length;
+                  if (n > longest) longest = n;
+                  break;
+
+              case "p":
+                  if (child.id.endsWith("-description")) {
+                      inputElement.placeholder = child.textContent;
+                      formControl.removeChild(child);
+                  }
+                  break;
+
+              default:
+                  break;
+          }
+      }
+
+      for (const child of formControl.children) {
+          if (child.tagName.toLowerCase() === "input") {
+              let l = 20 + (longest - child.textContent.length);
+              let dots = "";
+              for (let i=0; i<l; i++) dots += ".";
+              dots += ": ";
+              STYLES += `#label-${child.id}:after { content: "${dots}"; }\n`;
+          }
+      }
+  }
+  const style = document.createElement("style");
+  style.type = "text/css";
+  if (style.styleSheet) style.styleSheet.cssText = STYLES;
+  else style.appendChild(document.createTextNode(STYLES));
+  document.getElementsByTagName("head")[0].appendChild(style);
+  const sheet = new CSSStyleSheet()
+  sheet.replaceSync(STYLES)
+  document.adoptedStyleSheets = [sheet]
+});
+const submitButton = document.getElementById("submit");
+submitButton.onsubmit = "return false;";
+const submitButtonFunc = (e) => {
+  e.preventDefault();
+  console.log(editor.getValue());
+  return false;
+};
+submitButton.addEventListener("click", submitButtonFunc);
+</script>
+</body>

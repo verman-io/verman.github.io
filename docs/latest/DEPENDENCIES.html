@@ -88,75 +88,98 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="dependencies">Dependencies<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/DEPENDENCIES.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<p>Basic POSIX utilities. They’re usually included; unless you’re on
-Windows. Also: <code>curl</code>, <code>jq</code>, and
-<code>envsubst</code>. Optionally <code>sqlite3</code> for a config
-store; regardless <code>dyn_env.sh</code> and <code>dyn_env.cmd</code>
-are generated for everything dynamically set by the system.</p>
-<p>Specifically these from POSIX are used:</p>
+<h1 id="dependency-management">Dependency Management<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/DEPENDENCIES.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>This document explains how LibScript abstracts native OS package
+managers (<code>apt</code>, <code>apk</code>, <code>dnf</code>,
+<code>brew</code>, <code>pacman</code>, <code>choco</code>,
+<code>winget</code>) to achieve write-once, run-anywhere dependency
+resolution.</p>
+<h2 id="what-makes-this-interesting">What Makes This Interesting?</h2>
+<p>Handling dependencies across Alpine, Debian, RHEL, Arch, macOS, and
+Windows usually requires massive lookup tables or dedicated agents.
+LibScript solves this purely in shell using a unified mapping layer
+(<code>pkg_mapper.sh</code>) and a dynamic executor
+(<code>pkg_mgr.sh</code>). It intelligently falls back to building from
+source or grabbing static binaries if the native package manager is
+unavailable or missing a package.</p>
+<h2 id="the-resolution-lifecycle">The Resolution Lifecycle</h2>
+<ol type="1">
+<li><strong>Request</strong>: A component script calls
+<code>depends libssl-dev jq curl</code>.</li>
+<li><strong>Detection</strong>: <code>os_info.sh</code> identifies the
+host environment.</li>
+<li><strong>Mapping</strong>: <code>pkg_mapper.sh</code> intercepts the
+request. It knows that <code>libssl-dev</code> on Debian is called
+<code>openssl-dev</code> on Alpine and <code>openssl-devel</code> on
+RHEL.</li>
+<li><strong>Validation</strong>: The system queries the local package
+database to see if the mapped package is already installed, ensuring
+idempotency and speed.</li>
+<li><strong>Execution</strong>: If missing, <code>pkg_mgr.sh</code>
+invokes the native package manager non-interactively to install it.</li>
+</ol>
+<h2 id="declarative-stack-dependencies-libscript.json">Declarative Stack
+Dependencies (<code>libscript.json</code>)</h2>
+<p>Beyond OS-level dependencies, LibScript handles macro-level stack
+dependencies via <code>libscript.json</code>. Users can define an entire
+infrastructure stack (e.g., Postgres, Redis, Python, and an App).
+Running <code>./libscript.sh install-deps</code> will: 1. Parse the JSON
+using <code>jq</code>. 2. Execute parallel downloads for all required
+components (using <code>aria2</code> if available). 3. Sequentially
+install and configure the components based on their priority tiers.</p>
+<h2 id="component-level-dependencies">Component-Level Dependencies</h2>
+<p>Applications within LibScript can natively declare dependencies on
+other LibScript components using their <code>vars.schema.json</code>
+schema.</p>
+<p>By flagging a variable with
+<code>"is_libscript_dependency": true</code>, the global installer
+dynamically evaluates it before the component’s internal
+<code>setup.sh</code>/<code>setup.cmd</code> ever runs.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;properties&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;WORDPRESS_DB&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;is_libscript_dependency&quot;</span><span class="fu">:</span> <span class="kw">true</span><span class="fu">,</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;default&quot;</span><span class="fu">:</span> <span class="st">&quot;mariadb&quot;</span><span class="fu">,</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;enum&quot;</span><span class="fu">:</span> <span class="ot">[</span><span class="st">&quot;mariadb&quot;</span><span class="ot">,</span> <span class="st">&quot;postgres&quot;</span><span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&quot;description&quot;</span><span class="fu">:</span> <span class="st">&quot;Database backend to use&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<h3 id="resolution-strategies">Resolution Strategies</h3>
+<p>Dependencies are resolved through an auto-generated strategy property
+(<code>--&lt;DEP&gt;_STRATEGY=</code>), giving operators maximum
+flexibility over how components are satisfied.</p>
 <ul>
-<li><p><code>.</code> (for <code>source</code>ing)</p></li>
-<li><p><code>/bin/sh</code></p></li>
-<li><p><code>awk</code> (no GNU extensions)</p></li>
-<li><p><code>cat</code></p></li>
-<li><p><code>command</code></p></li>
-<li><p><code>cp</code> and <code>cp -r</code></p></li>
-<li><p><code>cut</code></p></li>
-<li><p><code>dc</code></p></li>
-<li><p><code>dd</code></p></li>
-<li><p><code>dirname</code></p></li>
-<li><p><code>echo</code></p></li>
-<li><p><code>env</code></p></li>
-<li><p><code>expr</code></p></li>
-<li><p><code>grep</code> [no GNU extensions used]</p></li>
-<li><p><code>head</code></p></li>
-<li><p><code>mkdir</code> &amp; <code>mkdir -p</code></p></li>
-<li><p><code>mktemp</code></p></li>
-<li><p><code>printf</code></p></li>
-<li><p><code>pwd</code></p></li>
-<li><p><code>read</code></p></li>
-<li><p><code>rm</code></p></li>
-<li><p><code>sed</code> [no GNU extensions used]</p></li>
-<li><p><code>set</code></p></li>
-<li><p><code>tee</code></p></li>
-<li><p><code>test</code> and shorthand: <code>[</code>
-<code>]</code></p></li>
-<li><p><code>touch</code></p></li>
-<li><p><code>tr</code></p></li>
-<li><p><code>true</code></p></li>
-<li><p><code>uname</code></p></li>
-<li><p><code>yes</code></p></li>
-<li><p>POSIX standard char ranges (<code>[:upper:]</code>;
-<code>[:lower:]</code>; <code>[:space:]</code>; <code>[:alpha:]</code>;
-<code>[:alnum:]</code>)</p></li>
-<li><p>Keywords: <code>if</code>, <code>then</code>, <code>else</code>,
-<code>fi</code>, <code>for</code>, <code>while</code>, <code>do</code>,
-<code>done</code>, <code>case</code>, <code>in</code>,
-<code>esac</code>, <code>wait</code>, <code>export</code>,
-<code>exit</code>, <code>return</code></p></li>
-<li><p>Operators: <code>!</code>, <code>&amp;&amp;</code>,
-<code>&amp;</code>, <code>||</code>, <code>&gt;</code>,
-<code>&lt;</code>, <code>&gt;&gt;</code>, <code>=</code>,
-<code>;</code>, <code>(</code>, <code>)</code>, <code>{</code>,
-<code>}</code>, <code>${</code>, <code>}</code></p></li>
-<li><p>Expansions: <code>${VAR:-default}</code> for default;
-<code>%</code> for substr</p></li>
-<li><p>Heredoc: <code>&lt;&lt;EOF</code>, <code>EOF</code></p></li>
-<li><p>Quotes: <code>'</code>, <code>"</code></p></li>
+<li><strong><code>reuse</code> (Default):</strong> The framework checks
+if the dependency is already installed globally or locally. If found, it
+skips installation and safely reuses it (e.g., using an existing
+PostgreSQL instance to create a new database).</li>
+<li><strong><code>install-alongside</code>:</strong> Forces a local,
+isolated installation of the dependency alongside any globally existing
+ones.</li>
+<li><strong><code>overwrite</code> / <code>upgrade</code> /
+<code>downgrade</code>:</strong> Safely uninstalls the existing target
+and installs the new version in its place.</li>
 </ul>
-<p>With <code>jq</code> and the aforementioned <code>curl</code> &amp;
-<code>envsubst</code> acquired if not found in system <code>PATH</code>.
-And:</p>
+<p>These dependency inputs and strategy toggles are seamlessly bridged
+across all interfaces: - <strong>Interactive Bash/Cmd Wizards:</strong>
+Evaluated directly via arguments
+(<code>--WORDPRESS_DB_STRATEGY=install-alongside</code>) or
+auto-injected environment variables. - <strong>Native GUI Wizards
+(MSI/InnoSetup):</strong> The generator layer (<code>package_as</code>)
+maps these schema endpoints to interactive dropdowns and installation
+stages within the native wizard.</p>
+<h2 id="feature-enumeration">Feature Enumeration</h2>
 <ul>
-<li><code>/bin/bash</code> on macOS [to acquire <code>brew</code>]</li>
-<li><code>docker</code>, only if using Docker, for
-<code>docker_builder.sh</code> and
-<code>docker_builder_parallel.sh</code> (or manually for any
-<code>*Dockerfile</code>)</li>
-<li><code>lsb_release</code> on Linux</li>
-<li><code>readlink</code></li>
-<li><code>sw_vers</code> on macOS</li>
+<li>Automatic package name translation across distributions.</li>
+<li>Idempotent execution (skips if installed).</li>
+<li>Native schema-driven dependency strategies (<code>reuse</code>,
+<code>overwrite</code>).</li>
+<li>Parallel downloads for complex component trees.</li>
+<li>Graceful fallbacks for Windows (<code>winget</code>,
+<code>choco</code>, or direct binary fetch).</li>
 </ul>
 </div>
 <!-- Status bar -->

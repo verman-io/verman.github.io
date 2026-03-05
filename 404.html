@@ -2,6 +2,7 @@
 <html lang="en" class="tui-bg-blue-black">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta itemprop="name" content="verMan.io &ndash; faster deploys: natively">
     <meta name="description" content="cross-platform open-source alternative to Hashicorp Packer">
     <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
@@ -15,6 +16,7 @@
 </head>
 
 <body class="tui-bg-blue-black relative">
+<input type="checkbox" id="mobile-menu-toggle" style="display:none" aria-hidden="true">
 <!-- Sidenav -->
 <nav class="tui-sidenav absolute">
     <ul>
@@ -57,7 +59,7 @@
 <nav class="tui-nav">
     <span class="tui-datetime" data-format="h:m:s a"></span>
     <ul>
-        <li class="tui-sidenav-button red-168-text">≡</li>
+        <li class="tui-sidenav-button red-168-text"><label for="mobile-menu-toggle" style="cursor:pointer; display:block; padding: 0 10px;" aria-label="Toggle Navigation">≡</label></li>
         <li class="tui-dropdown hide-on-med-and-down">
             <span class="red-168-text">D</span>ocumentation
             <div class="tui-dropdown-content">
@@ -127,7 +129,7 @@
 </nav>
 
 <!-- Edit panel -->
-<div class="content container">
+<main class="content container">
     <div class="row">
         <div class="col s12 m12 l12 white-text center">
             <h3>VerMan.io</h3>
@@ -183,7 +185,7 @@
                     </fieldset>
                 </div>
                 <a class="tui-button white-255-text" href="https://github.com/SamuelMarks/libscript">GitHub</a>
-                <button class="tui-button purple-168 white-255-text" onclick="copyURI(event)">share</button>
+                <a class="tui-button purple-168 white-255-text" href="mailto:?subject=VerMan.io&body=Check%20out%20VerMan.io:%20https%3A%2F%2Fgithub.com%2FSamuelMarks%2Flibscript">share</a>
                 <a class="tui-button cyan-255-text" style="margin-top: 10px" href="/verman">VerMan<small> (version
                     managers)</small></a>
                 <a class="tui-button yellow-255-text" style="margin-top: 10px"
@@ -197,65 +199,164 @@
 
         <!-- Window textarea -->
         <div class="info-text">0. write JSON</div>
-        <div class="tui-window">
-            <div class="tui-panel white-168" style="width: 400px; height: 100%">
-                <div class="tui-tabs red-168">
-                    <ul>
-                        <li><a class="tui-tab active" data-tab-content="tab-1-content">Toolchains</a></li>
-                        <li><a class="tui-tab" data-tab-content="tab-2-content">Databases</a></li>
-                        <li><a class="tui-tab" data-tab-content="tab-3-content">Servers</a></li>
-                    </ul>
-                </div>
-                <div>
-                    <div class="tui-tab-content" id="tab-1-content">
-                        <fieldset class="tui-fieldset">
-                            <textarea class="tui-textarea" style="color: black; width: 369px; height: 228px;">{"toolchains": [
-  { "name": "NODEJS",
-    "version": "lts",
-    "env": "NODEJS_INSTALL_DIR" },
-  { "name": "PYTHON",
-    "version": "3.10",
-    "env": "PYTHON_INSTALL_DIR" },
-  { "name": "RUST",
-    "version": "nightly",
-    "env": "RUST_INSTALL_DIR" }
-]}</textarea>
-                        </fieldset>
-                    </div>
-                    <div class="tui-tab-content" id="tab-2-content">
-                        <fieldset class="tui-fieldset">
-                            <textarea class="tui-textarea" style="color: black; width: 369px; height: 228px;">{"databases": [
-  { "name": "POSTGRES",
-    "version": "17",
-    "env": "POSTGRES_URL",
-    "vars": {
-      "POSTGRES_USER": "rest_user",
-      "POSTGRES_PASSWORD": "rest_pass",
-      "POSTGRES_DB": "rest_db",
-      "POSTGRES_PASSWORD_FILE": null
-    },
-    "target_env": [
-      "DATABASE_URL"
-    ]
-  },
-  {
-    "name": "VALKEY",
-    "version": "*",
-    "env": "REDIS_URL",
-    "target_env": [
-      "REDIS_URL",
-      "VALKEY_URL"
-    ]
-  }
-]}</textarea>
-                        </fieldset>
-                    </div>
-                    <div class="tui-tab-content" id="tab-3-content">
-                        <h3>Servers</h3>
-                        Too verbose for HTML!<br>(<em><a href="/docs/example.json">click for full example</a></em>)
-                    </div>
-                </div>
-            </div>
+        <div class="tui-window" style="width: 100%;">
+<div class="tui-panel white-168" style="width: 100%; height: 100%; overflow-y: scroll; max-height: 800px;">
+<form id="installer-form">
+  <fieldset class="tui-fieldset">
+    <legend>Export Format</legend>
+    <label class="tui-radio"><input type="radio" name="export_format" value=".msi"> <span>.msi</span></label>
+    <label class="tui-radio"><input type="radio" name="export_format" value=".exe" checked> <span>NSIS (.exe)</span></label>
+    <label class="tui-radio"><input type="radio" name="export_format" value="innosetup"> <span>InnoSetup (.iss)</span></label>
+    <label class="tui-checkbox"><input type="checkbox" name="offline_mode" value="true"> <span>Offline Installer</span></label>
+    <label class="tui-radio"><input type="radio" name="export_format" value=".rpm"> <span>.rpm</span></label>
+    <label class="tui-radio"><input type="radio" name="export_format" value=".deb"> <span>.deb</span></label>
+    <label class="tui-radio"><input type="radio" name="export_format" value="Dockerfile"> <span>Dockerfile</span></label>
+    <label class="tui-radio"><input type="radio" name="export_format" value="docker-compose"> <span>docker-compose</span></label>
+  </fieldset>
+  <fieldset class="tui-fieldset">
+    <legend>Target Location</legend>
+    <label class="tui-radio"><input type="radio" name="target_location" value="download" checked> <span>Download Archive (.zip)</span></label>
+    <label class="tui-radio"><input type="radio" name="target_location" value="cloud"> <span>Deploy to Cloud</span></label>
+  </fieldset>
+  <fieldset class="tui-fieldset">
+    <legend>Toolchains (required)</legend>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">NODEJS</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="NODEJS_version">Version:</label><input id="NODEJS_version" class="tui-input flex-item" type="text" name="NODEJS_version" value="lts"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="NODEJS_env">Env Var:</label><input id="NODEJS_env" class="tui-input flex-item" type="text" name="NODEJS_env" value="NODEJS_INSTALL_DIR"></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">PYTHON</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="PYTHON_version">Version:</label><input id="PYTHON_version" class="tui-input flex-item" type="text" name="PYTHON_version" value="3.10"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="PYTHON_env">Env Var:</label><input id="PYTHON_env" class="tui-input flex-item" type="text" name="PYTHON_env" value="PYTHON_INSTALL_DIR"></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">RUST</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="RUST_version">Version:</label><input id="RUST_version" class="tui-input flex-item" type="text" name="RUST_version" value="nightly"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="RUST_env">Env Var:</label><input id="RUST_env" class="tui-input flex-item" type="text" name="RUST_env" value="RUST_INSTALL_DIR"></div>
+    </div>
+  </fieldset>
+  <fieldset class="tui-fieldset">
+    <legend>Databases (required)</legend>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">POSTGRES</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="POSTGRES_version">Version:</label><input id="POSTGRES_version" class="tui-input flex-item" type="text" name="POSTGRES_version" value="18"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="POSTGRES_env">Env Var:</label><input id="POSTGRES_env" class="tui-input flex-item" type="text" name="POSTGRES_env" value="POSTGRES_URL"></div>
+      <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 5px;">Vars:</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="POSTGRES_var_POSTGRES_USER">POSTGRES_USER:</label><input id="POSTGRES_var_POSTGRES_USER" class="tui-input flex-item" type="text" name="POSTGRES_var_POSTGRES_USER" value="rest_user"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="POSTGRES_var_POSTGRES_PASSWORD">POSTGRES_PASSWORD:</label><input id="POSTGRES_var_POSTGRES_PASSWORD" class="tui-input flex-item" type="text" name="POSTGRES_var_POSTGRES_PASSWORD" value="rest_pass"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="POSTGRES_var_POSTGRES_HOST">POSTGRES_HOST:</label><input id="POSTGRES_var_POSTGRES_HOST" class="tui-input flex-item" type="text" name="POSTGRES_var_POSTGRES_HOST" value="localhost"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="POSTGRES_var_POSTGRES_DB">POSTGRES_DB:</label><input id="POSTGRES_var_POSTGRES_DB" class="tui-input flex-item" type="text" name="POSTGRES_var_POSTGRES_DB" value="rest_db"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="POSTGRES_var_POSTGRES_PASSWORD_FILE">POSTGRES_PASSWORD_FILE:</label><input id="POSTGRES_var_POSTGRES_PASSWORD_FILE" class="tui-input flex-item" type="text" name="POSTGRES_var_POSTGRES_PASSWORD_FILE" value=""></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">VALKEY</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="VALKEY_version">Version:</label><input id="VALKEY_version" class="tui-input flex-item" type="text" name="VALKEY_version" value="*"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="VALKEY_env">Env Var:</label><input id="VALKEY_env" class="tui-input flex-item" type="text" name="VALKEY_env" value="REDIS_URL"></div>
+    </div>
+  </fieldset>
+  <fieldset class="tui-fieldset">
+    <legend>Servers (required)</legend>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">SADAS</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="SADAS_version">Version:</label><input id="SADAS_version" class="tui-input flex-item" type="text" name="SADAS_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="SADAS_env">Env Var:</label><input id="SADAS_env" class="tui-input flex-item" type="text" name="SADAS_env" value=""></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">nodejs-http-server</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nodejs-http-server_version">Version:</label><input id="nodejs-http-server_version" class="tui-input flex-item" type="text" name="nodejs-http-server_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nodejs-http-server_env">Env Var:</label><input id="nodejs-http-server_env" class="tui-input flex-item" type="text" name="nodejs-http-server_env" value=""></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">python-server</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="python-server_version">Version:</label><input id="python-server_version" class="tui-input flex-item" type="text" name="python-server_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="python-server_env">Env Var:</label><input id="python-server_env" class="tui-input flex-item" type="text" name="python-server_env" value=""></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">build-static-files0</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="build-static-files0_version">Version:</label><input id="build-static-files0_version" class="tui-input flex-item" type="text" name="build-static-files0_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="build-static-files0_env">Env Var:</label><input id="build-static-files0_env" class="tui-input flex-item" type="text" name="build-static-files0_env" value=""></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">nginx-config-builder__frontend</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__frontend_version">Version:</label><input id="nginx-config-builder__frontend_version" class="tui-input flex-item" type="text" name="nginx-config-builder__frontend_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__frontend_env">Env Var:</label><input id="nginx-config-builder__frontend_env" class="tui-input flex-item" type="text" name="nginx-config-builder__frontend_env" value=""></div>
+      <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 5px;">Vars:</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__frontend_var_SERVER_NAME">SERVER_NAME:</label><input id="nginx-config-builder__frontend_var_SERVER_NAME" class="tui-input flex-item" type="text" name="nginx-config-builder__frontend_var_SERVER_NAME" value="example.com"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__frontend_var_WWWROOT">WWWROOT:</label><input id="nginx-config-builder__frontend_var_WWWROOT" class="tui-input flex-item" type="text" name="nginx-config-builder__frontend_var_WWWROOT" value=""${LIBSCRIPT_BUILD_DIR}"/ng-material-scaffold"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__frontend_var_HTTPS_ALWAYS">HTTPS_ALWAYS:</label><input id="nginx-config-builder__frontend_var_HTTPS_ALWAYS" class="tui-input flex-item" type="text" name="nginx-config-builder__frontend_var_HTTPS_ALWAYS" value="1"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__frontend_var_HTTPS_VENDOR">HTTPS_VENDOR:</label><input id="nginx-config-builder__frontend_var_HTTPS_VENDOR" class="tui-input flex-item" type="text" name="nginx-config-builder__frontend_var_HTTPS_VENDOR" value="letsencrypt"></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">nginx-config-builder__docs</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__docs_version">Version:</label><input id="nginx-config-builder__docs_version" class="tui-input flex-item" type="text" name="nginx-config-builder__docs_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__docs_env">Env Var:</label><input id="nginx-config-builder__docs_env" class="tui-input flex-item" type="text" name="nginx-config-builder__docs_env" value=""></div>
+      <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 5px;">Vars:</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__docs_var_SERVER_NAME">SERVER_NAME:</label><input id="nginx-config-builder__docs_var_SERVER_NAME" class="tui-input flex-item" type="text" name="nginx-config-builder__docs_var_SERVER_NAME" value="example.com"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__docs_var_LOCATION_EXPR">LOCATION_EXPR:</label><input id="nginx-config-builder__docs_var_LOCATION_EXPR" class="tui-input flex-item" type="text" name="nginx-config-builder__docs_var_LOCATION_EXPR" value="~* /(api|redoc|rapidoc|scalar|secured)"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__docs_var_HTTPS_ALWAYS">HTTPS_ALWAYS:</label><input id="nginx-config-builder__docs_var_HTTPS_ALWAYS" class="tui-input flex-item" type="text" name="nginx-config-builder__docs_var_HTTPS_ALWAYS" value="1"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__docs_var_HTTPS_VENDOR">HTTPS_VENDOR:</label><input id="nginx-config-builder__docs_var_HTTPS_VENDOR" class="tui-input flex-item" type="text" name="nginx-config-builder__docs_var_HTTPS_VENDOR" value="letsencrypt"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__docs_var_PROXY_PASS">PROXY_PASS:</label><input id="nginx-config-builder__docs_var_PROXY_PASS" class="tui-input flex-item" type="text" name="nginx-config-builder__docs_var_PROXY_PASS" value="http://localhost:3000"></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">nginx-config-builder__crawl</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__crawl_version">Version:</label><input id="nginx-config-builder__crawl_version" class="tui-input flex-item" type="text" name="nginx-config-builder__crawl_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__crawl_env">Env Var:</label><input id="nginx-config-builder__crawl_env" class="tui-input flex-item" type="text" name="nginx-config-builder__crawl_env" value=""></div>
+      <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 5px;">Vars:</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__crawl_var_SERVER_NAME">SERVER_NAME:</label><input id="nginx-config-builder__crawl_var_SERVER_NAME" class="tui-input flex-item" type="text" name="nginx-config-builder__crawl_var_SERVER_NAME" value="example.com"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__crawl_var_LOCATION_EXPR">LOCATION_EXPR:</label><input id="nginx-config-builder__crawl_var_LOCATION_EXPR" class="tui-input flex-item" type="text" name="nginx-config-builder__crawl_var_LOCATION_EXPR" value="/v1/crawl"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__crawl_var_HTTPS_ALWAYS">HTTPS_ALWAYS:</label><input id="nginx-config-builder__crawl_var_HTTPS_ALWAYS" class="tui-input flex-item" type="text" name="nginx-config-builder__crawl_var_HTTPS_ALWAYS" value="1"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__crawl_var_HTTPS_VENDOR">HTTPS_VENDOR:</label><input id="nginx-config-builder__crawl_var_HTTPS_VENDOR" class="tui-input flex-item" type="text" name="nginx-config-builder__crawl_var_HTTPS_VENDOR" value="letsencrypt"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__crawl_var_PROXY_PASS">PROXY_PASS:</label><input id="nginx-config-builder__crawl_var_PROXY_PASS" class="tui-input flex-item" type="text" name="nginx-config-builder__crawl_var_PROXY_PASS" value="http://localhost:3002"></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">nginx-config-builder__swap</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__swap_version">Version:</label><input id="nginx-config-builder__swap_version" class="tui-input flex-item" type="text" name="nginx-config-builder__swap_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__swap_env">Env Var:</label><input id="nginx-config-builder__swap_env" class="tui-input flex-item" type="text" name="nginx-config-builder__swap_env" value=""></div>
+      <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 5px;">Vars:</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__swap_var_SERVER_NAME">SERVER_NAME:</label><input id="nginx-config-builder__swap_var_SERVER_NAME" class="tui-input flex-item" type="text" name="nginx-config-builder__swap_var_SERVER_NAME" value="example.com"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__swap_var_LOCATION_EXPR">LOCATION_EXPR:</label><input id="nginx-config-builder__swap_var_LOCATION_EXPR" class="tui-input flex-item" type="text" name="nginx-config-builder__swap_var_LOCATION_EXPR" value="/v1/swap"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__swap_var_HTTPS_ALWAYS">HTTPS_ALWAYS:</label><input id="nginx-config-builder__swap_var_HTTPS_ALWAYS" class="tui-input flex-item" type="text" name="nginx-config-builder__swap_var_HTTPS_ALWAYS" value="1"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__swap_var_HTTPS_VENDOR">HTTPS_VENDOR:</label><input id="nginx-config-builder__swap_var_HTTPS_VENDOR" class="tui-input flex-item" type="text" name="nginx-config-builder__swap_var_HTTPS_VENDOR" value="letsencrypt"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__swap_var_PROXY_WEBSOCKETS">PROXY_WEBSOCKETS:</label><input id="nginx-config-builder__swap_var_PROXY_WEBSOCKETS" class="tui-input flex-item" type="text" name="nginx-config-builder__swap_var_PROXY_WEBSOCKETS" value="1"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__swap_var_PROXY_PASS">PROXY_PASS:</label><input id="nginx-config-builder__swap_var_PROXY_PASS" class="tui-input flex-item" type="text" name="nginx-config-builder__swap_var_PROXY_PASS" value="http://localhost:3003"></div>
+    </div>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">nginx-config-builder__data</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__data_version">Version:</label><input id="nginx-config-builder__data_version" class="tui-input flex-item" type="text" name="nginx-config-builder__data_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="nginx-config-builder__data_env">Env Var:</label><input id="nginx-config-builder__data_env" class="tui-input flex-item" type="text" name="nginx-config-builder__data_env" value=""></div>
+      <div style="margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 5px;">Vars:</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__data_var_SERVER_NAME">SERVER_NAME:</label><input id="nginx-config-builder__data_var_SERVER_NAME" class="tui-input flex-item" type="text" name="nginx-config-builder__data_var_SERVER_NAME" value="example.com"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__data_var_LOCATION_EXPR">LOCATION_EXPR:</label><input id="nginx-config-builder__data_var_LOCATION_EXPR" class="tui-input flex-item" type="text" name="nginx-config-builder__data_var_LOCATION_EXPR" value="/data"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__data_var_HTTPS_ALWAYS">HTTPS_ALWAYS:</label><input id="nginx-config-builder__data_var_HTTPS_ALWAYS" class="tui-input flex-item" type="text" name="nginx-config-builder__data_var_HTTPS_ALWAYS" value="1"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__data_var_HTTPS_VENDOR">HTTPS_VENDOR:</label><input id="nginx-config-builder__data_var_HTTPS_VENDOR" class="tui-input flex-item" type="text" name="nginx-config-builder__data_var_HTTPS_VENDOR" value="letsencrypt"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__data_var_WWWROOT">WWWROOT:</label><input id="nginx-config-builder__data_var_WWWROOT" class="tui-input flex-item" type="text" name="nginx-config-builder__data_var_WWWROOT" value="/opt/repos/E4S2024"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 200px;" for="nginx-config-builder__data_var_PROXY_PASS">PROXY_PASS:</label><input id="nginx-config-builder__data_var_PROXY_PASS" class="tui-input flex-item" type="text" name="nginx-config-builder__data_var_PROXY_PASS" value="http://localhost:3003"></div>
+    </div>
+  </fieldset>
+  <fieldset class="tui-fieldset">
+    <legend>Databases (optional)</legend>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">RABBITMQ</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="RABBITMQ_version">Version:</label><input id="RABBITMQ_version" class="tui-input flex-item" type="text" name="RABBITMQ_version" value="*"></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="RABBITMQ_env">Env Var:</label><input id="RABBITMQ_env" class="tui-input flex-item" type="text" name="RABBITMQ_env" value="AMQP_URL"></div>
+    </div>
+  </fieldset>
+  <fieldset class="tui-fieldset">
+    <legend>Servers (optional)</legend>
+    <div class="tui-panel white-168" style="margin-bottom: 10px; padding: 10px;">
+      <div style="font-weight: bold; margin-bottom: 5px;">JupyterHub</div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="JupyterHub_version">Version:</label><input id="JupyterHub_version" class="tui-input flex-item" type="text" name="JupyterHub_version" value=""></div>
+      <div class="flex" style="margin-bottom: 5px;"><label class="flex-item" style="width: 120px;" for="JupyterHub_env">Env Var:</label><input id="JupyterHub_env" class="tui-input flex-item" type="text" name="JupyterHub_env" value=""></div>
+    </div>
+  </fieldset>
+  <div class="flex" style="margin-top: 15px;">
+    <button type="button" id="deploy-btn" class="tui-button orange-168 white-text" onclick="if(this._loading)return;this._loading=true;this.textContent='Loading scripts...';const loadScript=(s,t)=>new Promise(r=>{const e=document.createElement('script');if(t)e.type=t;e.src=s;e.onload=r;document.body.appendChild(e)});Promise.all([loadScript('../assets/tuicss.min.js'),loadScript('https://cdn.jsdelivr.net/npm/toastify-js')]).then(()=>loadScript('../assets/root.js','module'));">Deploy / Download</button>
+  </div>
+</form>
+
+</div>
+</div>
         </div>
 
         <hr class="white-text">
@@ -396,7 +497,7 @@
         <div class="info-text">4. Eat 🍰</div>
 
     </div>
-</div>
+</main>
 
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">
@@ -411,9 +512,9 @@
    href="mailto:samuel@offscale.io&subject=verman"
    aria-label="Email me"
 >📧</a>
-<script type="application/javascript" src="../assets/tuicss.min.js"></script>
-<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
-<script type="text/javascript" src="../assets/root.js"></script>
+
+
+
 </body>
 
 </html>

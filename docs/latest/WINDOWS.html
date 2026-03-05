@@ -88,42 +88,51 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="windows-support">Windows support<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/WINDOWS.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<p>First look in <code>PATH</code> for git bash, MSYS, Cygwin; if none
-are found then download the <a href="#ports">ports</a> below using:</p>
-<ol start="0" type="1">
-<li><code>curl</code> (<a
-href="https://techcommunity.microsoft.com/blog/containers/tar-and-curl-come-to-windows/382409">installed
-by default since 2019’s Windows 10</a>)</li>
-<li>Fallback to PowerShell’s <code>iwr</code></li>
-<li>Fallback to <code>wget</code></li>
-<li>Fallback to <code>certutil</code></li>
-<li>Fallback to <code>bitsadmin</code></li>
-<li>Fallback to <code>cscript</code> with a <code>ActiveXObject</code>
-(e.g., follow <a href="https://superuser.com/a/536400">this
-code</a>)</li>
-<li>Fail with error. E.g., on DOS recommend manual downloading of
-<code>curl</code> from http://mik.dyndns.pro/dos-stuff/</li>
-</ol>
-<p>NOTE: <code>curl</code> and <code>tar</code> were first introduced in
-<a
-href="https://blogs.windows.com/windows-insider/2017/12/19/announcing-windows-10-insider-preview-build-17063-pc/%5D">2017</a>
-to Microsoft Windows; so should be usually available.</p>
-<h2 id="ports">Ports</h2>
-<ul>
-<li>BSD-3-clause <code>bc</code> and <code>dc</code> implementation:
-https://git.gavinhoward.com/gavin/bc</li>
-<li>Consider porting dash—the most popular <code>/bin/sh</code>—from
-http://gondor.apana.org.au/~herbert/dash to Windows</li>
-<li><code>envsubst</code> looks trivial to port to Windows (MSVC):
-https://github.com/nekopsykose/envsubst</li>
-</ul>
-<p>There also seems to be a busybox port for Windows:
-https://frippery.org/busybox/release-notes/current.html Worth
-investigating if this busybox can generate all the scripts. Or maybe
-busybox +
-https://github.com/SamuelMarks/win-bin/releases/download/0th/envsubst.zip
-(from 2005’s GnuWin32 project)</p>
+<h1 id="windows-and-ms-dos-support">Windows and MS-DOS Support<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/WINDOWS.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>Details how LibScript seamlessly supports modern Windows (via
+<code>cmd</code> and PowerShell) and legacy MS-DOS environments,
+achieving parity with its Unix counterparts.</p>
+<h2 id="what-makes-this-interesting">What Makes This Interesting?</h2>
+<p>Achieving infrastructure-as-code parity on Windows without forcing
+users into WSL or installing third-party runtimes is notoriously
+difficult. LibScript solves this by utilizing native <code>.cmd</code>
+files as a routing layer and delegating heavy lifting to PowerShell
+(<code>.ps1</code>), while maintaining a strict <code>.bat</code>
+fallback architecture for true legacy MS-DOS environments.</p>
+<h2 id="modern-windows-architecture-.cmd-and-.ps1">Modern Windows
+Architecture (<code>.cmd</code> and <code>.ps1</code>)</h2>
+<p>Instead of <code>.sh</code> scripts, Windows components use: -
+<code>cli.cmd</code>: Parses arguments natively in the Command Prompt. -
+<code>setup.cmd</code>: Acts as the portability wrapper. -
+<code>setup_win.ps1</code>: The core execution engine. It handles
+downloading artifacts, silently installing MSIs, unpacking ZIPs, editing
+the Windows Registry, and securely updating the User/Machine
+<code>PATH</code>. - <code>test.cmd</code>: Idempotent verification
+tests.</p>
+<h2 id="global-routing">Global Routing</h2>
+<p>The root router <code>libscript.cmd</code> behaves exactly like
+<code>libscript.sh</code>.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode cmd"><code class="sourceCode dosbat"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>libscript.cmd install python 3.12</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>libscript.cmd run python 3.12 script.py</span></code></pre></div>
+<h2 id="background-services">Background Services</h2>
+<p>Since Windows lacks Systemd or OpenRC, LibScript natively translates
+background daemon configurations into Windows Services. Tools like
+Valkey or Postgres are installed, configured, and registered natively
+via standard Windows service utilities (<code>sc.exe</code>),
+controllable via <code>libscript.cmd start postgres</code>.</p>
+<h2 id="legacy-ms-dos-support-.bat">Legacy MS-DOS Support
+(<code>.bat</code>)</h2>
+<p>To support environments predating modern <code>cmd.exe</code> command
+extensions or PowerShell, LibScript utilizes <code>.bat</code>
+fallbacks: - <code>libscript.bat</code> prioritizes <code>cli.bat</code>
+and <code>setup.bat</code> if they exist. -
+<code>dos_setup_script_deps.bat</code> uses legacy FTP capabilities to
+bootstrap standard CLI tools (like <code>curl</code> and
+<code>jq</code>) onto raw MS-DOS setups, enabling them to interface with
+the modern LibScript ecosystem without breaking the mainline
+<code>.cmd</code> features.</p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

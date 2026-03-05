@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; latest/FUTURE">
+    <meta name="description" content="Deploy latest/FUTURE with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/FUTURE.html" />
+    <title>latest/FUTURE from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="future-architecture">Future Architecture<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/FUTURE.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>Explores experimental paradigms and massive architectural shifts
+planned for LibScript.</p>
+<h2 id="what-makes-the-future-interesting">What Makes The Future
+Interesting?</h2>
+<p>LibScript aims to blur the line between local development
+environments, CI/CD pipelines, and production deployments. By
+abstracting the OS, LibScript can evolve from a package manager into a
+universal graph-execution engine for infrastructure.</p>
+<h2 id="upcoming-milestones">Upcoming Milestones</h2>
+<ol type="1">
+<li><strong>Parallel Execution Graph</strong>:
+<ul>
+<li>Parse <code>libscript.json</code> to dynamically build a Directed
+Acyclic Graph (DAG) of dependencies.</li>
+<li>Execute non-blocking components completely concurrently across
+multiple OS threads, vastly reducing bootstrap times.</li>
+</ul></li>
+<li><strong>Vagrant Multi-Distro Testing Matrix</strong>:
+<ul>
+<li>Orchestrate ephemeral VMs locally to run
+<code>libscript.sh test</code> across Alpine, FreeBSD, Debian, and
+AlmaLinux simultaneously, ensuring absolute shell compatibility without
+waiting on cloud CI runners.</li>
+</ul></li>
+<li><strong>Compiled CLI Wrapper</strong>:
+<ul>
+<li>Transition the global router (<code>libscript.sh</code>) into a
+statically compiled Rust or Go binary.</li>
+<li>This binary will handle JSON parsing, DAG execution, and schema
+validation with extreme speed, while continuing to shell out to the
+underlying <code>.sh</code> and <code>.cmd</code> scripts to maintain
+the zero-dependency philosophy on the execution layer.</li>
+</ul></li>
+<li><strong>State Snapshot &amp; Rollback</strong>:
+<ul>
+<li>Automatically back up modified configuration files to a staging
+directory before <code>setup.sh</code> runs.</li>
+<li>If <code>test.sh</code> fails, automatically restore the state,
+providing transaction-like safety for OS provisioning.</li>
+</ul></li>
+</ol>
+<p>GUID monotonic sequence derived from
+“package_name-OVERRIDEABLE_SERVICE_NAME-ARCH-VERSION” such that: - 0.0.1
+to 0.0.2 makes .msi understand it as an upgrade. - 0.0.1 to 1.2.4 is
+derivable without precomputing any of the GUIDs ahead of time</p>
+<pre class="jq"><code># Turn a hex string (32+ chars) into an RFC4122-ish GUID
+def hex_to_guid:
+  .[0:8] + &quot;-&quot; +
+  .[8:12] + &quot;-&quot; +
+  .[12:16] + &quot;-&quot; +
+  .[16:20] + &quot;-&quot; +
+  .[20:32];
+
+# Force RFC4122 version 5 + variant bits into a 32+ char hex string
+def as_uuidv5_bits:
+  # version (char 12, 0-based) -&gt; &#39;5&#39;
+  .[0:12] + &quot;5&quot; + .[13:] |
+  # variant (char 16) -&gt; 8..b; we’ll just force &#39;a&#39;
+  .[0:16] + &quot;a&quot; + .[17:];
+
+# Deterministic GUID from a string (UUIDv5-like)
+def guid_from_string:
+  @sha256
+  | .[0:32]
+  | as_uuidv5_bits
+  | hex_to_guid;
+
+# Main function:
+# input: &quot;package_name-OVERRIDEABLE_SERVICE_NAME-ARCH-VERSION&quot;
+def wix_codes:
+  split(&quot;-&quot;) as [$pkg,$svc,$arch,$ver] |
+
+  # Identity for UpgradeCode (no version)
+  ($pkg + &quot;|&quot; + $svc + &quot;|&quot; + $arch) as $identity |
+
+  # Identity for ProductCode (includes version)
+  ($identity + &quot;|&quot; + $ver) as $identity_ver |
+
+  {
+    UpgradeCode: ($identity     | guid_from_string),
+    ProductCode: ($identity_ver | guid_from_string)
+  };</code></pre>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+        <li style="float: right"><a href="https://rewriteInC.io">&num;rewriteInC.io</a></li>
+        <li style="float: right"><a href="https://offscale.io">offscale.io</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+</body>

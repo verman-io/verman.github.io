@@ -89,56 +89,63 @@
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="roadmap">Roadmap<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/ROADMAP.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>Tracks the phased delivery of LibScript’s capabilities from its
+foundational release to its ultimate form as a universal
+orchestrator.</p>
+<h2 id="what-makes-this-roadmap-interesting">What Makes This Roadmap
+Interesting?</h2>
+<p>It tracks the evolution from a simple script collection into a fully
+declarative, cross-compiling, multi-platform orchestrator capable of
+generating deployment artifacts (Docker, MSI, DEB) dynamically from its
+own runtime context.</p>
+<h2 id="phase-1-foundation-completed">Phase 1: Foundation
+(Completed)</h2>
 <ul class="task-list">
-<li><label><input type="checkbox" />Docs</label></li>
-<li><label><input type="checkbox" />Doc site generator (see <a
-href="DOCS_ROADMAP.html">DOCS_ROADMAP.md</a>)</label></li>
-<li><label><input type="checkbox" checked="" /><a
-href="https://en.wikipedia.org/wiki/Docker_(software)">Docker</a> cache
-layer per component</label></li>
-<li><label><input type="checkbox" checked="" /><a
-href="https://docker.com">Docker</a> cache layer per component group
-(e.g., toolchains; databases; servers)</label></li>
-<li><label><input type="checkbox" checked="" />Dockerfile per
-component</label></li>
-<li><label><input type="checkbox" checked="" />Dockerfile per component
-group</label></li>
-<li><label><input type="checkbox" /><a
-href="https://docs.docker.com/compose">Docker Compose</a></label></li>
-<li><label><input type="checkbox" /><a
-href="https://en.wikipedia.org/wiki/HP-UX">HP/UX</a>
-support</label></li>
-<li><label><input type="checkbox" /><a
-href="https://en.wikipedia.org/wiki/Kubernetes">Kubernetes</a> example
-configuration</label></li>
-<li><label><input type="checkbox" />Secret storage &amp; retrieval
-(e.g., using <a href="https://openbao.org">OpenBao</a>; the open-source
-<a href="https://www.vaultproject.io">Hashicorp Vault</a>
-fork)</label></li>
-<li><label><input type="checkbox" /><a
-href="https://en.wikipedia.org/wiki/SunOS">SunOS</a>
-support</label></li>
-<li><label><input type="checkbox" />Testing (e.g., using <a
-href="https://github.com/atkrad/wait4x"><code>wait4x</code></a> as a
-generic health-checker for databases and servers; and file existence
-checks for everything else)</label></li>
-<li><label><input type="checkbox" /><a
-href="https://en.wikipedia.org/wiki/Vagrant_(software)">Vagrant</a>file
-examples</label></li>
-<li><label><input type="checkbox" />Windows installer (with integrated
-<a href="win_setup_script_deps..html">win_setup_script_deps.cmd</a>
-execution)</label></li>
-<li><label><input type="checkbox" />Windows installer generator (with
-tree-shaking!)</label></li>
-<li><label><input type="checkbox" checked="" />Windows
-support</label></li>
-<li><label><input type="checkbox" /><a
-href="https://en.wikipedia.org/wiki/Z/OS">z/OS</a> support</label></li>
-<li><label><input type="checkbox" />{<a
-href="https://en.wikipedia.org/wiki/FreeBSD">FreeBSD</a>, <a
-href="https://en.wikipedia.org/wiki/NetBSD">NetBSD</a>, <a
-href="https://en.wikipedia.org/wiki/OpenBSD">OpenBSD</a>}
-support</label></li>
+<li><label><input type="checkbox" checked="" />Zero-dependency shell
+execution framework.</label></li>
+<li><label><input type="checkbox" checked="" />Package manager
+abstraction (<code>pkg_mgr.sh</code>).</label></li>
+<li><label><input type="checkbox" checked="" />Vast component library
+(Rust, Python, Node, Postgres, Nginx).</label></li>
+<li><label><input type="checkbox" checked="" />Verification scripts and
+CI Matrix.</label></li>
+</ul>
+<h2 id="phase-2-windows-declarative-parity-completed">Phase 2: Windows
+&amp; Declarative Parity (Completed)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />Full MS-DOS
+(<code>.bat</code>), Windows Command (<code>.cmd</code>), and PowerShell
+(<code>.ps1</code>) support.</label></li>
+<li><label><input type="checkbox" checked="" />Component-level CLI
+routing and JSON schema validation.</label></li>
+<li><label><input type="checkbox" checked="" />Declarative installations
+via <code>libscript.json</code>
+(<code>install-deps</code>).</label></li>
+</ul>
+<h2 id="phase-3-the-generator-engine-current">Phase 3: The Generator
+Engine (Current)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox"
+checked="" /><code>package_as docker</code> /
+<code>docker_compose</code> generator.</label></li>
+<li><label><input type="checkbox" checked="" /><code>package_as</code>
+Windows Installers (MSI via WiX, InnoSetup, NSIS).</label></li>
+<li><label><input type="checkbox" checked="" /><code>package_as</code>
+Native Packages (DEB, RPM, APK).</label></li>
+<li><label><input type="checkbox" />Stabilize dynamic configuration
+injection (passing generated database credentials directly to dependent
+application layers).</label></li>
+</ul>
+<h2 id="phase-4-advanced-orchestration-next">Phase 4: Advanced
+Orchestration (Next)</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" />Concurrent DAG-based execution for
+<code>libscript.json</code>.</label></li>
+<li><label><input type="checkbox" />Full uninstall and state-rollback
+lifecycle.</label></li>
+<li><label><input type="checkbox" />Rewrite the top-level router in
+Rust/Go for speed, keeping scripts for execution.</label></li>
 </ul>
 </div>
 <!-- Status bar -->

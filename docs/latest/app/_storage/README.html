@@ -89,12 +89,71 @@
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
 <h1 id="app_storage">app/_storage<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/app/_storage/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<p>Application-level storage layers. Only usable once most-all of the
-application is deployed.</p>
-<p>E.g., <a
-href="https://en.wikipedia.org/wiki/Celery_(software)">Celery</a>,
-daemonised; to enable data transfer from your application ↔︎ persistent
-storage.</p>
+<h2 id="purpose-current-state">Purpose &amp; Current State</h2>
+<p><strong>Purpose</strong>: This document provides context and
+technical details for the <code>_storage</code> component (part of
+<code>app</code>) within the LibScript ecosystem. LibScript is a
+modular, zero-dependency shell-script framework designed for
+cross-platform software provisioning across Linux, macOS, DOS, and
+Windows.</p>
+<p><strong>Current State</strong>: LibScript functions as a
+comprehensive global and per-component package manager, featuring a
+robust core CLI (<code>libscript.sh</code>, <code>libscript.cmd</code>,
+<code>libscript.bat</code>). It includes multi-platform toolchain
+support (Rust, Python, Node, Go, Java, C/C++), servers (Postgres 18,
+Nginx, Valkey), and advanced environment querying (<code>env</code>
+subcommand). It natively supports generating deployment configurations
+(<code>package_as docker</code>, <code>package_as docker_compose</code>,
+<code>package_as msi</code>, <code>package_as innosetup</code>,
+<code>package_as nsis</code>, <code>package_as TUI</code>) with deep
+installer customization, automated parallel dependency downloading and
+resolution via <code>libscript.json</code>, and robust uninstall
+lifecycle hooks (<code>uninstall.sh</code>/<code>uninstall.cmd</code>)
+for cleanly removing binaries, configs, and services. It natively
+handles deep semantic versioning, global <code>--secrets</code>
+extraction, caching, OpenBao/Vault generation, local caching via SQLite
+(<code>db-search</code>, <code>update-db</code>), explicit error
+handling for unsupported actions, and background process serving. Recent
+advancements have stabilized major Windows installer generation (MSI,
+InnoSetup, NSIS) and expanded macOS native service provisioning.</p>
+<h2 id="dependency-installation-methods">Dependency Installation
+Methods</h2>
+<p><code>libscript</code> provides a flexible dependency management
+system, allowing you to control how dependencies are installed—either
+globally across the entire setup or locally on a per-toolchain
+basis.</p>
+<h3 id="global-configuration">Global Configuration</h3>
+<p>You can set a global preference for how tools should be installed by
+defining <code>LIBSCRIPT_GLOBAL_INSTALL_METHOD</code> in your
+environment or global configuration (<code>install.json</code>).</p>
+<p>Supported global methods typically include: - <code>system</code>:
+Uses the system’s package manager (e.g., <code>apt</code>,
+<code>apk</code>, <code>pacman</code>). - <code>source</code>: Builds or
+downloads the tool from source/official binaries (fallback behavior
+depends on the tool).</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LIBSCRIPT_GLOBAL_INSTALL_METHOD</span><span class="op">=</span><span class="st">&quot;system&quot;</span></span></code></pre></div>
+<h3 id="local-overrides">Local Overrides</h3>
+<p>You can override the global setting for specific dependencies by
+setting their respective <code>[TOOL]_INSTALL_METHOD</code> variable.
+The local override takes highest precedence.</p>
+<p>For example, to globally use the system package manager but strictly
+install Python via <code>uv</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LIBSCRIPT_GLOBAL_INSTALL_METHOD</span><span class="op">=</span><span class="st">&quot;system&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PYTHON_INSTALL_METHOD</span><span class="op">=</span><span class="st">&quot;uv&quot;</span></span></code></pre></div>
+<h3 id="python-specific-support">Python-Specific Support</h3>
+<p>The Python toolchain (<code>_lib/_toolchain/python</code>) is
+extensively integrated with this feature and supports the following
+<code>PYTHON_INSTALL_METHOD</code> values: - <code>uv</code> (default
+fallback): Installs Python and creates virtual environments using
+astral’s <code>uv</code> tool. - <code>pyenv</code>: Installs Python
+versions using <code>pyenv</code>, managing them in
+<code>~/.pyenv</code>. - <code>system</code>: Uses the system’s package
+manager to provide Python. - <code>from-source</code>: Compiles Python
+directly from its source code.</p>
+<p>By combining global methods with local overrides, you can mix and
+match system-provided stable packages with newer or custom-compiled
+toolchains as needed.</p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

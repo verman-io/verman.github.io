@@ -133,39 +133,71 @@
     </fieldset>
   </form>
 </div>
-<ul class="task-list">
-<li><label><input type="checkbox" />simple secure (for template
-interpolation)</label></li>
-<li><label><input type="checkbox" />simple insecure (for template
-interpolation)</label></li>
-<li><label><input type="checkbox" />letsencrypt auto-setup and
-auto-renew</label></li>
-<li><label><input type="checkbox" />alternative to letsencrypt (e.g.,
-ZeroSSL, cloud-vendor, user-provided)</label></li>
-<li><label><input type="checkbox" />setup nginx.conf with
-sites-available or <code>/etc/nginx/conf.d/*.conf</code> as include dir
-(if not set that way already)</label></li>
-<li><label><input type="checkbox" />backups and rollbacks, so; e.g.; if
-<code>nginx -t</code> fails rollback to previous working version and
-show error</label></li>
-<li><label><input type="checkbox" />checksums (so if nothing changed
-don’t
-<code>restart</code>|<code>stop</code>+<code>start</code>|<code>reload</code>
-nginx daemon)</label></li>
-<li><label><input type="checkbox" />translate [compile!]
-<code>location</code> block to IIS and Apache Web Server
-equivalents</label></li>
-<li><label><input type="checkbox" /><code>setup.cmd</code> for
-Windows</label></li>
-<li><label><input
-type="checkbox" /><code>setup_generic.sh</code></label></li>
-<li><label><input
-type="checkbox" /><code>setup_alpine.sh</code></label></li>
-<li><label><input
-type="checkbox" /><code>setup_debian.sh</code></label></li>
-<li><label><input
-type="checkbox" /><code>setup_macOS.sh</code></label></li>
-</ul>
+<h2 id="purpose-current-state">Purpose &amp; Current State</h2>
+<p><strong>Purpose</strong>: This document provides context and
+technical details for the <code>nginx</code> component (part of
+<code>_server</code>) within the LibScript ecosystem. LibScript is a
+modular, zero-dependency shell-script framework designed for
+cross-platform software provisioning across Linux, macOS, DOS, and
+Windows.</p>
+<p><strong>Current State</strong>: LibScript functions as a
+comprehensive global and per-component package manager, featuring a
+robust core CLI (<code>libscript.sh</code>, <code>libscript.cmd</code>,
+<code>libscript.bat</code>). It includes multi-platform toolchain
+support (Rust, Python, Node, Go, Java, C/C++), servers (Postgres 18,
+Nginx, Valkey), and advanced environment querying (<code>env</code>
+subcommand). It natively supports generating deployment configurations
+(<code>package_as docker</code>, <code>package_as docker_compose</code>,
+<code>package_as msi</code>, <code>package_as innosetup</code>,
+<code>package_as nsis</code>, <code>package_as TUI</code>) with deep
+installer customization, automated parallel dependency downloading and
+resolution via <code>libscript.json</code>, and robust uninstall
+lifecycle hooks (<code>uninstall.sh</code>/<code>uninstall.cmd</code>)
+for cleanly removing binaries, configs, and services. It natively
+handles deep semantic versioning, global <code>--secrets</code>
+extraction, caching, OpenBao/Vault generation, local caching via SQLite
+(<code>db-search</code>, <code>update-db</code>), explicit error
+handling for unsupported actions, and background process serving. Recent
+advancements have stabilized major Windows installer generation (MSI,
+InnoSetup, NSIS) and expanded macOS native service provisioning.</p>
+<h2 id="dependency-installation-methods">Dependency Installation
+Methods</h2>
+<p><code>libscript</code> provides a flexible dependency management
+system, allowing you to control how dependencies are installed—either
+globally across the entire setup or locally on a per-toolchain
+basis.</p>
+<h3 id="global-configuration">Global Configuration</h3>
+<p>You can set a global preference for how tools should be installed by
+defining <code>LIBSCRIPT_GLOBAL_INSTALL_METHOD</code> in your
+environment or global configuration (<code>install.json</code>).</p>
+<p>Supported global methods typically include: - <code>system</code>:
+Uses the system’s package manager (e.g., <code>apt</code>,
+<code>apk</code>, <code>pacman</code>). - <code>source</code>: Builds or
+downloads the tool from source/official binaries (fallback behavior
+depends on the tool).</p>
+<p>Example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LIBSCRIPT_GLOBAL_INSTALL_METHOD</span><span class="op">=</span><span class="st">&quot;system&quot;</span></span></code></pre></div>
+<h3 id="local-overrides">Local Overrides</h3>
+<p>You can override the global setting for specific dependencies by
+setting their respective <code>[TOOL]_INSTALL_METHOD</code> variable.
+The local override takes highest precedence.</p>
+<p>For example, to globally use the system package manager but strictly
+install Python via <code>uv</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">LIBSCRIPT_GLOBAL_INSTALL_METHOD</span><span class="op">=</span><span class="st">&quot;system&quot;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">export</span> <span class="va">PYTHON_INSTALL_METHOD</span><span class="op">=</span><span class="st">&quot;uv&quot;</span></span></code></pre></div>
+<h3 id="python-specific-support">Python-Specific Support</h3>
+<p>The Python toolchain (<code>_lib/_toolchain/python</code>) is
+extensively integrated with this feature and supports the following
+<code>PYTHON_INSTALL_METHOD</code> values: - <code>uv</code> (default
+fallback): Installs Python and creates virtual environments using
+astral’s <code>uv</code> tool. - <code>pyenv</code>: Installs Python
+versions using <code>pyenv</code>, managing them in
+<code>~/.pyenv</code>. - <code>system</code>: Uses the system’s package
+manager to provide Python. - <code>from-source</code>: Compiles Python
+directly from its source code.</p>
+<p>By combining global methods with local overrides, you can mix and
+match system-provided stable packages with newer or custom-compiled
+toolchains as needed.</p>
 <!-- Local usage -->
 <h3>Local and image-creation usage</h3>
 <div class="tui-tabs">
@@ -267,13 +299,17 @@ $ . "${SCRIPT_NAME}"</pre>
   </form>
 </div>
 <ul>
-<li><a href="#reference-nginx-vars"><code>nginx vars</code></a> (root
-object)</li>
+<li><a
+href="#reference-nginx-web-server-configuration"><code>Nginx Web Server Configuration</code></a>
+(root object)</li>
 </ul>
 <hr />
-<p><a name="reference-nginx-vars"></a> ## nginx vars</p>
-<p>nginx vars that can be set</p>
-<p><strong><code>nginx vars</code> Properties</strong></p>
+<p><a name="reference-nginx-web-server-configuration"></a> ## Nginx Web
+Server Configuration</p>
+<p>Configuration variables for deploying and configuring the Nginx
+high-performance Web Server and Reverse Proxy.</p>
+<p><strong><code>Nginx Web Server Configuration</code>
+Properties</strong></p>
 <table class="tui-table hovered-purple striped-purple">
 <colgroup>
 <col style="width: 25%" />
@@ -291,43 +327,257 @@ object)</li>
 </thead>
 <tbody>
 <tr class="odd">
-<td><strong>EXEC_START</strong></td>
+<td><strong>NGINX_INSTALL_METHOD</strong></td>
 <td><code>string</code></td>
-<td>Executor</td>
-<td>✓ Yes</td>
+<td>How to install Nginx.</td>
+<td>No, default: <code>"system"</code></td>
 </tr>
 <tr class="even">
-<td><strong>WORKING_DIR</strong></td>
+<td><strong>WWWROOT_NAME</strong></td>
 <td><code>string</code></td>
-<td>Working directory that <code>EXEC_START</code> will be run from</td>
+<td>The server_name or domain (e.g., example.com) to serve.</td>
 <td>No</td>
 </tr>
 <tr class="odd">
-<td><strong>ENV</strong></td>
+<td><strong>WWWROOT_PATH</strong></td>
 <td><code>string</code></td>
-<td>Optional additional properties as key/value pairs</td>
+<td>The absolute path to the static document root to serve.</td>
 <td>No</td>
+</tr>
+<tr class="even">
+<td><strong>WWWROOT_LISTEN</strong></td>
+<td><code>string</code></td>
+<td>The HTTP port Nginx should listen on (defaults to 80).</td>
+<td>No, default: <code>"80"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_GLOBAL_INSTALL_METHOD</strong></td>
+<td><code>string</code></td>
+<td>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</td>
+<td>No, default: <code>"system"</code></td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_WINDOWS_PKG_MGR</strong></td>
+<td><code>string</code></td>
+<td>Global package manager override for Windows targets (e.g. winget,
+choco).</td>
+<td>No, default: <code>"winget"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_LISTEN_PORT_SECURE</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Global secure port to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Global port to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Global address to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Global unix socket to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>NGINX_LISTEN_PORT_SECURE</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Secure port for NGINX to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>NGINX_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Port for NGINX to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>NGINX_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Address for NGINX to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>NGINX_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Unix socket for NGINX to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>NGINX_SERVICE_RUN_AS_USER</strong></td>
+<td><code>string</code></td>
+<td>Windows local user account to run the service (leave empty for
+Network Service)</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>NGINX_SERVICE_RUN_AS_PASSWORD</strong></td>
+<td><code>string</code></td>
+<td>Password for the local user account (if applicable)</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>NGINX_SERVICE_NAME</strong></td>
+<td><code>string</code></td>
+<td>Custom name for the Windows Service (allows side-by-side
+installations)</td>
+<td>No, default: <code>"libscript_nginx"</code></td>
 </tr>
 </tbody>
 </table>
 <p>Additional properties are allowed.</p>
-<h3 id="nginx-vars.exec_start">nginx vars.EXEC_START</h3>
-<p>Executor</p>
+<h3 id="nginx-web-server-configuration.nginx_install_method">Nginx Web
+Server Configuration.NGINX_INSTALL_METHOD</h3>
+<p>How to install Nginx.</p>
 <ul>
 <li><strong>Type</strong>: <code>string</code></li>
-<li><strong>Required</strong>: ✓ Yes</li>
+<li><strong>Required</strong>: No, default: <code>"system"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"system"</code></li>
+<li><code>"source"</code></li>
+</ul></li>
 </ul>
-<h3 id="nginx-vars.working_dir">nginx vars.WORKING_DIR</h3>
-<p>Working directory that <code>EXEC_START</code> will be run from</p>
+<h3 id="nginx-web-server-configuration.wwwroot_name">Nginx Web Server
+Configuration.WWWROOT_NAME</h3>
+<p>The server_name or domain (e.g., example.com) to serve.</p>
 <ul>
 <li><strong>Type</strong>: <code>string</code></li>
 <li><strong>Required</strong>: No</li>
 </ul>
-<h3 id="nginx-vars.env">nginx vars.ENV</h3>
-<p>Optional additional properties as key/value pairs</p>
+<h3 id="nginx-web-server-configuration.wwwroot_path">Nginx Web Server
+Configuration.WWWROOT_PATH</h3>
+<p>The absolute path to the static document root to serve.</p>
 <ul>
 <li><strong>Type</strong>: <code>string</code></li>
 <li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.wwwroot_listen">Nginx Web Server
+Configuration.WWWROOT_LISTEN</h3>
+<p>The HTTP port Nginx should listen on (defaults to 80).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"80"</code></li>
+</ul>
+<h3
+id="nginx-web-server-configuration.libscript_global_install_method">Nginx
+Web Server Configuration.LIBSCRIPT_GLOBAL_INSTALL_METHOD</h3>
+<p>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"system"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"system"</code></li>
+<li><code>"source"</code></li>
+</ul></li>
+</ul>
+<h3 id="nginx-web-server-configuration.libscript_windows_pkg_mgr">Nginx
+Web Server Configuration.LIBSCRIPT_WINDOWS_PKG_MGR</h3>
+<p>Global package manager override for Windows targets (e.g. winget,
+choco).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"winget"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"winget"</code></li>
+<li><code>"choco"</code></li>
+</ul></li>
+</ul>
+<h3
+id="nginx-web-server-configuration.libscript_listen_port_secure">Nginx
+Web Server Configuration.LIBSCRIPT_LISTEN_PORT_SECURE</h3>
+<p>Global secure port to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.libscript_listen_port">Nginx Web
+Server Configuration.LIBSCRIPT_LISTEN_PORT</h3>
+<p>Global port to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.libscript_listen_address">Nginx
+Web Server Configuration.LIBSCRIPT_LISTEN_ADDRESS</h3>
+<p>Global address to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.libscript_listen_socket">Nginx
+Web Server Configuration.LIBSCRIPT_LISTEN_SOCKET</h3>
+<p>Global unix socket to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.nginx_listen_port_secure">Nginx
+Web Server Configuration.NGINX_LISTEN_PORT_SECURE</h3>
+<p>Secure port for NGINX to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.nginx_listen_port">Nginx Web
+Server Configuration.NGINX_LISTEN_PORT</h3>
+<p>Port for NGINX to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.nginx_listen_address">Nginx Web
+Server Configuration.NGINX_LISTEN_ADDRESS</h3>
+<p>Address for NGINX to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.nginx_listen_socket">Nginx Web
+Server Configuration.NGINX_LISTEN_SOCKET</h3>
+<p>Unix socket for NGINX to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.nginx_service_run_as_user">Nginx
+Web Server Configuration.NGINX_SERVICE_RUN_AS_USER</h3>
+<p>Windows local user account to run the service (leave empty for
+Network Service)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3
+id="nginx-web-server-configuration.nginx_service_run_as_password">Nginx
+Web Server Configuration.NGINX_SERVICE_RUN_AS_PASSWORD</h3>
+<p>Password for the local user account (if applicable)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nginx-web-server-configuration.nginx_service_name">Nginx Web
+Server Configuration.NGINX_SERVICE_NAME</h3>
+<p>Custom name for the Windows Service (allows side-by-side
+installations)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default:
+<code>"libscript_nginx"</code></li>
 </ul>
 </div>
 <!-- Status bar -->
@@ -348,10 +598,10 @@ object)</li>
 <script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
 <script>
 const editor = new JSONEditor(document.getElementById("editor_holder"),
-  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"nginx vars","description":"nginx vars that can be set","type":"object","properties":{"EXEC_START":{"description":"Executor","type":"string"},"WORKING_DIR":{"description":"Working directory that `EXEC_START` will be run from","type":"string"},"ENV":{"description":"Optional additional properties as key/value pairs","type":"string"}},"required":["EXEC_START"]}
-{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"nginx vars","description":"nginx vars that can be set","type":"object","properties":{"EXEC_START":{"description":"Executor","type":"string"},"WORKING_DIR":{"description":"Working directory that `EXEC_START` will be run from","type":"string"},"ENV":{"description":"Optional additional properties as key/value pairs","type":"string"}},"required":["EXEC_START"]}
-{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"nginx vars","description":"nginx vars that can be set","type":"object","properties":{"EXEC_START":{"description":"Executor","type":"string"},"WORKING_DIR":{"description":"Working directory that `EXEC_START` will be run from","type":"string"},"ENV":{"description":"Optional additional properties as key/value pairs","type":"string"}},"required":["EXEC_START"]}
-{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"nginx vars","description":"nginx vars that can be set","type":"object","properties":{"EXEC_START":{"description":"Executor","type":"string"},"WORKING_DIR":{"description":"Working directory that `EXEC_START` will be run from","type":"string"},"ENV":{"description":"Optional additional properties as key/value pairs","type":"string"}},"required":["EXEC_START"]}
+  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"Nginx Web Server Configuration","description":"Configuration variables for deploying and configuring the Nginx high-performance Web Server and Reverse Proxy.","type":"object","properties":{"NGINX_INSTALL_METHOD":{"description":"How to install Nginx.","type":"string","enum":["system","source"],"default":"system"},"WWWROOT_NAME":{"description":"The server_name or domain (e.g., example.com) to serve.","type":"string"},"WWWROOT_PATH":{"description":"The absolute path to the static document root to serve.","type":"string"},"WWWROOT_LISTEN":{"description":"The HTTP port Nginx should listen on (defaults to 80).","type":"string","default":"80"},"LIBSCRIPT_GLOBAL_INSTALL_METHOD":{"description":"Global override for how software should be installed across all systems (e.g. system package manager vs downloaded binaries/from-source).","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_WINDOWS_PKG_MGR":{"description":"Global package manager override for Windows targets (e.g. winget, choco).","type":"string","enum":["winget","choco"],"default":"winget"},"LIBSCRIPT_LISTEN_PORT_SECURE":{"type":["string","integer"],"description":"Global secure port to listen on"},"LIBSCRIPT_LISTEN_PORT":{"type":["string","integer"],"description":"Global port to listen on"},"LIBSCRIPT_LISTEN_ADDRESS":{"type":"string","description":"Global address to listen on"},"LIBSCRIPT_LISTEN_SOCKET":{"type":"string","description":"Global unix socket to listen on"},"NGINX_LISTEN_PORT_SECURE":{"type":["string","integer"],"description":"Secure port for NGINX to listen on"},"NGINX_LISTEN_PORT":{"type":["string","integer"],"description":"Port for NGINX to listen on"},"NGINX_LISTEN_ADDRESS":{"type":"string","description":"Address for NGINX to listen on"},"NGINX_LISTEN_SOCKET":{"type":"string","description":"Unix socket for NGINX to listen on"},"NGINX_SERVICE_RUN_AS_USER":{"description":"Windows local user account to run the service (leave empty for Network Service)","type":"string"},"NGINX_SERVICE_RUN_AS_PASSWORD":{"description":"Password for the local user account (if applicable)","type":"string"},"NGINX_SERVICE_NAME":{"description":"Custom name for the Windows Service (allows side-by-side installations)","type":"string","default":"libscript_nginx"}}}
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"Nginx Web Server Configuration","description":"Configuration variables for deploying and configuring the Nginx high-performance Web Server and Reverse Proxy.","type":"object","properties":{"NGINX_INSTALL_METHOD":{"description":"How to install Nginx.","type":"string","enum":["system","source"],"default":"system"},"WWWROOT_NAME":{"description":"The server_name or domain (e.g., example.com) to serve.","type":"string"},"WWWROOT_PATH":{"description":"The absolute path to the static document root to serve.","type":"string"},"WWWROOT_LISTEN":{"description":"The HTTP port Nginx should listen on (defaults to 80).","type":"string","default":"80"},"LIBSCRIPT_GLOBAL_INSTALL_METHOD":{"description":"Global override for how software should be installed across all systems (e.g. system package manager vs downloaded binaries/from-source).","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_WINDOWS_PKG_MGR":{"description":"Global package manager override for Windows targets (e.g. winget, choco).","type":"string","enum":["winget","choco"],"default":"winget"},"LIBSCRIPT_LISTEN_PORT_SECURE":{"type":["string","integer"],"description":"Global secure port to listen on"},"LIBSCRIPT_LISTEN_PORT":{"type":["string","integer"],"description":"Global port to listen on"},"LIBSCRIPT_LISTEN_ADDRESS":{"type":"string","description":"Global address to listen on"},"LIBSCRIPT_LISTEN_SOCKET":{"type":"string","description":"Global unix socket to listen on"},"NGINX_LISTEN_PORT_SECURE":{"type":["string","integer"],"description":"Secure port for NGINX to listen on"},"NGINX_LISTEN_PORT":{"type":["string","integer"],"description":"Port for NGINX to listen on"},"NGINX_LISTEN_ADDRESS":{"type":"string","description":"Address for NGINX to listen on"},"NGINX_LISTEN_SOCKET":{"type":"string","description":"Unix socket for NGINX to listen on"},"NGINX_SERVICE_RUN_AS_USER":{"description":"Windows local user account to run the service (leave empty for Network Service)","type":"string"},"NGINX_SERVICE_RUN_AS_PASSWORD":{"description":"Password for the local user account (if applicable)","type":"string"},"NGINX_SERVICE_NAME":{"description":"Custom name for the Windows Service (allows side-by-side installations)","type":"string","default":"libscript_nginx"}}}
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"Nginx Web Server Configuration","description":"Configuration variables for deploying and configuring the Nginx high-performance Web Server and Reverse Proxy.","type":"object","properties":{"NGINX_INSTALL_METHOD":{"description":"How to install Nginx.","type":"string","enum":["system","source"],"default":"system"},"WWWROOT_NAME":{"description":"The server_name or domain (e.g., example.com) to serve.","type":"string"},"WWWROOT_PATH":{"description":"The absolute path to the static document root to serve.","type":"string"},"WWWROOT_LISTEN":{"description":"The HTTP port Nginx should listen on (defaults to 80).","type":"string","default":"80"},"LIBSCRIPT_GLOBAL_INSTALL_METHOD":{"description":"Global override for how software should be installed across all systems (e.g. system package manager vs downloaded binaries/from-source).","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_WINDOWS_PKG_MGR":{"description":"Global package manager override for Windows targets (e.g. winget, choco).","type":"string","enum":["winget","choco"],"default":"winget"},"LIBSCRIPT_LISTEN_PORT_SECURE":{"type":["string","integer"],"description":"Global secure port to listen on"},"LIBSCRIPT_LISTEN_PORT":{"type":["string","integer"],"description":"Global port to listen on"},"LIBSCRIPT_LISTEN_ADDRESS":{"type":"string","description":"Global address to listen on"},"LIBSCRIPT_LISTEN_SOCKET":{"type":"string","description":"Global unix socket to listen on"},"NGINX_LISTEN_PORT_SECURE":{"type":["string","integer"],"description":"Secure port for NGINX to listen on"},"NGINX_LISTEN_PORT":{"type":["string","integer"],"description":"Port for NGINX to listen on"},"NGINX_LISTEN_ADDRESS":{"type":"string","description":"Address for NGINX to listen on"},"NGINX_LISTEN_SOCKET":{"type":"string","description":"Unix socket for NGINX to listen on"},"NGINX_SERVICE_RUN_AS_USER":{"description":"Windows local user account to run the service (leave empty for Network Service)","type":"string"},"NGINX_SERVICE_RUN_AS_PASSWORD":{"description":"Password for the local user account (if applicable)","type":"string"},"NGINX_SERVICE_NAME":{"description":"Custom name for the Windows Service (allows side-by-side installations)","type":"string","default":"libscript_nginx"}}}
+{"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nginx/vars.schema.json","title":"Nginx Web Server Configuration","description":"Configuration variables for deploying and configuring the Nginx high-performance Web Server and Reverse Proxy.","type":"object","properties":{"NGINX_INSTALL_METHOD":{"description":"How to install Nginx.","type":"string","enum":["system","source"],"default":"system"},"WWWROOT_NAME":{"description":"The server_name or domain (e.g., example.com) to serve.","type":"string"},"WWWROOT_PATH":{"description":"The absolute path to the static document root to serve.","type":"string"},"WWWROOT_LISTEN":{"description":"The HTTP port Nginx should listen on (defaults to 80).","type":"string","default":"80"},"LIBSCRIPT_GLOBAL_INSTALL_METHOD":{"description":"Global override for how software should be installed across all systems (e.g. system package manager vs downloaded binaries/from-source).","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_WINDOWS_PKG_MGR":{"description":"Global package manager override for Windows targets (e.g. winget, choco).","type":"string","enum":["winget","choco"],"default":"winget"},"LIBSCRIPT_LISTEN_PORT_SECURE":{"type":["string","integer"],"description":"Global secure port to listen on"},"LIBSCRIPT_LISTEN_PORT":{"type":["string","integer"],"description":"Global port to listen on"},"LIBSCRIPT_LISTEN_ADDRESS":{"type":"string","description":"Global address to listen on"},"LIBSCRIPT_LISTEN_SOCKET":{"type":"string","description":"Global unix socket to listen on"},"NGINX_LISTEN_PORT_SECURE":{"type":["string","integer"],"description":"Secure port for NGINX to listen on"},"NGINX_LISTEN_PORT":{"type":["string","integer"],"description":"Port for NGINX to listen on"},"NGINX_LISTEN_ADDRESS":{"type":"string","description":"Address for NGINX to listen on"},"NGINX_LISTEN_SOCKET":{"type":"string","description":"Unix socket for NGINX to listen on"},"NGINX_SERVICE_RUN_AS_USER":{"description":"Windows local user account to run the service (leave empty for Network Service)","type":"string"},"NGINX_SERVICE_RUN_AS_PASSWORD":{"description":"Password for the local user account (if applicable)","type":"string"},"NGINX_SERVICE_NAME":{"description":"Custom name for the Windows Service (allows side-by-side installations)","type":"string","default":"libscript_nginx"}}}
 });
 editor.on("ready", () => {
   const editor_holder = document.getElementById("editor_holder");

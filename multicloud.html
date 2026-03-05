@@ -2,6 +2,7 @@
 <html lang="en" class="tui-bg-blue-black">
 <head>
     <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>verMan.io &ndash; multicloud</title>
     <meta itemprop="name" content="verMan.io &ndash; faster deploys: natively">
     <meta name="description" content="cross-platform open-source alternative to Hashicorp Packer">
@@ -13,11 +14,50 @@
     <link rel="stylesheet" href="../assets/styles.css" type="text/css">
 </head>
 <body>
+<input type="checkbox" id="mobile-menu-toggle" style="display:none" aria-hidden="true">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute">
+    <ul>
+        <li>
+            <a href="/docs/latest/README.html">
+                <span class="red-168-text">R</span>EADME
+            </a>
+        </li>
+        <li>
+            <a href="/docs/latest/WHY.html">
+                <span class="red-168-text">W</span>HY
+            </a>
+        </li>
+        <hr>
+        <li>
+            <a href="/docs/latest/_lib/_toolchain/README.html">
+                <span class="red-168-text">T</span>oolchains
+            </a>
+        </li>
+        <li>
+            <a href="/docs/latest/_lib/_storage/README.html">
+                <span class="red-168-text">D</span>atabases
+            </a>
+        </li>
+        <li>
+            <a href="/docs/latest/_lib/_server/README.html">
+                <span class="red-168-text">S</span>ervers
+            </a>
+        </li>
+        <hr>
+        <li>
+            <a href="/verman">
+                <span class="red-168-text">V</span>erMan (version managers)
+            </a>
+        </li>
+    </ul>
+</nav>
+
 <!-- Navbar -->
 <nav class="tui-nav">
     <span class="tui-datetime" data-format="h:m:s a"></span>
     <ul>
-        <li class="tui-sidenav-button red-168-text">≡</li>
+        <li class="tui-sidenav-button red-168-text"><label for="mobile-menu-toggle" style="cursor:pointer; display:block; padding: 0 10px;" aria-label="Toggle Navigation">≡</label></li>
         <li class="tui-dropdown hide-on-med-and-down">
             <span class="red-168-text">D</span>ocumentation
             <div class="tui-dropdown-content">
@@ -87,7 +127,7 @@
 </nav>
 
 <!-- Edit panel -->
-<div class="content container">
+<main class="content container">
     <div class="row">
         <div class="col s12 m12 l12 white-text center">
             <h3>VerMan.io</h3>
@@ -103,7 +143,7 @@
         <fieldset class="tui-fieldset" style="width: 100%">
             <legend class="white-255-text center">Set auth (saves to LocalStorage)</legend>
             <div class="flex">
-                <span class="flex-item"><label class="yellow-255-text" for="providers-select">P</label>rovider...................:</span>
+                <label class="flex-item" for="providers-select"><span class="yellow-255-text">P</span>rovider...................:</label>
                 <select id="providers-select" class="tui-input flex-item">
                     <option value="">--Choose a provider--</option>
                 </select><br>
@@ -114,7 +154,7 @@
     <div class="tui-window" style="width: 100%">
         <button class="tui-button orange-168 white-text" style="margin: 15px" onclick="main()">Show avail. image sizes</button>
     </div>
-</div>
+</main>
 
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; netctl">
+    <meta name="description" content="Deploy netctl with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/netctl/README.html" />
+    <title>netctl from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="netctl">netctl<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/netctl/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose-current-state">Purpose &amp; Current State</h2>
+<p><strong>Purpose</strong>: This document provides context and
+technical details for the <code>netctl</code> directory within the
+LibScript ecosystem. LibScript is a modular, zero-dependency
+shell-script framework designed for cross-platform software provisioning
+across Linux, macOS, DOS, and Windows.</p>
+<p><strong>Current State</strong>: LibScript functions as a
+comprehensive global and per-component package manager, featuring a
+robust core CLI (<code>libscript.sh</code>, <code>libscript.cmd</code>,
+<code>libscript.bat</code>). It includes multi-platform toolchain
+support (Rust, Python, Node, Go, Java, C/C++), servers (Postgres 18,
+Nginx, Valkey), and advanced environment querying (<code>env</code>
+subcommand). It natively supports generating deployment configurations
+(<code>package_as docker</code>, <code>package_as docker_compose</code>,
+<code>package_as msi</code>, <code>package_as innosetup</code>,
+<code>package_as nsis</code>, <code>package_as TUI</code>) with deep
+installer customization, automated parallel dependency downloading and
+resolution via <code>libscript.json</code>, and robust uninstall
+lifecycle hooks (<code>uninstall.sh</code>/<code>uninstall.cmd</code>)
+for cleanly removing binaries, configs, and services. It natively
+handles deep semantic versioning, global <code>--secrets</code>
+extraction, caching, OpenBao/Vault generation, local caching via SQLite
+(<code>db-search</code>, <code>update-db</code>), explicit error
+handling for unsupported actions, and background process serving. Recent
+advancements have stabilized major Windows installer generation (MSI,
+InnoSetup, NSIS) and expanded macOS native service provisioning.</p>
+<h2 id="features">Features</h2>
+<ul>
+<li><strong>Universal Abstraction</strong>: Write your routing rules
+once, and emit configurations for Nginx, Caddy, Apache, or IIS.</li>
+<li><strong>Idempotent</strong>: Adding the same route twice simply
+overwrites the previous definition (last-write-wins).</li>
+<li><strong>Two Execution Modes</strong>:
+<ul>
+<li><strong>Singular Mode</strong>: Define all your listen ports, static
+files, and proxies in a single command. The configuration is output
+directly to <code>stdout</code> without leaving any state files
+behind.</li>
+<li><strong>Additive Mode</strong>: Build your configuration
+step-by-step across multiple commands. State is securely managed in a
+local <code>.netctl.json</code> file.</li>
+</ul></li>
+<li><strong>Cross-Platform</strong>:
+<ul>
+<li>Unix/Linux/macOS: Handled via <code>netctl.sh</code> (POSIX
+<code>sh</code> + <code>jq</code>).</li>
+<li>Windows: Handled via <code>netctl.cmd</code> (Windows Batch +
+<code>jq</code>).</li>
+</ul></li>
+</ul>
+<h2 id="prerequisites">Prerequisites</h2>
+<ul>
+<li><code>jq</code> must be installed and available in your system’s
+<code>PATH</code>.</li>
+</ul>
+<h2 id="usage-syntax">Usage &amp; Syntax</h2>
+<h3 id="singular-mode-one-liner">Singular Mode (One-Liner)</h3>
+<p>Pass configuration options as flags. The final configuration is
+emitted immediately to standard output.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> <span class="at">--listen</span> 80 <span class="dt">\</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>          <span class="at">--listen</span> 443 <span class="dt">\</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>          <span class="at">--static</span> / /var/www <span class="dt">\</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>          <span class="at">--proxy</span> /api http://localhost:8080 <span class="dt">\</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>          <span class="at">--rewrite</span> /php <span class="dt">\.</span>php$ <span class="dt">\</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>          <span class="at">--emit</span> nginx</span></code></pre></div>
+<h3 id="additive-mode-stateful">Additive Mode (Stateful)</h3>
+<p>Use subcommands to build your configuration incrementally. State is
+saved to <code>.netctl.json</code> in the current working directory.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># 1. Initialize empty state</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> init</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co"># 2. Add Listeners</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> listen 80</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> listen 443</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="co"># 3. Add Routes (Idempotent - running the same route overrides the previous target)</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> static / /var/www</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> proxy /api http://localhost:8080</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> proxy /api http://10.0.0.1:9090  <span class="co"># Overwrites the previous /api route</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> rewrite /php <span class="dt">\.</span>php$</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a><span class="co"># 4. Emit the configuration for your chosen server</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a><span class="ex">netctl.sh</span> emit caddy <span class="op">&gt;</span> Caddyfile</span></code></pre></div>
+<h2 id="supported-directives">Supported Directives</h2>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 33%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">Command/Flag</th>
+<th style="text-align: left;">Arguments</th>
+<th style="text-align: left;">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;"><code>listen</code> /
+<code>--listen</code></td>
+<td style="text-align: left;"><code>&lt;port&gt;</code></td>
+<td style="text-align: left;">Adds a listening port to the server
+block.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>static</code> /
+<code>--static</code></td>
+<td
+style="text-align: left;"><code>&lt;path&gt; &lt;target&gt;</code></td>
+<td style="text-align: left;">Maps a URL path prefix to a static file
+directory.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>proxy</code> /
+<code>--proxy</code></td>
+<td
+style="text-align: left;"><code>&lt;path&gt; &lt;target&gt;</code></td>
+<td style="text-align: left;">Maps a URL path prefix to an upstream
+reverse proxy target.</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;"><code>rewrite</code> /
+<code>--rewrite</code></td>
+<td
+style="text-align: left;"><code>&lt;path&gt; &lt;pattern&gt;</code></td>
+<td style="text-align: left;">Adds a URL rewriting rule.</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;"><code>emit</code> /
+<code>--emit</code></td>
+<td style="text-align: left;"><code>&lt;format&gt;</code></td>
+<td style="text-align: left;">Outputs the generated configuration
+(<code>nginx</code>, <code>caddy</code>, <code>apache</code>,
+<code>iis</code>).</td>
+</tr>
+</tbody>
+</table>
+<h2 id="architecture-implementation">Architecture &amp;
+Implementation</h2>
+<p>State is normalized into a simple JSON schema
+(<code>.netctl.json</code>), which eliminates the complexity of shell
+text parsing.</p>
+<pre class="text"><code>+-----------------------+--------------------+---------------------------------------------------------+
+| Target / Component    | Language / Tooling | Implementation Strategy                                 |
++-----------------------+--------------------+---------------------------------------------------------+
+| Core State Engine     | POSIX sh + jq      | CLI arguments translate into `jq` merge operations      |
+| (Singular &amp; Additive) | Windows Batch + jq | (e.g., `.routes[$path] = $config`). State is held in    |
+|                       |                    | a `.netctl.json` file. `mktemp` creates temporary ones  |
+|                       |                    | for single-shot (singular) outputs.                     |
++-----------------------+--------------------+---------------------------------------------------------+
+| Nginx Generator       | POSIX sh / Batch   | Extract state via `jq -r`; generate standard `server{}` |
+|                       |                    | blocks. Use `location {}` for routes, `proxy_pass` for  |
+|                       |                    | proxies, `alias` for static, `rewrite` for PHP.         |
++-----------------------+--------------------+---------------------------------------------------------+
+| Apache HTTPD Gen.     | POSIX sh / Batch   | Extract state; output `httpd.conf` using `&lt;VirtualHost&gt;`|
+|                       |                    | Listen directives, `&lt;Location&gt;`, `ProxyPass`, `Alias`,  |
+|                       |                    | and `RewriteRule` mappings.                             |
++-----------------------+--------------------+---------------------------------------------------------+
+| Caddy Generator       | POSIX sh / Batch   | Extract state; map to standard `Caddyfile` syntax. Use  |
+|                       |                    | `:PORT` blocks, `reverse_proxy`, `file_server`, and     |
+|                       |                    | `rewrite` directives matching the JSON mappings.        |
++-----------------------+--------------------+---------------------------------------------------------+
+| IIS Generator         | Windows Batch + jq | Script translates CLI args to manipulate JSON state.    |
+|                       |                    | Generates standard IIS `web.config` with `&lt;rewrite&gt;`    |
+|                       |                    | XML elements. Outputs setup commands for static roots.  |
++-----------------------+--------------------+---------------------------------------------------------+</code></pre>
+<h2 id="iis-specifics">IIS Specifics</h2>
+<p>When generating IIS configurations
+(<code>netctl.cmd emit iis</code>), the tool outputs a standard
+<code>web.config</code> file containing the necessary XML
+<code>&lt;rewrite&gt;</code> rules for proxies and URL rewriting.
+Because IIS requires system-level registry/metabase changes to bind
+ports and map virtual directories, <code>netctl</code> also emits the
+required <code>appcmd</code> setup strings as XML comments inside the
+generated configuration.</p>
+<h2 id="testing">Testing</h2>
+<p>A comprehensive unit test suite is provided in POSIX shell:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./tests/test_netctl.sh</span></span></code></pre></div>
+<p>This suite verifies singular execution, additive state integrity,
+idempotency, and syntax assertions for Nginx, Caddy, and Apache HTTPD
+generators.</p>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+        <li style="float: right"><a href="https://rewriteInC.io">&num;rewriteInC.io</a></li>
+        <li style="float: right"><a href="https://offscale.io">offscale.io</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+</body>

@@ -88,70 +88,46 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="why">Why<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/WHY.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<h2 id="overhead">Overhead</h2>
-<p>Overhead of Docker is extreme, in terms of:</p>
-<ul>
-<li>Disk usage</li>
-<li>Build time</li>
-<li>Other resource usage overhead vs native (CPU, GPU, disk,
-kernel)</li>
-</ul>
-<h2 id="alternatives-to-docker">Alternatives to Docker</h2>
-<p>There are many alternatives to Docker. These are rarely benchmarked,
-security-audited, or otherwise compared with Docker based solutions.</p>
-<p>Some alternatives follow.</p>
-<h3 id="docker-directly-comparable">Docker directly comparable</h3>
-<p>These can work directly with <code>Dockerfile</code>s:</p>
-<ul>
-<li><a href="https://podman.io">Podman</a></li>
-<li><a href="https://github.com/containerd/nerdctl">nerdctl</a></li>
-</ul>
-<h3 id="linux-specific">Linux specific</h3>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Cgroups">cgroups</a></li>
-<li><a
-href="https://en.wikipedia.org/wiki/Linux_namespaces">namespaces</a></li>
-<li><a
-href="https://en.wikipedia.org/wiki/Open_Container_Initiative">OCI</a>
-(at least until <a
-href="https://github.com/opencontainers/wg-freebsd-runtime">FreeBSD
-support is merged</a>! - Windows Containers not sure how this fits into
-OCI…)</li>
-</ul>
-<h3 id="other">Other</h3>
-<ul>
-<li><a href="https://en.wikipedia.org/wiki/Solaris_Containers">Zones
-(SunOS)</a></li>
-<li><a href="https://en.wikipedia.org/wiki/FreeBSD_jail">Jails
-(*BSD)</a></li>
-<li><a
-href="https://learn.microsoft.com/en-us/virtualization/windowscontainers/about/">Windows
-Containers</a></li>
-<li>Platform virtualization software:
-https://en.wikipedia.org/wiki/Comparison_of_platform_virtualization_software</li>
-<li>OS-level virtualization software:
-https://en.wikipedia.org/wiki/OS-level_virtualization#IMPLEMENTATIONS</li>
-<li>μ-kernel: https://en.wikipedia.org/wiki/Microkernel</li>
-<li>Unikernel: https://en.wikipedia.org/wiki/Unikernel</li>
-<li>Any other kernel:
-https://en.wikipedia.org/wiki/Comparison_of_operating_system_kernels</li>
-</ul>
-<h2 id="slogans">Slogans</h2>
-<ul>
-<li>Mutable dev; immutable prod.</li>
-<li>Develop quickly. Production? - Produce images.</li>
-<li>PaaS. Native.</li>
-<li>PaaS. Native. Actually.</li>
-<li>Cross-platform. Actually.</li>
-<li>Docker should be optional.</li>
-<li>Docker is terrible; stop using it. Also: we make your Docker images
-better.</li>
-<li>Python scripts? - No: Python packages. - Bash scripts? - No:
-<code>*.sh</code> &amp; <code>*.bat</code> packages.</li>
-<li>Make shell scripting software-engineering</li>
-<li>Shell scripting? - No: shell software-engineering.</li>
-</ul>
+<h1 id="why-libscript">Why LibScript?<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/WHY.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>Explains the philosophy and engineering rationale driving LibScript:
+zero dependencies, high inspectability, idempotency, and native OS
+integration.</p>
+<h2 id="what-makes-the-philosophy-interesting">What Makes The Philosophy
+Interesting?</h2>
+<p>In a world dominated by Docker and heavy configuration managers
+(Ansible, Chef, Terraform), LibScript takes a step back to the universal
+denominator: the Shell. It proves that you can have complex,
+declarative, cross-platform infrastructure management without installing
+massive runtimes or sacrificing access to the host machine.</p>
+<h2 id="zero-dependencies-the-bootstrap-problem">1. Zero Dependencies
+(The Bootstrap Problem)</h2>
+<p>To use Ansible, you must first install Python. To use Docker, you
+must install the Docker Engine. LibScript solves the bootstrap problem
+natively. You can <code>curl</code> LibScript onto a completely raw,
+freshly formatted OS and instantly provision a highly complex server
+stack using only the built-in <code>/bin/sh</code> or
+<code>cmd.exe</code>.</p>
+<h2 id="supreme-inspectability">2. Supreme Inspectability</h2>
+<p>Configuration management tools often obfuscate errors behind complex
+Domain Specific Languages (DSLs) or abstract Python stack traces. If a
+LibScript component fails, it’s just a shell script. You run it with
+<code>sh -x setup.sh</code> and see the exact native command that
+failed. It empowers standard sysadmin debugging techniques.</p>
+<h2 id="native-os-integration-vs.-containers">3. Native OS Integration
+vs. Containers</h2>
+<p>Containers are incredible for application packaging, but they isolate
+you from the host OS. When you need deep OS integration—configuring
+native GUI apps, setting up VPNs, tuning network interfaces, or
+providing direct hardware access for a developer workstation—containers
+become an obstacle. LibScript provisions software directly to the host
+OS efficiently and safely.</p>
+<h2 id="unrivaled-composability">4. Unrivaled Composability</h2>
+<p>LibScript acts as a comprehensive standard library for shell scripts.
+Developers no longer need to copy-paste OS detection or
+<code>apt</code>/<code>apk</code>/<code>brew</code> logic across
+repositories. You simply depend on the abstracted
+<code>pkg_mgr.sh</code> and gain universal compatibility.</p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

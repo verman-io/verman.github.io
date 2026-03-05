@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; latest/USAGE">
+    <meta name="description" content="Deploy latest/USAGE with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/USAGE.html" />
+    <title>latest/USAGE from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="usage-guide">Usage Guide<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/USAGE.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>A deep dive into how to use LibScript, covering CLI commands,
+environment scoping, background daemon management, and declarative
+manifests.</p>
+<h2 id="what-makes-libscripts-usage-interesting">What Makes LibScript’s
+Usage Interesting?</h2>
+<p>LibScript can be used imperatively like <code>brew</code> or
+<code>apt</code> (e.g., <code>install rust latest</code>), but it also
+acts as a declarative orchestrator via <code>libscript.json</code>, a
+virtual environment manager (via <code>run</code>/<code>exec</code>),
+and an installer compiler (<code>package_as</code>).</p>
+<h2 id="core-commands">Core Commands</h2>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> list                <span class="co"># View all components</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> search <span class="op">&lt;</span>query<span class="op">&gt;</span>      # Search components</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> install <span class="op">&lt;</span>pkg<span class="op">&gt;</span> <span class="op">&lt;</span>ver<span class="op">&gt;</span> # Install a component</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> env <span class="op">&lt;</span>pkg<span class="op">&gt;</span> <span class="op">&lt;</span>ver<span class="op">&gt;</span>     # Output environment variables</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> run <span class="op">&lt;</span>pkg<span class="op">&gt;</span> <span class="op">&lt;</span>ver<span class="op">&gt;</span>     # Run a tool in its isolated environment</span></code></pre></div>
+<h2 id="environment-scoping-prefixes">Environment Scoping &amp;
+Prefixes</h2>
+<p>You don’t have to pollute your global system. Use
+<code>--prefix</code> to install tools locally.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> install nodejs 20 <span class="at">--prefix</span><span class="op">=</span>/opt/myproject</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> run nodejs 20 <span class="at">--prefix</span><span class="op">=</span>/opt/myproject node index.js</span></code></pre></div>
+<h2 id="service-daemon-management">Service &amp; Daemon Management</h2>
+<p>LibScript includes unified commands to manage background services,
+mapping them automatically to Systemd, OpenRC, or Windows Services.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> start postgres</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> status postgres</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> logs <span class="at">-f</span> postgres</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> stop postgres</span></code></pre></div>
+<h2 id="component-dependencies-strategy-overrides">Component
+Dependencies &amp; Strategy Overrides</h2>
+<p>When installing complex applications, LibScript parses the
+component’s <code>vars.schema.json</code> to automatically resolve
+dependencies (like databases or web servers).</p>
+<p>By default, the installer attempts to <code>reuse</code> any existing
+dependencies found on the system. You can interactively override the
+dependency and its resolution strategy via auto-generated CLI flags or
+environment variables:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Override the default database dependency (e.g. mariadb -&gt; postgres)</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> install wordpress latest <span class="at">--WORDPRESS_DB</span><span class="op">=</span>postgres</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Tell LibScript to install this dependency locally, even if a global version exists</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> install wordpress latest <span class="at">--WORDPRESS_DB_STRATEGY</span><span class="op">=</span>install-alongside</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Downgrade an existing installation, if necessary</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> install wordpress latest <span class="at">--WORDPRESS_WEBSERVER_STRATEGY</span><span class="op">=</span>downgrade</span></code></pre></div>
+<h2 id="declarative-environments-libscript.json">Declarative
+Environments (<code>libscript.json</code>)</h2>
+<p>Create a <code>libscript.json</code> file to define your stack:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;deps&quot;</span><span class="fu">:</span> <span class="fu">{</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;postgres&quot;</span><span class="fu">:</span> <span class="st">&quot;16&quot;</span><span class="fu">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;nodejs&quot;</span><span class="fu">:</span> <span class="st">&quot;20&quot;</span><span class="fu">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&quot;nginx&quot;</span><span class="fu">:</span> <span class="st">&quot;latest&quot;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">}</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p>Deploy the entire stack:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> install-deps libscript.json</span></code></pre></div>
+<h2 id="deployment-artifact-generation-package_as">Deployment Artifact
+Generation (<code>package_as</code>)</h2>
+<p>Generate standard deployment configurations from your current
+environment dynamically:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a Docker Compose file</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> package_as docker_compose postgres 16 nginx latest <span class="op">&gt;</span> docker-compose.yml</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Generate a Debian package</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="ex">./libscript.sh</span> package_as deb <span class="at">--app-name</span> my-stack postgres 16</span></code></pre></div>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+        <li style="float: right"><a href="https://rewriteInC.io">&num;rewriteInC.io</a></li>
+        <li style="float: right"><a href="https://offscale.io">offscale.io</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+</body>

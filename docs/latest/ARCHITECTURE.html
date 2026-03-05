@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <meta itemprop="name" content="libscript &ndash; latest/ARCHITECTURE">
+    <meta name="description" content="Deploy latest/ARCHITECTURE with this cross-platform open-source 1-click installer">
+    <meta name="keywords" content="docker packer hashicorp shell libscript verman package-manager">
+    <link rel="author" href="https://github.com/SamuelMarks" />
+    <link rel="canonical" href="https://verMan.io./docs/latest/ARCHITECTURE.html" />
+    <title>latest/ARCHITECTURE from libscript @ VerMan.io</title>
+    <link rel="stylesheet" href="/assets/tuicss.min.css" type="text/css">
+    <link rel="stylesheet" href="/assets/styles.css" type="text/css">
+    <link rel="stylesheet" href="/assets/libscript_styles.css" type="text/css">
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="application/javascript" charset="utf-8" src="/assets/first_scripts.js"></script>
+</head>
+<body onload="toggleSidebar()">
+<!-- Sidenav -->
+<nav class="tui-sidenav absolute" style="height: unset !important;">
+    <div id="tree-container"></div>
+</nav>
+
+<!-- Navbar -->
+<nav class="tui-nav">
+    <span class="tui-datetime" data-format="h:m:s a"></span>
+    <ul>
+        <li class="tui-sidenav-button red-168-text" onclick="toggleSidebar()">≡</li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">D</span>ocumentation
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="#!">
+                            Synta<span class="red-168-text">x</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="https://github.com/verman-io/verman-presentations/releases/download/init/futureproofing_software_deployment_by_crossing_50.years_of_platforms.pdf">
+                            <span class="red-168-text">W</span>hitepaper
+                        </a>
+                    </li>
+                    <div class="tui-black-divider"></div>
+                    <li class="tui-dropdown block">
+                        <span class="right">►</span>
+                        <span class="red-168-text">P</span>orts
+                        <div class="tui-dropdown-content">
+                            <ul>
+                                <li>
+                                    <a href="/docs/latest/_lib/_toolchain/README.html">
+                                        <span class="red-168-text">T</span>oolchains
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_storage/README.html">
+                                        <span class="red-168-text">D</span>atabases
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="/docs/latest/_lib/_server/README.html">
+                                        <span class="red-168-text">S</span>ervers
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </li>
+        <li class="tui-dropdown hide-on-med-and-down">
+            <span class="red-168-text">A</span>bout
+            <div class="tui-dropdown-content">
+                <ul>
+                    <li>
+                        <a href="/docs/latest/TEAM.html">
+                            T<span class="red-168-text">e</span>am
+                        </a>
+                    </li>
+                    <li>
+                        <a href="/docs/latest/WHY.html">
+                            W<span class="red-168-text">h</span>y
+                            <span class="tui-shortcut">F4</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </li>
+    </ul>
+</nav>
+<div class="content container" id="actual-body" style="margin-left: 250px">
+<h1 id="architecture">Architecture<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/ARCHITECTURE.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>This document details the internal directory structure, execution
+lifecycle, and core abstractions (<code>os_info.sh</code>,
+<code>pkg_mgr.sh</code>) that power LibScript’s zero-dependency,
+cross-platform provisioning engine.</p>
+<h2 id="what-makes-this-architecture-interesting">What Makes This
+Architecture Interesting?</h2>
+<p>LibScript eschews heavyweight agents and runtimes (like Python for
+Ansible or Go for Terraform) in favor of a strictly POSIX
+<code>sh</code> and Windows <code>cmd</code> routing layer. This
+architecture allows a component to define its schema via JSON
+(<code>vars.schema.json</code>), which the global router
+(<code>libscript.sh</code> / <code>libscript.cmd</code>) dynamically
+parses to generate CLI help text, parse arguments, generate environment
+variables, and compile advanced deployment artifacts (like MSIs or
+Dockerfiles).</p>
+<h2 id="core-structure">Core Structure</h2>
+<p>The repository is split into modular components: -
+<code>_lib/_toolchain/</code>: Compilers, interpreters, and CLI tools. -
+<code>_lib/_server/</code>: Web servers, proxies, and container
+runtimes. - <code>_lib/_storage/</code>: Databases, caches, and message
+queues. - <code>app/</code>: High-level third-party application
+stacks.</p>
+<p>Each component contains: - <code>cli.sh</code> /
+<code>cli.cmd</code>: Entrypoint that parses options against
+<code>vars.schema.json</code>. - <code>setup.sh</code> /
+<code>setup.cmd</code> / <code>setup_win.ps1</code>: The actual
+installation and configuration logic. - <code>test.sh</code> /
+<code>test.cmd</code>: Idempotent verification tests. -
+<code>vars.schema.json</code>: Configuration schema (ports, passwords,
+versions).</p>
+<h2 id="execution-lifecycle">Execution Lifecycle</h2>
+<ol type="1">
+<li><strong>Invocation</strong>: The user runs
+<code>./libscript.sh install &lt;pkg&gt; &lt;version&gt; [args]</code>.</li>
+<li><strong>Routing</strong>: The global CLI locates the package and
+executes its <code>cli.sh</code>.</li>
+<li><strong>Configuration Extraction</strong>: <code>cli.sh</code>
+parses <code>vars.schema.json</code> to process the inputs and maps CLI
+arguments to exported environment variables (e.g.,
+<code>--PORT=8080</code> becomes
+<code>export LIBSCRIPT_GLOBAL_PORT=8080</code>).</li>
+<li><strong>Schema Dependency Evaluation</strong>: Before component
+execution, <code>cli.sh</code> intercepts properties flagged with
+<code>"is_libscript_dependency": true</code>.
+<ul>
+<li>It probes the system globally (<code>command -v</code>) and locally
+(<code>libscript.sh which</code>) to locate the requested
+dependencies.</li>
+<li>Using the declared strategy
+(<code>--DEP_STRATEGY=reuse|overwrite|install-alongside</code>), it
+recursively installs any missing component dependencies
+dynamically.</li>
+</ul></li>
+<li><strong>Environment Detection</strong>: <code>setup.sh</code>
+sources <code>os_info.sh</code> to determine <code>TARGET_OS</code>,
+<code>TARGET_ARCH</code>, and the init system (Systemd/OpenRC).</li>
+<li><strong>OS Package Resolution</strong>: <code>pkg_mgr.sh</code> maps
+and installs native OS requirements (e.g. <code>libssl-dev</code>) via
+the native package manager.</li>
+<li><strong>Installation</strong>: Binaries are downloaded, cached,
+extracted to the <code>--prefix</code>, and configured.</li>
+<li><strong>Service Registration</strong>: If applicable, the component
+registers a background daemon natively.</li>
+</ol>
+<h2 id="the-generator-layer-package_as">The Generator Layer
+(<code>package_as</code>)</h2>
+<p>A standout architectural feature is the global CLI’s ability to
+introspect components. By parsing the component schemas and utilizing
+the declarative <code>env</code> output, LibScript can synthesize
+standard installers (DEB, RPM, APK), Windows installers (WiX, InnoSetup,
+NSIS), Dockerfiles, and <code>docker-compose.yml</code> configurations
+on the fly without running the actual installation locally.</p>
+</div>
+<!-- Status bar -->
+<div class="tui-statusbar fixed" style="bottom: 0;">
+    <ul>
+        <li><a href="/">VerMan.io &ndash; deploy like it's the 1980s</a></li>
+        <li style="float: right"><a href="https://rewriteInC.io">&num;rewriteInC.io</a></li>
+        <li style="float: right"><a href="https://offscale.io">offscale.io</a></li>
+    </ul>
+</div>
+
+<a class="tui-button red-168 white-255-text fixed add-btn"
+   href="mailto:samuel@offscale.io&subject=verman"
+   aria-label="Email me"
+>📧</a>
+<script type="application/javascript" charset="utf-8" src="/assets/tuicss.min.js"></script>
+<script type="application/javascript" charset="utf-8" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+<script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
+</body>

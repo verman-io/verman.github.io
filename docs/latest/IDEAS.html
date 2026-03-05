@@ -88,72 +88,37 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="ideas">Ideas<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/IDEAS.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<p>This document is not ready for <a href="ROADMAP.html">ROADMAP.md</a>;
-but a place for looser ideation.</p>
-<p>Think about <a href="https://dokku.com">dokku</a> and other <a
-href="https://en.wikipedia.org/wiki/Platform_as_a_service">PaaS</a>’ and
-what they have.</p>
-<p>For example:</p>
+<h1 id="ideas-explorations">Ideas &amp; Explorations<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/IDEAS.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>A scratchpad for radical use-cases, feature concepts, and ecosystem
+expansions for LibScript.</p>
+<h2 id="interesting-explorations">Interesting Explorations</h2>
 <ul>
-<li><a
-href="https://en.wikipedia.org/wiki/Create,_read,_update_and_delete">CRUD</a>
-project</li>
-<li><a
-href="https://en.wikipedia.org/wiki/Network_monitoring">Healthcheck
-(status-check)</a> project
-<ul>
-<li>This could be built by adding a <code>test.sh</code> to each
-`port’.</li>
-<li>Example: <a
-href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_storage/postgres/test.sh"><code>_lib/_storage/postgres/test.sh</code></a></li>
-</ul></li>
-<li>See logs of project
-<ul>
-<li><code>logs -f project_name33</code></li>
-</ul></li>
-<li>Start|stop project
-<ul>
-<li><code>start project_name33</code></li>
-</ul></li>
-<li>Start|stop component of project
-<ul>
-<li><code>stop project_name33 postgresql</code></li>
-</ul></li>
+<li><strong>The Universal TUI Generator</strong>: The
+<code>package_as TUI</code> command currently generates a basic
+<code>whiptail</code> menu. This can be expanded into a full graphical
+terminal interface where users can select databases, configure ports
+(reading from <code>vars.schema.json</code>), and generate a complex
+<code>libscript.json</code> interactively.</li>
+<li><strong>Embedded Deployments (IoT/Edge)</strong>: Because LibScript
+is just shell, it is perfectly suited for resource-constrained Edge
+devices (like Raspberry Pis or custom embedded Linux builds) where
+installing Python/Ansible is impossible.</li>
+<li><strong>Self-Updating Immutable OS Generation</strong>: Combine
+LibScript’s Dockerfile generation with tools like <code>ostree</code> or
+Buildroot to generate entirely custom, bootable OS images based solely
+on a <code>libscript.json</code> definition.</li>
 </ul>
-<p>Also; maybe; consider: - <a
-href="https://en.wikipedia.org/wiki/Multi-user_software">Multi-user</a>
-- <a href="https://about.gitlab.com/topics/gitops/">GitOps</a> - <a
-href="https://en.wikipedia.org/wiki/MLOps">MLOps</a> - <a
-href="https://en.wikipedia.org/wiki/DevSecOps">DevSecOps</a></p>
-<p>This would additionally require every non shared-library /
-shared-toolchain understand: -
-<code>INSTALL_DIR="${LIBSCRIPT_PROJECT_DIR}"'/'"${project_name}"</code>
-- <code>HERMETIC_BUILD=1</code></p>
-<p>Penultimately, because network isolation isn’t builtin, maybe some
-dry-run checks like: - <a
-href="https://en.wikipedia.org/wiki/Port_(computer_networking)">Port</a>
-availability - <a
-href="https://en.wikipedia.org/wiki/Unix_domain_socket">Socket</a>
-availability - Database name availability - E.g., with PostgreSQL you
-can have multiple databases made with
-<code>CREATE DATABSE</code>|<code>createdb</code>. So rather than error
-naïvely that port <code>5432</code> is in use, try and create a database
-and only error if port <code>5432</code> is in use and database already
-exists.</p>
-<p>Finally, there’s the whole day-2 operations stuff, like: - <a
-href="https://en.wikipedia.org/wiki/Backup">Backups</a> - <a
-href="https://en.wikipedia.org/wiki/Snapshot_(computer_storage)">Snapshots</a>
-- <a
-href="https://en.wikipedia.org/wiki/Rollback_(data_management)">Rollbacks</a>
-- <a
-href="https://en.wikipedia.org/wiki/Feature_toggle#Canary_release">Canary
-deployments</a> - Clustered deployments - <a
-href="https://en.wikipedia.org/wiki/Computer_cluster">Deployment of
-clusters</a> - Centralised monitoring - Centralised <a
-href="https://en.wikipedia.org/wiki/Logging_(computing)">logging</a> -
-<a href="https://en.wikipedia.org/wiki/Upgrade">Upgrades</a> - <a
-href="https://en.wikipedia.org/wiki/Downgrade">Downgrades</a></p>
+<h2 id="component-expansion-ideas">Component Expansion Ideas</h2>
+<ul>
+<li><strong>AI / ML Ecosystem</strong>: Components for CUDA setups,
+Ollama, vLLM, and Jupyter integrations.</li>
+<li><strong>Desktop Environments</strong>: Provisioning full GUI
+environments, dotfiles, window managers (Sway, i3), and developer
+tooling directly to the host OS.</li>
+<li><strong>Advanced Networking</strong>: Automated WireGuard meshes,
+Tailscale provisioning, and BGP routing setups natively via shell.</li>
+</ul>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

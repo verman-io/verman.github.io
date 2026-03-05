@@ -88,35 +88,37 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="docs-roadmap">Docs: Roadmap<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/DOCS_ROADMAP.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
-<p>Each directory containing a <code>setup.sh</code> will also
-contain:</p>
-<ul>
-<li>README.md</li>
-<li>libscript.json (modelled after vcpkg.json)
-<ul>
-<li>static analyses of source-code will enable auto-inference of:
-<ul>
-<li><code>.dependencies</code></li>
-<li><code>.description</code> (first text line after title heading)</li>
-<li><code>.os_support</code></li>
-</ul></li>
-</ul></li>
+<h1 id="documentation-roadmap">Documentation Roadmap<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/DOCS_ROADMAP.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>
+<h2 id="purpose">Purpose</h2>
+<p>Outlines the strategy for evolving LibScript’s documentation from
+repository-level markdown files to a comprehensive, auto-generated
+static site.</p>
+<h2 id="what-makes-this-interesting">What Makes This Interesting?</h2>
+<p>Because every component defines its configuration in
+<code>vars.schema.json</code> and its execution is strictly typed by the
+CLI router, our documentation can be procedurally generated. We don’t
+just write docs; we compile them directly from the source truth of the
+components.</p>
+<h2 id="current-state-next-steps">Current State &amp; Next Steps</h2>
+<ul class="task-list">
+<li><label><input type="checkbox" checked="" />Comprehensive root-level
+Markdown guides covering architecture, usage, and
+development.</label></li>
+<li><label><input type="checkbox" checked="" />Standardized
+<code>vars.schema.json</code> format across all components.</label></li>
+<li><label><input type="checkbox" /><strong>Static Site
+Generation</strong>: Implement a generator (e.g., MkDocs or Docusaurus)
+that parses <code>vars.schema.json</code> files to auto-build feature
+matrices, configuration tables, and OS compatibility lists for every
+component.</label></li>
+<li><label><input type="checkbox" /><strong>Examples
+Repository</strong>: Curate a library of <code>libscript.json</code>
+templates (e.g., LEMP stack, Data Science stack) mapped to interactive
+tutorials.</label></li>
+<li><label><input type="checkbox" /><strong>Inline Man Pages</strong>:
+Enhance <code>libscript.sh --help</code> to format and paginate output
+dynamically like standard Unix man pages.</label></li>
 </ul>
-<p>Then a separate static site generator will take all these and
-create:</p>
-<ul>
-<li>Versioned drop-down selectable docs</li>
-<li>Docs having the README.md for each `port’ (to use vcpkg
-nomenclature)</li>
-<li>For each port also infer and auto-document what parameters are taken
-and/or settable in env vars</li>
-<li>Outside of libscript’s website, tree-shake to produce a website just
-for this port and its dependencies</li>
-</ul>
-<p>[outside DOCS_ROADMAP.md scope: but this could then be used to
-tree-shake so only used libraries are the
-libscript-for-your-project]</p>
 </div>
 <!-- Status bar -->
 <div class="tui-statusbar fixed" style="bottom: 0;">

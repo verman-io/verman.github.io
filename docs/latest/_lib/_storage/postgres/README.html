@@ -89,7 +89,7 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="lib_storagepostgres">_lib/_storage/postgres<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_storage/postgres/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<h1 id="postgres-storagedatabase">Postgres (Storage/Database)<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_storage/postgres/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
 <div class="tui-window" style="width: 100%">
   <fieldset class="tui-fieldset">
   <legend class="center">1-click deploy</legend>
@@ -133,8 +133,147 @@
     </fieldset>
   </form>
 </div>
-<p><a href="https://en.wikipedia.org/wiki/PostgreSQL">PostgreSQL</a>
-installer, user+database init, and tester.</p>
+<h2 id="purpose-current-state">Purpose &amp; Current State</h2>
+<p><strong>Purpose</strong>: This document provides context and
+technical details for the <code>postgres</code> component (part of
+<code>_storage</code>) within the LibScript ecosystem. LibScript is a
+modular, zero-dependency shell-script framework designed for
+cross-platform software provisioning across Linux, macOS, DOS, and
+Windows.</p>
+<p><strong>Current State</strong>: LibScript functions as a
+comprehensive global and per-component package manager, featuring a
+robust core CLI (<code>libscript.sh</code>, <code>libscript.cmd</code>,
+<code>libscript.bat</code>). It includes multi-platform toolchain
+support (Rust, Python, Node, Go, Java, C/C++), servers (Postgres 18,
+Nginx, Valkey), and advanced environment querying (<code>env</code>
+subcommand). It natively supports generating deployment configurations
+(<code>package_as docker</code>, <code>package_as docker_compose</code>,
+<code>package_as msi</code>, <code>package_as innosetup</code>,
+<code>package_as nsis</code>, <code>package_as TUI</code>) with deep
+installer customization, automated parallel dependency downloading and
+resolution via <code>libscript.json</code>, and robust uninstall
+lifecycle hooks (<code>uninstall.sh</code>/<code>uninstall.cmd</code>)
+for cleanly removing binaries, configs, and services. It natively
+handles deep semantic versioning, global <code>--secrets</code>
+extraction, caching, OpenBao/Vault generation, local caching via SQLite
+(<code>db-search</code>, <code>update-db</code>), explicit error
+handling for unsupported actions, and background process serving. Recent
+advancements have stabilized major Windows installer generation (MSI,
+InnoSetup, NSIS) and expanded macOS native service provisioning.</p>
+<h2 id="overview">Overview</h2>
+<p>This directory contains the installation and configuration scripts
+for <code>postgres</code>. It is designed to be executed via the global
+<code>libscript.sh</code> router or directly via
+<code>cli.sh</code>.</p>
+<h3 id="installation">Installation</h3>
+<p><strong>Unix (Linux/macOS):</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./cli.sh</span> <span class="op">&lt;</span>COMMAND<span class="op">&gt;</span> <span class="op">&lt;</span>PACKAGE_NAME<span class="op">&gt;</span> <span class="pp">[</span><span class="ss">VERSION</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">OPTIONS</span><span class="pp">]</span></span></code></pre></div>
+<p><strong>Windows:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cmd"><code class="sourceCode dosbat"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cli.cmd <span class="kw">&lt;</span>COMMAND<span class="kw">&gt;</span> <span class="kw">&lt;</span>PACKAGE_NAME<span class="kw">&gt;</span> [VERSION] [OPTIONS]</span></code></pre></div>
+<h2 id="configuration-options">Configuration Options</h2>
+<p>The following environment variables can be passed to the CLI
+(<code>--KEY=VALUE</code>) or exported before running the setup
+script.</p>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 31%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+<th>Default</th>
+<th>Aliases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>POSTGRESQL_VERSION</code></td>
+<td>Version of PostgreSQL demanded</td>
+<td><code>none</code></td>
+<td><code>| | `POSTGRES_USER` | Username to create inside postgres | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>POSTGRES_PASSWORD</code></td>
+<td>Password for created user inside postgres</td>
+<td><code>none</code></td>
+<td><code>| | `POSTGRES_PASSWORD_FILE` | Password file, its contents used as password for created user inside postgres | `none` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>POSTGRES_SERVICE_USER</code></td>
+<td>Username for superuser &amp; system role</td>
+<td><code>none</code></td>
+<td><code>| | `POSTGRES_SERVICE_PASSWORD` | Password for postgres user; fallsback to `POSTGRES_PASSWORD` | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>POSTGRES_HOST</code></td>
+<td>Hostname to serve postgres from</td>
+<td><code>none</code></td>
+<td><code>| | `POSTGRES_DB` | Database to create within postgres | `none` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>LIBSCRIPT_GLOBAL_INSTALL_METHOD</code></td>
+<td>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</td>
+<td><code>system</code></td>
+<td><code>| | `LIBSCRIPT_WINDOWS_PKG_MGR` | Global package manager override for Windows targets (e.g. winget, choco). | `winget` |</code></td>
+</tr>
+<tr class="even">
+<td><code>LIBSCRIPT_LISTEN_PORT</code></td>
+<td>Global port to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `LIBSCRIPT_LISTEN_ADDRESS` | Global address to listen on | `none` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>LIBSCRIPT_LISTEN_SOCKET</code></td>
+<td>Global unix socket to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `POSTGRES_LISTEN_PORT` | Port for POSTGRES to listen on | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>POSTGRES_LISTEN_ADDRESS</code></td>
+<td>Address for POSTGRES to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `POSTGRES_LISTEN_SOCKET` | Unix socket for POSTGRES to listen on | `none` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>POSTGRES_DATA_DIR</code></td>
+<td>Directory for PostgreSQL data cluster</td>
+<td><code>none</code></td>
+<td><code>| | `POSTGRES_LOCALE` | Locale for PostgreSQL initdb (e.g. English, United States) | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>POSTGRES_SERVICE_RUN_AS_USER</code></td>
+<td>Windows local user account to run the service (leave empty for
+Network Service)</td>
+<td><code>none</code></td>
+<td><code>| | `POSTGRES_SERVICE_RUN_AS_PASSWORD` | Password for the local user account (if applicable) | `none` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>POSTGRES_SERVICE_NAME</code></td>
+<td>Custom name for the Windows Service (allows side-by-side
+installations)</td>
+<td><code>libscript_postgres</code></td>
+<td>``</td>
+</tr>
+</tbody>
+</table>
+<h2 id="architecture">Architecture</h2>
+<ul>
+<li><code>setup.sh</code>: The main entrypoint that resolves the OS and
+invokes the correct script.</li>
+<li><code>setup_generic.sh</code>: Fallback installation logic using the
+package manager mapper.</li>
+<li><code>test.sh</code> / <code>test.cmd</code>: Verification scripts
+to ensure the component is installed and functioning correctly.</li>
+<li><code>vars.schema.json</code>: The schema definition for the CLI
+arguments.</li>
+</ul>
 <!-- Local usage -->
 <h3>Local and image-creation usage</h3>
 <div class="tui-tabs">
@@ -259,6 +398,19 @@ postgres</td>
 <td>No</td>
 </tr>
 <tr class="odd">
+<td><strong>POSTGRES_SERVICE_USER</strong></td>
+<td><code>string</code></td>
+<td>Username for superuser &amp; system role</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>POSTGRES_SERVICE_PASSWORD</strong></td>
+<td><code>string</code></td>
+<td>Password for postgres user; fallsback to
+<code>POSTGRES_PASSWORD</code></td>
+<td>No</td>
+</tr>
+<tr class="odd">
 <td><strong>POSTGRES_HOST</strong></td>
 <td><code>string</code></td>
 <td>Hostname to serve postgres from</td>
@@ -269,6 +421,89 @@ postgres</td>
 <td><code>string</code></td>
 <td>Database to create within postgres</td>
 <td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_GLOBAL_INSTALL_METHOD</strong></td>
+<td><code>string</code></td>
+<td>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</td>
+<td>No, default: <code>"system"</code></td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_WINDOWS_PKG_MGR</strong></td>
+<td><code>string</code></td>
+<td>Global package manager override for Windows targets (e.g. winget,
+choco).</td>
+<td>No, default: <code>"winget"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Global port to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Global address to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Global unix socket to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>POSTGRES_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Port for POSTGRES to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>POSTGRES_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Address for POSTGRES to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>POSTGRES_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Unix socket for POSTGRES to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>POSTGRES_DATA_DIR</strong></td>
+<td><code>string</code></td>
+<td>Directory for PostgreSQL data cluster</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>POSTGRES_LOCALE</strong></td>
+<td><code>string</code></td>
+<td>Locale for PostgreSQL initdb (e.g. English, United States)</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>POSTGRES_SERVICE_RUN_AS_USER</strong></td>
+<td><code>string</code></td>
+<td>Windows local user account to run the service (leave empty for
+Network Service)</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>POSTGRES_SERVICE_RUN_AS_PASSWORD</strong></td>
+<td><code>string</code></td>
+<td>Password for the local user account (if applicable)</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>POSTGRES_SERVICE_NAME</strong></td>
+<td><code>string</code></td>
+<td>Custom name for the Windows Service (allows side-by-side
+installations)</td>
+<td>No, default: <code>"libscript_postgres"</code></td>
 </tr>
 </tbody>
 </table>
@@ -302,6 +537,21 @@ postgres</p>
 <li><strong>Type</strong>: <code>string</code></li>
 <li><strong>Required</strong>: No</li>
 </ul>
+<h3 id="postgres-server-vars.postgres_service_user">postgres server
+vars.POSTGRES_SERVICE_USER</h3>
+<p>Username for superuser &amp; system role</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_service_password">postgres server
+vars.POSTGRES_SERVICE_PASSWORD</h3>
+<p>Password for postgres user; fallsback to
+<code>POSTGRES_PASSWORD</code></p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
 <h3 id="postgres-server-vars.postgres_host">postgres server
 vars.POSTGRES_HOST</h3>
 <p>Hostname to serve postgres from</p>
@@ -315,6 +565,113 @@ vars.POSTGRES_DB</h3>
 <ul>
 <li><strong>Type</strong>: <code>string</code></li>
 <li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.libscript_global_install_method">postgres
+server vars.LIBSCRIPT_GLOBAL_INSTALL_METHOD</h3>
+<p>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"system"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"system"</code></li>
+<li><code>"source"</code></li>
+</ul></li>
+</ul>
+<h3 id="postgres-server-vars.libscript_windows_pkg_mgr">postgres server
+vars.LIBSCRIPT_WINDOWS_PKG_MGR</h3>
+<p>Global package manager override for Windows targets (e.g. winget,
+choco).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"winget"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"winget"</code></li>
+<li><code>"choco"</code></li>
+</ul></li>
+</ul>
+<h3 id="postgres-server-vars.libscript_listen_port">postgres server
+vars.LIBSCRIPT_LISTEN_PORT</h3>
+<p>Global port to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.libscript_listen_address">postgres server
+vars.LIBSCRIPT_LISTEN_ADDRESS</h3>
+<p>Global address to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.libscript_listen_socket">postgres server
+vars.LIBSCRIPT_LISTEN_SOCKET</h3>
+<p>Global unix socket to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_listen_port">postgres server
+vars.POSTGRES_LISTEN_PORT</h3>
+<p>Port for POSTGRES to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_listen_address">postgres server
+vars.POSTGRES_LISTEN_ADDRESS</h3>
+<p>Address for POSTGRES to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_listen_socket">postgres server
+vars.POSTGRES_LISTEN_SOCKET</h3>
+<p>Unix socket for POSTGRES to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_data_dir">postgres server
+vars.POSTGRES_DATA_DIR</h3>
+<p>Directory for PostgreSQL data cluster</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_locale">postgres server
+vars.POSTGRES_LOCALE</h3>
+<p>Locale for PostgreSQL initdb (e.g. English, United States)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_service_run_as_user">postgres
+server vars.POSTGRES_SERVICE_RUN_AS_USER</h3>
+<p>Windows local user account to run the service (leave empty for
+Network Service)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_service_run_as_password">postgres
+server vars.POSTGRES_SERVICE_RUN_AS_PASSWORD</h3>
+<p>Password for the local user account (if applicable)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="postgres-server-vars.postgres_service_name">postgres server
+vars.POSTGRES_SERVICE_NAME</h3>
+<p>Custom name for the Windows Service (allows side-by-side
+installations)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default:
+<code>"libscript_postgres"</code></li>
 </ul>
 </div>
 <!-- Status bar -->
@@ -335,7 +692,7 @@ vars.POSTGRES_DB</h3>
 <script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
 <script>
 const editor = new JSONEditor(document.getElementById("editor_holder"),
-  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/postgres/vars.schema.json","title":"postgres server vars","description":"postgres vars that can be set","type":"object","properties":{"POSTGRESQL_VERSION":{"description":"Version of PostgreSQL demanded","type":"string"},"POSTGRES_USER":{"description":"Username to create inside postgres","type":"string"},"POSTGRES_PASSWORD":{"description":"Password for created user inside postgres","type":"string"},"POSTGRES_PASSWORD_FILE":{"description":"Password file, its contents used as password for created user inside postgres","type":"string"},"POSTGRES_HOST":{"description":"Hostname to serve postgres from","type":"string"},"POSTGRES_DB":{"description":"Database to create within postgres","type":"string"}}}
+  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_storage/postgres/vars.schema.json","title":"postgres server vars","description":"postgres vars that can be set","type":"object","properties":{"POSTGRESQL_VERSION":{"description":"Version of PostgreSQL demanded","type":"string"},"POSTGRES_USER":{"description":"Username to create inside postgres","type":"string"},"POSTGRES_PASSWORD":{"description":"Password for created user inside postgres","type":"string"},"POSTGRES_PASSWORD_FILE":{"description":"Password file, its contents used as password for created user inside postgres","type":"string"},"POSTGRES_SERVICE_USER":{"description":"Username for superuser & system role","type":"string"},"POSTGRES_SERVICE_PASSWORD":{"description":"Password for postgres user; fallsback to `POSTGRES_PASSWORD`","type":"string"},"POSTGRES_HOST":{"description":"Hostname to serve postgres from","type":"string"},"POSTGRES_DB":{"description":"Database to create within postgres","type":"string"},"LIBSCRIPT_GLOBAL_INSTALL_METHOD":{"description":"Global override for how software should be installed across all systems (e.g. system package manager vs downloaded binaries/from-source).","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_WINDOWS_PKG_MGR":{"description":"Global package manager override for Windows targets (e.g. winget, choco).","type":"string","enum":["winget","choco"],"default":"winget"},"LIBSCRIPT_LISTEN_PORT":{"type":["string","integer"],"description":"Global port to listen on"},"LIBSCRIPT_LISTEN_ADDRESS":{"type":"string","description":"Global address to listen on"},"LIBSCRIPT_LISTEN_SOCKET":{"type":"string","description":"Global unix socket to listen on"},"POSTGRES_LISTEN_PORT":{"type":["string","integer"],"description":"Port for POSTGRES to listen on"},"POSTGRES_LISTEN_ADDRESS":{"type":"string","description":"Address for POSTGRES to listen on"},"POSTGRES_LISTEN_SOCKET":{"type":"string","description":"Unix socket for POSTGRES to listen on"},"POSTGRES_DATA_DIR":{"description":"Directory for PostgreSQL data cluster","type":"string"},"POSTGRES_LOCALE":{"description":"Locale for PostgreSQL initdb (e.g. English, United States)","type":"string"},"POSTGRES_SERVICE_RUN_AS_USER":{"description":"Windows local user account to run the service (leave empty for Network Service)","type":"string"},"POSTGRES_SERVICE_RUN_AS_PASSWORD":{"description":"Password for the local user account (if applicable)","type":"string"},"POSTGRES_SERVICE_NAME":{"description":"Custom name for the Windows Service (allows side-by-side installations)","type":"string","default":"libscript_postgres"}}}
 });
 editor.on("ready", () => {
   const editor_holder = document.getElementById("editor_holder");

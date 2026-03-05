@@ -89,7 +89,7 @@
     </ul>
 </nav>
 <div class="content container" id="actual-body" style="margin-left: 250px">
-<h1 id="lib_servernodejs">_lib/_server/nodejs<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/nodejs/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
+<h1 id="nodejs-server">Nodejs (Server)<a class="right" href="https://github.com/SamuelMarks/libscript/blob/master/_lib/_server/nodejs/README.md" aria-label="Open on GitHub"><img class="deploy-img" src="/assets/github-badge-small.png" alt="Open on GitHub"/></a></h1>\n
 <div class="tui-window" style="width: 100%">
   <fieldset class="tui-fieldset">
   <legend class="center">1-click deploy</legend>
@@ -133,8 +133,109 @@
     </fieldset>
   </form>
 </div>
-<p><a href="https://en.wikipedia.org/wiki/Node.js">Node.js</a> server
-builder/updater and daemon installer/updater.</p>
+<h2 id="purpose-current-state">Purpose &amp; Current State</h2>
+<p><strong>Purpose</strong>: This document provides context and
+technical details for the <code>nodejs</code> component (part of
+<code>_server</code>) within the LibScript ecosystem. LibScript is a
+modular, zero-dependency shell-script framework designed for
+cross-platform software provisioning across Linux, macOS, DOS, and
+Windows.</p>
+<p><strong>Current State</strong>: LibScript functions as a
+comprehensive global and per-component package manager, featuring a
+robust core CLI (<code>libscript.sh</code>, <code>libscript.cmd</code>,
+<code>libscript.bat</code>). It includes multi-platform toolchain
+support (Rust, Python, Node, Go, Java, C/C++), servers (Postgres 18,
+Nginx, Valkey), and advanced environment querying (<code>env</code>
+subcommand). It natively supports generating deployment configurations
+(<code>package_as docker</code>, <code>package_as docker_compose</code>,
+<code>package_as msi</code>, <code>package_as innosetup</code>,
+<code>package_as nsis</code>, <code>package_as TUI</code>) with deep
+installer customization, automated parallel dependency downloading and
+resolution via <code>libscript.json</code>, and robust uninstall
+lifecycle hooks (<code>uninstall.sh</code>/<code>uninstall.cmd</code>)
+for cleanly removing binaries, configs, and services. It natively
+handles deep semantic versioning, global <code>--secrets</code>
+extraction, caching, OpenBao/Vault generation, local caching via SQLite
+(<code>db-search</code>, <code>update-db</code>), explicit error
+handling for unsupported actions, and background process serving. Recent
+advancements have stabilized major Windows installer generation (MSI,
+InnoSetup, NSIS) and expanded macOS native service provisioning.</p>
+<h2 id="overview">Overview</h2>
+<p>This directory contains the installation and configuration scripts
+for <code>nodejs</code>. It is designed to be executed via the global
+<code>libscript.sh</code> router or directly via
+<code>cli.sh</code>.</p>
+<h3 id="installation">Installation</h3>
+<p><strong>Unix (Linux/macOS):</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">./cli.sh</span> <span class="op">&lt;</span>COMMAND<span class="op">&gt;</span> <span class="op">&lt;</span>PACKAGE_NAME<span class="op">&gt;</span> <span class="pp">[</span><span class="ss">VERSION</span><span class="pp">]</span> <span class="pp">[</span><span class="ss">OPTIONS</span><span class="pp">]</span></span></code></pre></div>
+<p><strong>Windows:</strong></p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode cmd"><code class="sourceCode dosbat"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>cli.cmd <span class="kw">&lt;</span>COMMAND<span class="kw">&gt;</span> <span class="kw">&lt;</span>PACKAGE_NAME<span class="kw">&gt;</span> [VERSION] [OPTIONS]</span></code></pre></div>
+<h2 id="configuration-options">Configuration Options</h2>
+<p>The following environment variables can be passed to the CLI
+(<code>--KEY=VALUE</code>) or exported before running the setup
+script.</p>
+<table>
+<colgroup>
+<col style="width: 24%" />
+<col style="width: 31%" />
+<col style="width: 21%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Variable</th>
+<th>Description</th>
+<th>Default</th>
+<th>Aliases</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>DEST</code></td>
+<td>Destination (working directory)</td>
+<td><code>none</code></td>
+<td><code>| | `VARS` | Key/value in JSON format (as an escaped string) | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>LIBSCRIPT_GLOBAL_INSTALL_METHOD</code></td>
+<td>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</td>
+<td><code>system</code></td>
+<td><code>| | `LIBSCRIPT_WINDOWS_PKG_MGR` | Global package manager override for Windows targets (e.g. winget, choco). | `winget` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>LIBSCRIPT_LISTEN_PORT</code></td>
+<td>Global port to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `LIBSCRIPT_LISTEN_ADDRESS` | Global address to listen on | `none` |</code></td>
+</tr>
+<tr class="even">
+<td><code>LIBSCRIPT_LISTEN_SOCKET</code></td>
+<td>Global unix socket to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `NODEJS_LISTEN_PORT` | Port for NODEJS to listen on | `none` |</code></td>
+</tr>
+<tr class="odd">
+<td><code>NODEJS_LISTEN_ADDRESS</code></td>
+<td>Address for NODEJS to listen on</td>
+<td><code>none</code></td>
+<td><code>| | `NODEJS_LISTEN_SOCKET` | Unix socket for NODEJS to listen on | `none` |</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="architecture">Architecture</h2>
+<ul>
+<li><code>setup.sh</code>: The main entrypoint that resolves the OS and
+invokes the correct script.</li>
+<li><code>setup_generic.sh</code>: Fallback installation logic using the
+package manager mapper.</li>
+<li><code>test.sh</code> / <code>test.cmd</code>: Verification scripts
+to ensure the component is installed and functioning correctly.</li>
+<li><code>vars.schema.json</code>: The schema definition for the CLI
+arguments.</li>
+</ul>
 <!-- Local usage -->
 <h3>Local and image-creation usage</h3>
 <div class="tui-tabs">
@@ -217,6 +318,12 @@ href="#reference-nodejs-server-vars"><code>nodejs server vars</code></a>
 <p>nodejs server vars that can be set</p>
 <p><strong><code>nodejs server vars</code> Properties</strong></p>
 <table class="tui-table hovered-purple striped-purple">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
 <thead>
 <tr class="header">
 <th></th>
@@ -238,6 +345,57 @@ href="#reference-nodejs-server-vars"><code>nodejs server vars</code></a>
 <td>Key/value in JSON format (as an escaped string)</td>
 <td>No</td>
 </tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_GLOBAL_INSTALL_METHOD</strong></td>
+<td><code>string</code></td>
+<td>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</td>
+<td>No, default: <code>"system"</code></td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_WINDOWS_PKG_MGR</strong></td>
+<td><code>string</code></td>
+<td>Global package manager override for Windows targets (e.g. winget,
+choco).</td>
+<td>No, default: <code>"winget"</code></td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Global port to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>LIBSCRIPT_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Global address to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>LIBSCRIPT_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Global unix socket to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>NODEJS_LISTEN_PORT</strong></td>
+<td><code>["string", "integer"]</code></td>
+<td>Port for NODEJS to listen on</td>
+<td>No</td>
+</tr>
+<tr class="odd">
+<td><strong>NODEJS_LISTEN_ADDRESS</strong></td>
+<td><code>string</code></td>
+<td>Address for NODEJS to listen on</td>
+<td>No</td>
+</tr>
+<tr class="even">
+<td><strong>NODEJS_LISTEN_SOCKET</strong></td>
+<td><code>string</code></td>
+<td>Unix socket for NODEJS to listen on</td>
+<td>No</td>
+</tr>
 </tbody>
 </table>
 <p>Additional properties are allowed.</p>
@@ -249,6 +407,75 @@ href="#reference-nodejs-server-vars"><code>nodejs server vars</code></a>
 </ul>
 <h3 id="nodejs-server-vars.vars">nodejs server vars.VARS</h3>
 <p>Key/value in JSON format (as an escaped string)</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nodejs-server-vars.libscript_global_install_method">nodejs
+server vars.LIBSCRIPT_GLOBAL_INSTALL_METHOD</h3>
+<p>Global override for how software should be installed across all
+systems (e.g. system package manager vs downloaded
+binaries/from-source).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"system"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"system"</code></li>
+<li><code>"source"</code></li>
+</ul></li>
+</ul>
+<h3 id="nodejs-server-vars.libscript_windows_pkg_mgr">nodejs server
+vars.LIBSCRIPT_WINDOWS_PKG_MGR</h3>
+<p>Global package manager override for Windows targets (e.g. winget,
+choco).</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No, default: <code>"winget"</code></li>
+<li><strong>Allowed values</strong>:
+<ul>
+<li><code>"winget"</code></li>
+<li><code>"choco"</code></li>
+</ul></li>
+</ul>
+<h3 id="nodejs-server-vars.libscript_listen_port">nodejs server
+vars.LIBSCRIPT_LISTEN_PORT</h3>
+<p>Global port to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nodejs-server-vars.libscript_listen_address">nodejs server
+vars.LIBSCRIPT_LISTEN_ADDRESS</h3>
+<p>Global address to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nodejs-server-vars.libscript_listen_socket">nodejs server
+vars.LIBSCRIPT_LISTEN_SOCKET</h3>
+<p>Global unix socket to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nodejs-server-vars.nodejs_listen_port">nodejs server
+vars.NODEJS_LISTEN_PORT</h3>
+<p>Port for NODEJS to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>["string", "integer"]</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nodejs-server-vars.nodejs_listen_address">nodejs server
+vars.NODEJS_LISTEN_ADDRESS</h3>
+<p>Address for NODEJS to listen on</p>
+<ul>
+<li><strong>Type</strong>: <code>string</code></li>
+<li><strong>Required</strong>: No</li>
+</ul>
+<h3 id="nodejs-server-vars.nodejs_listen_socket">nodejs server
+vars.NODEJS_LISTEN_SOCKET</h3>
+<p>Unix socket for NODEJS to listen on</p>
 <ul>
 <li><strong>Type</strong>: <code>string</code></li>
 <li><strong>Required</strong>: No</li>
@@ -272,7 +499,7 @@ href="#reference-nodejs-server-vars"><code>nodejs server vars</code></a>
 <script type="application/javascript" charset="utf-8" src="/assets/scripts.js"></script>
 <script>
 const editor = new JSONEditor(document.getElementById("editor_holder"),
-  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nodejs/vars.schema.json","title":"nodejs server vars","description":"nodejs server vars that can be set","type":"object","properties":{"DEST":{"description":"Destination (working directory)","type":"string"},"VARS":{"description":"Key/value in JSON format (as an escaped string)","type":"string"}}}
+  { schema: {"$schema":"https://json-schema.org/draft/2020-12/schema","$id":"/_lib/_server/nodejs/vars.schema.json","title":"nodejs server vars","description":"nodejs server vars that can be set","type":"object","properties":{"DEST":{"description":"Destination (working directory)","type":"string"},"VARS":{"description":"Key/value in JSON format (as an escaped string)","type":"string"},"LIBSCRIPT_GLOBAL_INSTALL_METHOD":{"description":"Global override for how software should be installed across all systems (e.g. system package manager vs downloaded binaries/from-source).","type":"string","enum":["system","source"],"default":"system"},"LIBSCRIPT_WINDOWS_PKG_MGR":{"description":"Global package manager override for Windows targets (e.g. winget, choco).","type":"string","enum":["winget","choco"],"default":"winget"},"LIBSCRIPT_LISTEN_PORT":{"type":["string","integer"],"description":"Global port to listen on"},"LIBSCRIPT_LISTEN_ADDRESS":{"type":"string","description":"Global address to listen on"},"LIBSCRIPT_LISTEN_SOCKET":{"type":"string","description":"Global unix socket to listen on"},"NODEJS_LISTEN_PORT":{"type":["string","integer"],"description":"Port for NODEJS to listen on"},"NODEJS_LISTEN_ADDRESS":{"type":"string","description":"Address for NODEJS to listen on"},"NODEJS_LISTEN_SOCKET":{"type":"string","description":"Unix socket for NODEJS to listen on"}}}
 });
 editor.on("ready", () => {
   const editor_holder = document.getElementById("editor_holder");
